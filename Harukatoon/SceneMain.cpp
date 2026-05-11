@@ -1,5 +1,6 @@
 #include "SceneMain.h"
 #include "DxLib.h"
+#include "Player.h"
 
 SceneMain::SceneMain() :
 	m_frameCount(0)
@@ -10,6 +11,7 @@ SceneMain::~SceneMain()
 {
 
 }
+
 
 void SceneMain::Init()
 {
@@ -36,6 +38,7 @@ void SceneMain::Draw()
 
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);
+	SetBackgroundColor(180,180,180);
 }
 
 void SceneMain::DrawGrid()
@@ -48,12 +51,12 @@ void SceneMain::DrawGrid()
 	{
 		startPos = VGet(-300.0f, 0.0f, static_cast<float>(z));
 		endPos = VGet(300.0f, 0.0f, static_cast<float>(z));
-		DrawLine3D(startPos, endPos, 0xff0000);
+		DrawLine3D(startPos, endPos, 0xffffff);
 	}
 	for (int x = -300; x <= 300; x += 100)
 	{
 		startPos = VGet(static_cast<float>(x), 0.0f, -300.0f);
 		endPos = VGet(static_cast<float>(x), 0.0f, 300.0f);
-		DrawLine3D(startPos, endPos, 0x0000ff);
+		DrawLine3D(startPos, endPos, 0xffffff);
 	}
 }
