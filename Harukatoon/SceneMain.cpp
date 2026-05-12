@@ -5,6 +5,7 @@
 SceneMain::SceneMain() :
 	m_frameCount(0)
 {
+	m_pPlayer = new Player();
 }
 
 SceneMain::~SceneMain()
@@ -25,16 +26,21 @@ void SceneMain::Init()
 	SetCameraPositionAndTarget_UpVecY(VGet(0.0f, 300.0f, -700), VGet(0.0f, 0.0f, 0.0f));
 	SetupCamera_Perspective(DX_PI_F / 3.0f);
 	SetCameraNearFar(200.0f, 1500.0f);
+
+
+	m_pPlayer->Init();
 }
 
 void SceneMain::Update()
 {
 	m_frameCount++;
+	m_pPlayer->Update();
 }
 
 void SceneMain::Draw()
 {
 	DrawGrid();
+	m_pPlayer->Draw();
 
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);

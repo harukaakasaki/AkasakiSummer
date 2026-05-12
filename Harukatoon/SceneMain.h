@@ -1,4 +1,9 @@
 #pragma once
+#include <DxLib.h>
+
+// プロトタイプ宣言
+class Player;
+
 class SceneMain
 {
 public:
@@ -14,5 +19,6 @@ private:
 
 private:
 	int m_frameCount;
+	Player* m_pPlayer;
 };
 
