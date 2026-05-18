@@ -22,6 +22,7 @@ public:
 		float m_angle = 0.0f;// Šp“x
 
 		Vector3 m_pos;// ˆÊ’u
+		Vector3 m_move;// ˆÚ“®
 		bool isShooting = false;// UŒ‚‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 };
 

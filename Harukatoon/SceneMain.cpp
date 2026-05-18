@@ -4,7 +4,8 @@
 #include "Camera.h"
 
 SceneMain::SceneMain() :
-	m_frameCount(0)
+	m_frameCount(0),
+	m_timeScale(1.0)
 {
 	m_pPlayer = new Player();
 	m_pCamera = new Camera();
@@ -31,6 +32,7 @@ void SceneMain::Init()
 
 
 	m_pPlayer->Init();
+	m_pCamera->Init();
 }
 
 void SceneMain::Update()
@@ -44,6 +46,7 @@ void SceneMain::Draw()
 {
 	DrawGrid();
 	m_pPlayer->Draw();
+	m_pCamera->Draw();
 
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);

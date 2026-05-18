@@ -3,12 +3,13 @@
 
 namespace
 {
-	constexpr float kSpeed = 200.0f;// プレイヤーの移動速度
+	constexpr float kSpeed = 20.0f;// プレイヤーの移動速度
 }
 
 Player::Player():
 	m_modelHandle(-1),
 	m_angle(0.0f),
+	m_move{0.0f,0.0f,0.0f},
 	m_pos(0.0f, 0.0f, 0.0f),
 	isShooting(false)
 {
@@ -21,7 +22,7 @@ Player::~Player()
 void Player::Init()
 {
 }
-void Player::Update(float cameraAngle,float)
+void Player::Update(float cameraAngle,float timeScale)
 {
 	int x, y;
 	GetJoypadAnalogInput(&x, &y, DX_INPUT_PAD1);
@@ -34,43 +35,45 @@ void Player::Update(float cameraAngle,float)
 	if (fabs(stickX) < deadZone)stickX = 0.0f;
 	if (fabs(stickY) < deadZone)stickY = 0.0f;
 
-	// 移動
-	Vector3 move = { 0.0f, 0.0f, 0.0f };
+	m_move = { 0.0f,0.0f,0.0f };
 
 	// 前後
-	move.x += cosf(cameraAngle) * stickY;
-	move.z += sinf(cameraAngle) * stickY;
+	m_move.x += cosf(cameraAngle) * stickY;
+	m_move.z += sinf(cameraAngle) * stickY;
 	// 左右
-	move.x += -sinf(cameraAngle) * stickX;
-	move.z += cosf(cameraAngle) * stickX;
+	m_move.x += -sinf(cameraAngle) * stickX;
+	m_move.z += cosf(cameraAngle) * stickX;
 
-	float len = sqrtf(move.x * move.x + move.z * move.z);
+	float len = sqrtf(m_move.x * m_move.x + m_move.z * m_move.z);
 	if (len > 0)
 	{
 		// 移動方向から角度を作る
-		m_angle = atan2f(-move.x, -move.z);
+		m_angle = atan2f(-m_move.x, -m_move.z);
 
 		// 正規化
-		move.x /= len;
-		move.z /= len;
+		m_move.x /= len;
+		m_move.z /= len;
 
-		move.x = move.x * kSpeed;
-		move.z = move.z * kSpeed;
+		m_move.x = m_move.x * kSpeed * timeScale;
+		m_move.z = m_move.z * kSpeed * timeScale;
 	}
 
-	m_pos.x += move.x;
-	m_pos.z += move.z;
+	m_pos.x += m_move.x;
+	m_pos.z += m_move.z;
 
 }
 void Player::Draw()
 {
+	
+
 	// プレイヤーの描画
-	DrawCapsule3D(VGet(0.0f,100.0f,0.0f),VGet(0.0f,180.0f,0.0f),40.0f,8,GetColor(255,255,255),GetColor(255,255,255),TRUE);
+	DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+100.0f, m_pos.z+0.0f), VGet(m_pos.x+0.0f, m_pos.y+180.0f, m_pos.z+0.0f), 40.0f, 8, GetColor(255, 255, 255), GetColor(255, 255, 255), TRUE);
+	DrawCapsule3D(VGet(m_pos.x+50.0f, m_pos.y+165.0f, m_pos.z+0.0f), VGet(m_pos.x+50.0f, m_pos.y+170.0f, m_pos.z+0.0f), 40.0f, 8, GetColor(255, 255, 255), GetColor(255, 255, 255), TRUE);
 }
 
 Vector3 Player::GetPos() const
 {
-	return Vector3();
+	return m_pos;
 }
 
 bool Player::IsShooting() const
