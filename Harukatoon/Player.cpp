@@ -21,6 +21,7 @@ Player::~Player()
 
 void Player::Init()
 {
+	m_modelHandle = MV1LoadModel("data/player_Gun.mv1");
 }
 void Player::Update(float cameraAngle,float timeScale)
 {
@@ -61,14 +62,28 @@ void Player::Update(float cameraAngle,float timeScale)
 	m_pos.x += m_move.x;
 	m_pos.z += m_move.z;
 
+	if (Pad::IsTrigger(PAD_INPUT_3))
+	{
+		printfDx("撃ってるぜ！\n");
+	}
+
 }
 void Player::Draw()
 {
 	
-
 	// プレイヤーの描画
-	DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+100.0f, m_pos.z+0.0f), VGet(m_pos.x+0.0f, m_pos.y+180.0f, m_pos.z+0.0f), 40.0f, 8, GetColor(255, 255, 255), GetColor(255, 255, 255), TRUE);
-	DrawCapsule3D(VGet(m_pos.x+50.0f, m_pos.y+165.0f, m_pos.z+0.0f), VGet(m_pos.x+50.0f, m_pos.y+170.0f, m_pos.z+0.0f), 40.0f, 8, GetColor(255, 255, 255), GetColor(255, 255, 255), TRUE);
+	int playerCapsule = DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+100.0f, m_pos.z+0.0f), 
+		VGet(m_pos.x+0.0f, m_pos.y+180.0f, m_pos.z+0.0f), 
+		40.0f, 8, GetColor(255, 255, 255), GetColor(255, 255, 255), TRUE);
+
+	// プレイヤーモデルの回転
+	MATRIX rot = MGetRotY(m_angle);// 向き
+	MATRIX trans = MGetTranslate(VGet(m_pos.x, m_pos.y, m_pos.z));// 動き
+	MATRIX mtx = MMult(rot, trans);// 合成
+
+	MV1SetMatrix(m_modelHandle, mtx);// モデルハンドルと合わせる
+
+	MV1DrawModel(m_modelHandle);// プレイヤー表示
 }
 
 Vector3 Player::GetPos() const
