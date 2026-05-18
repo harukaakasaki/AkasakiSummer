@@ -3,6 +3,7 @@
 
 // プロトタイプ宣言
 class Player;
+class Camera;
 
 class SceneMain
 {
@@ -19,6 +20,8 @@ private:
 
 private:
 	int m_frameCount;
+	float m_timeScale;
 	Player* m_pPlayer;
+	Camera* m_pCamera;
 };
 

@@ -1,11 +1,13 @@
 #include "SceneMain.h"
 #include "DxLib.h"
 #include "Player.h"
+#include "Camera.h"
 
 SceneMain::SceneMain() :
 	m_frameCount(0)
 {
 	m_pPlayer = new Player();
+	m_pCamera = new Camera();
 }
 
 SceneMain::~SceneMain()
@@ -34,7 +36,8 @@ void SceneMain::Init()
 void SceneMain::Update()
 {
 	m_frameCount++;
-	m_pPlayer->Update();
+	m_pPlayer->Update(m_pCamera->GetAngle(), m_timeScale);
+	m_pCamera->Update(m_pPlayer->GetPos());
 }
 
 void SceneMain::Draw()
