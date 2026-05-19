@@ -13,7 +13,8 @@ SceneMain::SceneMain() :
 
 SceneMain::~SceneMain()
 {
-
+	delete m_pPlayer;
+	delete m_pCamera;
 }
 
 

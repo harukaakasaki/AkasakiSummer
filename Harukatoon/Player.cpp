@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <DxLib.h>
 #include "Pad.h"
 #include "Weapon.h"
 #include "Bomb.h"
@@ -21,6 +22,8 @@ Player::Player():
 
 Player::~Player()
 {
+	delete m_pWeapon;
+	delete m_pBomb;
 }
 
 void Player::Init()
@@ -74,13 +77,12 @@ void Player::Update(float cameraAngle,float timeScale)
 
 	GetJoypadXInputState(DX_INPUT_PAD1, &xinputState);
 	bool isWeaponPress = (xinputState.RightTrigger > 128);// RTが押された
-	bool isBombPress = Pad::IsPress(PAD_INPUT_6);// RBが押された
-
+	bool isBombPress = Pad::IsPress(PAD_INPUT_6);         // RBが押された
 
 	if (isWeaponPress)
 	{
 		m_pWeapon->Shot();
-		printfDx("ウェポンで攻撃中！\n");
+		
 		isShooting = true;
 	}
 	else
@@ -90,13 +92,11 @@ void Player::Update(float cameraAngle,float timeScale)
 	if (isBombPress)
 	{
 		m_pBomb->Throw();
-		printfDx("ボムで攻撃中！\n");
 	}
 
 }
 void Player::Draw()
 {
-	
 	// プレイヤーの描画
 	int playerCapsule = DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+100.0f, m_pos.z+0.0f), 
 		VGet(m_pos.x+0.0f, m_pos.y+180.0f, m_pos.z+0.0f), 

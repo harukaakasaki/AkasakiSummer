@@ -1,3 +1,4 @@
+#include <DxLib.h>
 #include "Bomb.h"
 
 Bomb::Bomb()
@@ -22,6 +23,6 @@ void Bomb::Draw()
 }
 void Bomb::Throw()
 {
-
+	printfDx("ƒ{ƒ€‚ÅUŒ‚’†I\n");
 }
 
