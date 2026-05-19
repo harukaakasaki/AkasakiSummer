@@ -37,6 +37,7 @@ void SceneMain::Init()
 
 void SceneMain::Update()
 {
+
 	m_frameCount++;
 	m_pPlayer->Update(m_pCamera->GetAngle(), m_timeScale);
 	m_pCamera->Update(m_pPlayer->GetPos());

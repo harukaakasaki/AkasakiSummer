@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "Pad.h"
+#include "Weapon.h"
+#include "Bomb.h"
 
 namespace
 {
@@ -13,6 +15,8 @@ Player::Player():
 	m_pos(0.0f, 0.0f, 0.0f),
 	isShooting(false)
 {
+	m_pWeapon = new Weapon();
+	m_pBomb = new Bomb();
 }
 
 Player::~Player()
@@ -22,9 +26,12 @@ Player::~Player()
 void Player::Init()
 {
 	m_modelHandle = MV1LoadModel("data/player_Gun.mv1");
+	
 }
 void Player::Update(float cameraAngle,float timeScale)
 {
+	Pad::Update();
+
 	int x, y;
 	GetJoypadAnalogInput(&x, &y, DX_INPUT_PAD1);
 
@@ -62,9 +69,28 @@ void Player::Update(float cameraAngle,float timeScale)
 	m_pos.x += m_move.x;
 	m_pos.z += m_move.z;
 
-	if (Pad::IsTrigger(PAD_INPUT_3))
+	// 攻撃
+	XINPUT_STATE xinputState;
+
+	GetJoypadXInputState(DX_INPUT_PAD1, &xinputState);
+	bool isWeaponPress = (xinputState.RightTrigger > 128);// RTが押された
+	bool isBombPress = Pad::IsPress(PAD_INPUT_6);// RBが押された
+
+
+	if (isWeaponPress)
 	{
-		printfDx("撃ってるぜ！\n");
+		m_pWeapon->Shot();
+		printfDx("ウェポンで攻撃中！\n");
+		isShooting = true;
+	}
+	else
+	{
+		isShooting = false;
+	}
+	if (isBombPress)
+	{
+		m_pBomb->Throw();
+		printfDx("ボムで攻撃中！\n");
 	}
 
 }

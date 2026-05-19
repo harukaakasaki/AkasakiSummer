@@ -1,6 +1,10 @@
 #pragma once
 #include <DxLib.h>
 #include "Vector3.h"
+
+class Weapon;
+class Bomb;
+
 class Player
 {
 public:
@@ -24,5 +28,8 @@ public:
 		Vector3 m_pos;// 位置
 		Vector3 m_move;// 移動
 		bool isShooting = false;// 攻撃しているかどうか
+
+		Weapon* m_pWeapon;// プレイヤーが持つウェポン
+		Bomb* m_pBomb;// プレイヤーが持つボム
 };
 
