@@ -1,4 +1,5 @@
 #pragma once
+#include "../GameObjects/Player.h"
 // ƒ{ƒ€‚ÌƒNƒ‰ƒX
 
 class Bomb

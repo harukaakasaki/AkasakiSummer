@@ -1,9 +1,7 @@
 #include "DxLib.h"
-#include "Game.h"
-
+#include "../Systems/Game.h"
 #include <memory>
-
-#include "SceneMain.h"
+#include "../Scenes/Scenemain.h"
 
 
 

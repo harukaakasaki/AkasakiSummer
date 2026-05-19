@@ -1,8 +1,8 @@
 #include "Player.h"
 #include <DxLib.h>
-#include "Pad.h"
-#include "Weapon.h"
-#include "Bomb.h"
+#include "../Systems/Pad.h"
+#include "../Weapons/Weapon.h"
+#include "../Weapons/Bomb.h"
 
 namespace
 {
@@ -92,6 +92,12 @@ void Player::Update(float cameraAngle,float timeScale)
 	if (isBombPress)
 	{
 		m_pBomb->Throw();
+	}
+
+	if (isShooting)
+	{
+		// ƒJƒƒ‰•ûŒü‚ğŒ©‚È‚ª‚çƒCƒ“ƒN‚ğŒ‚‚Â
+		m_angle = cameraAngle;
 	}
 
 }

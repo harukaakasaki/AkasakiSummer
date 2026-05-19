@@ -60,7 +60,7 @@ void Camera::Update(Vector3 playerPos)
 
 	// カメラズーム（サブウェポンを投げるときに長押しでズームするようにしたい！）
 	// そんな時はラープ！
-	/*if (Pad::IsPress(PAD_INPUT_2))
+	/*if (Pad::IsPress(PAD_INPUT_6))
 	{
 		distance = 600.0f;
 		height = 50.0f;

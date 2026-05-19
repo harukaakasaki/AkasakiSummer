@@ -1,5 +1,5 @@
 #pragma once
-#include "Player.h"
+#include "../GameObjects/Player.h"
 // シューターのクラス
 
 class Weapon
@@ -12,7 +12,7 @@ public:
 	void Draw();
 	// ウェポンで撃つ関数
 	// もしプレイヤーのインク容量がなくなると撃てなくなるようにしたい
-	void Shot();// ここにプレイヤーの位置、向きを代入
+	void Shot();// ここにカメラの位置、向きを代入
 
 private:
 	

@@ -135,26 +135,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bomb.cpp" />
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Weapons\Bomb.cpp" />
+    <ClCompile Include="Weapons\Bullet.cpp" />
+    <ClCompile Include="Systems\Camera.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Pad.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SceneMain.cpp" />
-    <ClCompile Include="Vector3.cpp" />
-    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="Systems\Pad.cpp" />
+    <ClCompile Include="GameObjects\Player.cpp" />
+    <ClCompile Include="Scenes\SceneMain.cpp" />
+    <ClCompile Include="Systems\Vector3.cpp" />
+    <ClCompile Include="Weapons\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bomb.h" />
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Pad.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="SceneMain.h" />
-    <ClInclude Include="Vector3.h" />
-    <ClInclude Include="Weapon.h" />
+    <ClInclude Include="Weapons\Bomb.h" />
+    <ClInclude Include="Weapons\Bullet.h" />
+    <ClInclude Include="Systems\Camera.h" />
+    <ClInclude Include="Systems\Game.h" />
+    <ClInclude Include="Systems\Pad.h" />
+    <ClInclude Include="GameObjects\Player.h" />
+    <ClInclude Include="Scenes\SceneMain.h" />
+    <ClInclude Include="Systems\Vector3.h" />
+    <ClInclude Include="Weapons\Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

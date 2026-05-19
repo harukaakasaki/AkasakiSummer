@@ -1,7 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
-#include "Player.h"
+#include "../GameObjects/Player.h"
 class Camera
 {
 public:

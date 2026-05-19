@@ -19,8 +19,6 @@ private:
 
 	// 速度velocity
 
-	// 弾の寿命（寿命の場合距離測れなくない？）
-
 	// 弾が生きているかのフラグ
 	bool m_isAlive;
 

@@ -1,7 +1,7 @@
 #include "SceneMain.h"
 #include "DxLib.h"
-#include "Player.h"
-#include "Camera.h"
+#include "../GameObjects/Player.h"
+#include "../Systems/Camera.h"
 
 SceneMain::SceneMain() :
 	m_frameCount(0),

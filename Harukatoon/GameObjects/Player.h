@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector3.h"
+#include "../Systems/Vector3.h"
 
 class Weapon;
 class Bomb;
