@@ -1,6 +1,6 @@
 #pragma once
 #include "../GameObjects/Player.h"
-// シューターのクラス
+// ウェポンクラスはバレットクラスです！
 
 class Weapon
 {
@@ -12,7 +12,7 @@ public:
 	void Draw();
 	// ウェポンで撃つ関数
 	// もしプレイヤーのインク容量がなくなると撃てなくなるようにしたい
-	void Shot();// ここにカメラの位置、向きを代入
+	void UseWeapon();// ウェポンを使ったらバレットクラスに伝える
 
 private:
 	

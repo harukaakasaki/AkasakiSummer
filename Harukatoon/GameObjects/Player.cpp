@@ -7,6 +7,9 @@
 namespace
 {
 	constexpr float kSpeed = 20.0f;// プレイヤーの移動速度
+	constexpr float kDiveSpeed = 25.0f;// プレイヤーの潜り移動速度
+
+	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
 }
 
 Player::Player():
@@ -28,8 +31,8 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_modelHandle = MV1LoadModel("data/player_Gun.mv1");
-	
+	m_modelHandle = MV1LoadModel("data/Player_Model.mv1");
+	MV1SetScale(m_modelHandle, kScale);// 初期の大きさ
 }
 void Player::Update(float cameraAngle,float timeScale)
 {
@@ -77,11 +80,13 @@ void Player::Update(float cameraAngle,float timeScale)
 
 	GetJoypadXInputState(DX_INPUT_PAD1, &xinputState);
 	bool isWeaponPress = (xinputState.RightTrigger > 128);// RTが押された
+	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
 	bool isBombPress = Pad::IsPress(PAD_INPUT_6);         // RBが押された
 
+	// 入力情報は優先度をつけて管理する
 	if (isWeaponPress)
 	{
-		m_pWeapon->Shot();
+		m_pWeapon->UseWeapon();
 		
 		isShooting = true;
 	}
@@ -92,6 +97,10 @@ void Player::Update(float cameraAngle,float timeScale)
 	if (isBombPress)
 	{
 		m_pBomb->Throw();
+	}
+	else if (isDivePress)
+	{
+		printfDx("潜ってる～\n");
 	}
 
 	if (isShooting)
@@ -107,14 +116,18 @@ void Player::Draw()
 	// プレイヤーの描画
 	int playerCapsule = DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+100.0f, m_pos.z+0.0f), 
 		VGet(m_pos.x+0.0f, m_pos.y+180.0f, m_pos.z+0.0f), 
-		40.0f, 8, GetColor(255, 255, 255), GetColor(255, 255, 255), TRUE);
+		40.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), false);
 
 	// プレイヤーモデルの回転
 	MATRIX rot = MGetRotY(m_angle);// 向き
+	MATRIX scale = MGetScale(kScale);// 大きさ
 	MATRIX trans = MGetTranslate(VGet(m_pos.x, m_pos.y, m_pos.z));// 動き
-	MATRIX mtx = MMult(rot, trans);// 合成
+	MATRIX mtx = MMult(rot, scale);// 合成
+	mtx = MMult(mtx, trans);
 
 	MV1SetMatrix(m_modelHandle, mtx);// モデルハンドルと合わせる
+
+	
 
 	MV1DrawModel(m_modelHandle);// プレイヤー表示
 }

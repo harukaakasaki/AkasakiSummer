@@ -21,7 +21,7 @@ void Weapon::Draw()
 {
 
 }
-void Weapon::Shot()
+void Weapon::UseWeapon()
 {
 	printfDx("ウェポンで攻撃中！\n");
 }

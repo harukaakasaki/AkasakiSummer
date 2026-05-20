@@ -1,5 +1,6 @@
 #pragma once
 #include <DxLib.h>
+#include <vector>
 
 // プロトタイプ宣言
 class Player;
