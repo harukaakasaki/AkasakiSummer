@@ -97,7 +97,8 @@ void Player::Update(float cameraAngle,float timeScale)
 	if (isShooting)
 	{
 		// カメラ方向を見ながらインクを撃つ
-		m_angle = cameraAngle;
+		// atan2fでcos,sinのカメラアングルを合わせる
+		m_angle = atan2f(cos(cameraAngle),sin(cameraAngle));
 	}
 
 }
