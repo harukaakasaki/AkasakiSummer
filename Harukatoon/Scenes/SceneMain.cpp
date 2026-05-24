@@ -7,8 +7,13 @@ SceneMain::SceneMain() :
 	m_frameCount(0),
 	m_timeScale(1.0)
 {
+	m_inkTexture = MakeScreen(500, 500, false);
 	m_pPlayer = new Player();
 	m_pCamera = new Camera();
+
+	SetRenderTargetToShader(m_inkTexture, FALSE);
+	DrawBox(0, 0, 500, 500, GetColor(0, 0, 0), TRUE);
+	SetRenderTargetToShader(DX_SCREEN_BACK, FALSE);
 }
 
 SceneMain::~SceneMain()
@@ -27,10 +32,11 @@ void SceneMain::Init()
 	SetUseZBuffer3D(true);	// Zバッファを使います
 	SetWriteZBuffer3D(true);	// 描画する物体はZバッファにも距離を書き込む
 
+	SetBackgroundColor(180, 180, 180);
+
 	SetCameraPositionAndTarget_UpVecY(VGet(0.0f, 300.0f, -700), VGet(0.0f, 0.0f, 0.0f));
 	SetupCamera_Perspective(DX_PI_F / 3.0f);
 	SetCameraNearFar(200.0f, 1500.0f);
-
 
 	m_pPlayer->Init();
 	m_pCamera->Init();
@@ -38,25 +44,39 @@ void SceneMain::Init()
 
 void SceneMain::Update()
 {
-
 	m_frameCount++;
 	m_pPlayer->Update(m_pCamera->GetAngle(), m_timeScale);
 	m_pCamera->Update(m_pPlayer->GetPos());
+
+	int mouseX, mouseY;
+	GetMousePoint(&mouseX, &mouseY);
+
+	// もしマウスの左クリックを押したら、テクスチャに色が付く
+	if ((GetMouseInput()&MOUSE_INPUT_LEFT)!=0)
+	{
+//		printfDx("クリックしてる！\n");
+		
+		SetRenderTargetToShader(m_inkTexture,false);// 描画先をm_inkTextureに設定
+		DrawCircle(mouseX, mouseY, 20,GetColor(255, 0, 0), true);
+		SetRenderTargetToShader(DX_SCREEN_BACK,false);
+	}
 }
 
 void SceneMain::Draw()
 {
+	DrawGraph(0, 0, m_inkTexture, false);
 	DrawGrid();
 	m_pPlayer->Draw();
 	m_pCamera->Draw();
 
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);
-	SetBackgroundColor(180,180,180);
+	
 }
 
 void SceneMain::DrawGrid()
 {
+	
 	// 直線の始点と終点
 	VECTOR startPos;
 	VECTOR endPos;
