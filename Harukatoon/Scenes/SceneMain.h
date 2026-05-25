@@ -18,6 +18,7 @@ public:
 
 private:
 	void DrawGrid();
+	void InkPaint();// F‚ğ“h‚é
 
 private:
 	int m_inkTexture;
