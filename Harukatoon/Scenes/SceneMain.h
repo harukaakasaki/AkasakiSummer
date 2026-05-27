@@ -5,6 +5,7 @@
 // プロトタイプ宣言
 class Player;
 class Camera;
+class StageManager;
 
 class SceneMain
 {
@@ -26,5 +27,6 @@ private:
 	float m_timeScale;
 	Player* m_pPlayer;
 	Camera* m_pCamera;
+	StageManager* m_pStageManager;
 };
 

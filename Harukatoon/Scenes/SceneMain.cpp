@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "../GameObjects/Player.h"
 #include "../Systems/Camera.h"
+#include "../StageManager.h"
 
 SceneMain::SceneMain() :
 	m_frameCount(0),
@@ -11,6 +12,7 @@ SceneMain::SceneMain() :
 	m_inkTexture = MakeScreen(500, 500, false);
 	m_pPlayer = new Player();
 	m_pCamera = new Camera();
+	m_pStageManager = new StageManager();
 
 	SetRenderTargetToShader(m_inkTexture, FALSE);
 	DrawBox(0, 0, 500, 500, GetColor(0, 0, 0), TRUE);
@@ -41,6 +43,7 @@ void SceneMain::Init()
 
 	m_pPlayer->Init();
 	m_pCamera->Init();
+	m_pStageManager->Init();
 }
 
 void SceneMain::Update()
@@ -48,6 +51,7 @@ void SceneMain::Update()
 	m_frameCount++;
 	m_pPlayer->Update(m_pCamera->GetAngle(), m_timeScale);
 	m_pCamera->Update(m_pPlayer->GetPos());
+	m_pStageManager->Update();
 	InkPaint();
 }
 
@@ -95,6 +99,7 @@ void SceneMain::Draw()
 	DrawGrid();
 	m_pPlayer->Draw();
 	m_pCamera->Draw();
+	m_pStageManager->Draw();
 
 	SetUseZBuffer3D(false);
 
