@@ -26,10 +26,13 @@ private:
 	// 2Dマップデータ
 	std::vector<std::vector<int>> m_2dMap;
 	// 1マスのサイズ
-	int m_pixelSize = 20;
+	int m_pixelSize;
 	// ステージ縦横のマス数
 	int m_MapWidthSize;
 	int m_MapHeightSize;
+	// インクのテクスチャ
+	int m_pinkTexture;
+	int m_greenTexture;
 
 };
 

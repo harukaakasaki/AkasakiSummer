@@ -8,7 +8,9 @@ namespace
 StageManager::StageManager():
 	m_MapWidthSize(0),
 	m_MapHeightSize(0),
-	m_pixelSize(10)
+	m_pixelSize(0),
+	m_pinkTexture(-1),
+	m_greenTexture(-1)
 {
 }
 
@@ -18,6 +20,10 @@ StageManager::~StageManager()
 
 void StageManager::Init()
 {
+	m_pinkTexture = LoadGraph("data/Ink/ink_pink.png");// ピンクのインクテクスチャ
+	m_greenTexture = LoadGraph("data/Ink/ink_green.png");// ピンクのインクテクスチャ
+
+	m_pixelSize = 20;
 	m_MapWidthSize = 64;
 	m_MapHeightSize = 48;
 
@@ -27,7 +33,6 @@ void StageManager::Init()
 	{
 		m_2dMap[i].resize(m_MapWidthSize,0);
 	}
-
 }
 void StageManager::Update()
 {
@@ -46,15 +51,15 @@ void StageManager::Draw()
 
 			if (m_2dMap[y][x] == 0)
 			{
-				DrawBox(leftX, topY, rightX, bottomY, GetColor(190, 190, 190), TRUE);
+				DrawExtendGraph(leftX, topY, rightX, bottomY, GetColor(0, 0, 0), TRUE);
 			}
 			else if (m_2dMap[y][x] == 1)// ピンクの場合
 			{
-				DrawBox(leftX, topY, rightX, bottomY, GetColor(255, 20, 140), TRUE);
+				DrawExtendGraph(leftX, topY, rightX, bottomY, m_pinkTexture, TRUE);
 			}
 			else if (m_2dMap[y][x] == 2)// グリーンの場合
 			{
-				DrawBox(leftX, topY, rightX, bottomY, GetColor(0, 255, 0), TRUE);
+				DrawExtendGraph(leftX, topY, rightX, bottomY, m_greenTexture, TRUE);
 			}
 		}
 	}

@@ -36,6 +36,8 @@ void SceneMain::Init()
 	SetupCamera_Perspective(DX_PI_F / 3.0f);
 	SetCameraNearFar(200.0f, 1500.0f);
 
+	
+
 	m_pPlayer->Init();
 	m_pCamera->Init();
 	m_pStageManager->Init();
@@ -75,9 +77,9 @@ void SceneMain::Draw()
 	m_pCamera->Draw();
 	m_pStageManager->Draw();
 
-	SetUseZBuffer3D(false);
+	/*SetUseZBuffer3D(false);
 
-	SetUseZBuffer3D(true);
+	SetUseZBuffer3D(true);*/
 	
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);
