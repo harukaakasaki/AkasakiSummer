@@ -9,20 +9,21 @@ SceneMain::SceneMain() :
 	m_timeScale(1.0),
 	m_inkTexture(-1)
 {
-	m_inkTexture = MakeScreen(500, 500, false);
+//	m_inkTexture = MakeScreen(500, 500, false);
 	m_pPlayer = new Player();
 	m_pCamera = new Camera();
 	m_pStageManager = new StageManager();
 
-	SetRenderTargetToShader(m_inkTexture, FALSE);
+	/*SetRenderTargetToShader(m_inkTexture, FALSE);
 	DrawBox(0, 0, 500, 500, GetColor(0, 0, 0), TRUE);
-	SetRenderTargetToShader(DX_SCREEN_BACK, FALSE);
+	SetRenderTargetToShader(DX_SCREEN_BACK, FALSE);*/
 }
 
 SceneMain::~SceneMain()
 {
 	delete m_pPlayer;
 	delete m_pCamera;
+	delete m_pStageManager;
 }
 
 
@@ -64,31 +65,35 @@ void SceneMain::InkPaint()
 	// もしマウスの左クリックを押したら、テクスチャに色が付く
 	if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0)
 	{
-		if (mouseX >= 0 && mouseX < 500 && mouseY >= 0 && mouseY < 500)
-		{
-			// 描画先をm_inkTextureに設定
-			SetRenderTargetToShader(m_inkTexture, false);
 
-			// 塗れる範囲
-			SetDrawArea(0, 0, 500, 500);
+		m_pStageManager->Paint(mouseX, mouseY, 1);
 
-			// 3Dの書き込みをオフにする
-			SetWriteZBuffer3D(false);
+		//	if (mouseX >= 0 && mouseX < 500 && mouseY >= 0 && mouseY < 500)
+		//	{
+		//		// 描画先をm_inkTextureに設定
+		//		SetRenderTargetToShader(m_inkTexture, false);
 
-			// 一時的にブレンドなしにする
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		//		// 塗れる範囲
+		//		SetDrawArea(0, 0, 500, 500);
 
-			// 赤い円を描画する
-			DrawCircle(mouseX, mouseY, 20, GetColor(255, 0, 0), true);
+		//		// 3Dの書き込みをオフにする
+		//		SetWriteZBuffer3D(false);
 
-			// 設定を元に戻す
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
-			SetWriteZBuffer3D(true);
+		//		// 一時的にブレンドなしにする
+		//		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-			SetRenderTargetToShader(DX_SCREEN_BACK, false);
+		//		// 赤い円を描画する
+		//		DrawCircle(mouseX, mouseY, 20, GetColor(255, 0, 0), true);
 
-			SetDrawArea(0, 0, 0, 0);
-		}
+		//		// 設定を元に戻す
+		//		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+		//		SetWriteZBuffer3D(true);
+
+		//		SetRenderTargetToShader(DX_SCREEN_BACK, false);
+
+		//		SetDrawArea(0, 0, 0, 0);
+		//	}
+		//}
 	}
 }
 
