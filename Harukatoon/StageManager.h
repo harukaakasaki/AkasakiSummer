@@ -26,7 +26,7 @@ private:
 	// 2Dマップデータ
 	std::vector<std::vector<int>> m_2dMap;
 	// 1マスのサイズ
-	int m_pixelSize = 10;
+	int m_pixelSize = 20;
 	// ステージ縦横のマス数
 	int m_MapWidthSize;
 	int m_MapHeightSize;

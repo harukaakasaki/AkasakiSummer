@@ -50,7 +50,7 @@ void StageManager::Draw()
 			}
 			else if (m_2dMap[y][x] == 1)// ピンクの場合
 			{
-				DrawBox(leftX, topY, rightX, bottomY, GetColor(255, 0, 0), TRUE);
+				DrawBox(leftX, topY, rightX, bottomY, GetColor(255, 20, 140), TRUE);
 			}
 			else if (m_2dMap[y][x] == 2)// グリーンの場合
 			{

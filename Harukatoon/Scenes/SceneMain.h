@@ -22,7 +22,6 @@ private:
 	void InkPaint();// F‚ğ“h‚é
 
 private:
-	int m_inkTexture;
 	int m_frameCount;
 	float m_timeScale;
 	Player* m_pPlayer;
