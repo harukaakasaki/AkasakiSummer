@@ -36,8 +36,6 @@ void SceneMain::Init()
 	SetupCamera_Perspective(DX_PI_F / 3.0f);
 	SetCameraNearFar(200.0f, 1500.0f);
 
-	
-
 	m_pPlayer->Init();
 	m_pCamera->Init();
 	m_pStageManager->Init();
@@ -54,7 +52,6 @@ void SceneMain::Update()
 
 void SceneMain::InkPaint()
 {
-	
 	int mouseX, mouseY;
 	GetMousePoint(&mouseX, &mouseY);
 
@@ -83,7 +80,6 @@ void SceneMain::Draw()
 	
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);
-	
 }
 
 void SceneMain::DrawGrid()

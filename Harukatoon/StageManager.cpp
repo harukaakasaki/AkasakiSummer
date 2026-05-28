@@ -23,7 +23,7 @@ void StageManager::Init()
 	m_pinkTexture = LoadGraph("data/Ink/ink_pink.png");// ピンクのインクテクスチャ
 	m_greenTexture = LoadGraph("data/Ink/ink_green.png");// グリーンのインクテクスチャ
 
-	m_pixelSize = 20;
+	m_pixelSize = 100;
 	m_MapWidthSize = 64;
 	m_MapHeightSize = 48;
 
