@@ -135,7 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="StageManager.cpp" />
+    <ClCompile Include="Stages\StageManager.cpp" />
     <ClCompile Include="Weapons\Bomb.cpp" />
     <ClCompile Include="Weapons\Bullet.cpp" />
     <ClCompile Include="Systems\Camera.cpp" />
@@ -147,7 +147,7 @@
     <ClCompile Include="Weapons\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="StageManager.h" />
+    <ClInclude Include="Stages\StageManager.h" />
     <ClInclude Include="Weapons\Bomb.h" />
     <ClInclude Include="Weapons\Bullet.h" />
     <ClInclude Include="Systems\Camera.h" />
@@ -157,6 +157,22 @@
     <ClInclude Include="Scenes\SceneMain.h" />
     <ClInclude Include="Systems\Vector3.h" />
     <ClInclude Include="Weapons\Weapon.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="InkShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

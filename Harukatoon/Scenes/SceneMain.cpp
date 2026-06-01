@@ -2,7 +2,7 @@
 #include "DxLib.h"
 #include "../GameObjects/Player.h"
 #include "../Systems/Camera.h"
-#include "../StageManager.h"
+#include "../Stages/StageManager.h"
 
 SceneMain::SceneMain() :
 	m_frameCount(0),

@@ -42,7 +42,7 @@
     <ClCompile Include="Weapons\Bullet.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="StageManager.cpp">
+    <ClCompile Include="Stages\StageManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,8 +74,11 @@
     <ClInclude Include="Weapons\Bullet.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="StageManager.h">
+    <ClInclude Include="Stages\StageManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="InkShader.hlsl" />
   </ItemGroup>
 </Project>
