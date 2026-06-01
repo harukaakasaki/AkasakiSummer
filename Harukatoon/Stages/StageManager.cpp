@@ -119,7 +119,7 @@ void StageManager::Draw()
 					// ŽOŠpŒ`2
 					{ { leftX,  topY,    0.0f }, 1.0f, GetColorU8(255,255,255,255), 0.0f, 0.0f },
 					{ { rightX, bottomY, 0.0f }, 1.0f, GetColorU8(255,255,255,255), 1.0f, 1.0f },
-					{ { leftX, bottomY, 0.0f }, 1.0f, GetColorU8(255,255,255,255), 0.0f, 1.0f }
+					{ { leftX, bottomY,  0.0f }, 1.0f, GetColorU8(255,255,255,255), 0.0f, 1.0f }
 				};
 				DrawPolygon2D(vertices, 2, colorHandle, TRUE);
 			}

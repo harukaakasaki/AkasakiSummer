@@ -28,22 +28,31 @@ float4 main(PS_INPUT Input) : SV_TARGET
     float3 normal;
     normal.xy = (normalSample.xy - 0.5f) * 2.0f; // 法線のXとYは中心からのオフセット
     normal.z = (normalSample.z - 0.5f) * 2.0f;  // 法線のZは、オフセットの長さから計算
+    normal.xy *= 1.5f;
     normal = normalize(normal); // 法線を正規化
     
     // 画面の右上から光を当てる
     float3 lightDir = normalize(float3(0.5f, -0.5f, 1.0f)); // 光の方向
     
-    // 光の色を計算
-    float lightDiffuse = max(0.5f,dot(lightDir,normal)); // 光の拡散成分
+    float NdotL = max(0.0f, dot(normal, lightDir));
+    
+    float ambient = 0.5f; // 環境光の強さ
+    float diffuse = NdotL; // 拡散成分の強さ
+    
+    float3 color = textureColor.rgb * (ambient + diffuse); // 環境光と拡散成分を組み合わせる
+    
     
     // ツヤの計算
-    float3 viewDir = float3(0.0f, 0.0f, -1.0f); // 視線の方向
-    float3 reflectDir = reflect(lightDir, normal); // 反射ベクトル
+    float3 viewDir = normalize(float3(0.0f, 0.0f, -1.0f)); // 視線の方向
+    float3 reflectDir = reflect(-lightDir, normal); // 反射ベクトル
     // ツヤの広がり
-    float specular = pow(max(0.0f,dot(viewDir, reflectDir)),30.0f)*0.7f; // ツヤの強さ
+    float specular = pow(max(0.0f,dot(viewDir, reflectDir)),80.0f)*1.2f; // ツヤの強さ
     
-    // 最終的なインクの色の計算
-    float3 shaderColor = (textureColor.rgb * lightDiffuse) + specular; // 光の影響を加える
+    float fresnel = pow(1.0f - dot(normal, viewDir), 3.0f); // フレネル効果の計算
     
-    return float4(shaderColor,1.0f);
+    color += fresnel * 0.5f; // フレネル効果を色に加える
+    
+ //   return float4(color+specular,1.0f);
+    
+    return float4(textureColor.rgb*0.2,1);
 }
