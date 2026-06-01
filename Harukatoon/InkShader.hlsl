@@ -32,9 +32,9 @@ float4 main(PS_INPUT Input) : SV_TARGET
     normal = normalize(normal); // 法線を正規化
     
     // 画面の右上から光を当てる
-    float3 lightDir = normalize(float3(0.5f, -0.5f, 1.0f)); // 光の方向
+    float3 lightDir = normalize(float3(0.5f, -0.5f, -1.0f)); // 光の方向
     
-    float NdotL = max(0.0f, dot(normal, lightDir));
+    float NdotL = max(0.0f, dot(normal, -lightDir));
     
     float ambient = 0.5f; // 環境光の強さ
     float diffuse = NdotL; // 拡散成分の強さ
@@ -44,7 +44,7 @@ float4 main(PS_INPUT Input) : SV_TARGET
     
     // ツヤの計算
     float3 viewDir = normalize(float3(0.0f, 0.0f, -1.0f)); // 視線の方向
-    float3 reflectDir = reflect(-lightDir, normal); // 反射ベクトル
+    float3 reflectDir = reflect(lightDir, normal); // 反射ベクトル
     // ツヤの広がり
     float specular = pow(max(0.0f,dot(viewDir, reflectDir)),80.0f)*1.2f; // ツヤの強さ
     
@@ -52,7 +52,5 @@ float4 main(PS_INPUT Input) : SV_TARGET
     
     color += fresnel * 0.5f; // フレネル効果を色に加える
     
- //   return float4(color+specular,1.0f);
-    
-    return float4(textureColor.rgb*0.2,1);
+    return float4(color+specular,textureColor.a);
 }
