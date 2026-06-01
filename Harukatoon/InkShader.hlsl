@@ -27,19 +27,20 @@ float4 main(PS_INPUT Input) : SV_TARGET
     // 法線ベクトルを計算
     float3 normal;
     normal.xy = (normalSample.xy - 0.5f) * 2.0f; // 法線のXとYは中心からのオフセット
-    normal.z = -(normalSample.z - 0.5f) * 2.0f;  // 法線のZは、オフセットの長さから計算
+    normal.z = (normalSample.z - 0.5f) * 2.0f;  // 法線のZは、オフセットの長さから計算
     normal = normalize(normal); // 法線を正規化
     
     // 画面の右上から光を当てる
-    float lightDir = normalize(float3(1.0f, -1.0f, 1.0f)); // 光の方向
+    float3 lightDir = normalize(float3(0.5f, -0.5f, 1.0f)); // 光の方向
     
     // 光の色を計算
-    float lightDiffuse = max(0.2f,dot(-lightDir,normal)); // 光の拡散成分
+    float lightDiffuse = max(0.5f,dot(lightDir,normal)); // 光の拡散成分
     
     // ツヤの計算
     float3 viewDir = float3(0.0f, 0.0f, -1.0f); // 視線の方向
     float3 reflectDir = reflect(lightDir, normal); // 反射ベクトル
-    float specular = pow(max(0.0f,dot(viewDir, reflectDir)),20.0f)*0.6f; // ツヤの強さ
+    // ツヤの広がり
+    float specular = pow(max(0.0f,dot(viewDir, reflectDir)),30.0f)*0.7f; // ツヤの強さ
     
     // 最終的なインクの色の計算
     float3 shaderColor = (textureColor.rgb * lightDiffuse) + specular; // 光の影響を加える

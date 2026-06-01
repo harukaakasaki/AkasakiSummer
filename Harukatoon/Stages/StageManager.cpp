@@ -31,11 +31,11 @@ void StageManager::Init()
 	m_greenTextureHandle = LoadGraph("data/Ink/ink_green.png");
 	assert(m_greenTextureHandle != -1);
 	// ピンクのノーマルマップ
-	m_pinkTextureHandle = LoadGraph("data/Ink/ink_pink_n.png");
-	assert(m_pinkTextureHandle != -1);
+	m_nPinkTextureHandle = LoadGraph("data/Ink/ink_pink_n.png");
+	assert(m_nPinkTextureHandle != -1);
 	// グリーンのノーマルマップ
-	m_greenTextureHandle = LoadGraph("data/Ink/ink_green_n.png");
-	assert(m_greenTextureHandle != -1);
+	m_nGreenTextureHandle = LoadGraph("data/Ink/ink_green_n.png");
+	assert(m_nGreenTextureHandle != -1);
 	// インクのシェーダー
 	m_InkShaderHandle = LoadPixelShader("InkShader.pso");
 	assert(m_InkShaderHandle != -1);
@@ -68,8 +68,6 @@ void StageManager::Draw()
 				int topY = y * m_pixelSize;
 				int rightX = (x + 1) * m_pixelSize;
 				int bottomY = (y + 1) * m_pixelSize;
-
-				//DrawBox(leftX, topY, rightX, bottomY, GetColor(0, 0, 0), TRUE);
 			}
 			
 		}
@@ -93,18 +91,37 @@ void StageManager::Draw()
 			int rightX = (x + 1) * m_pixelSize;
 			int bottomY = (y + 1) * m_pixelSize;
 
+			int colorHandle = -1;
+			int normalHandle = -1;
 			
 			if (m_2dMap[y][x] == 1)// ピンクの場合
 			{
-				SetUseTextureToShader(0,m_pinkTextureHandle);
-				SetUseTextureToShader(1,m_nPinkTextureHandle);
-				DrawExtendGraph(leftX, topY, rightX, bottomY, m_pinkTextureHandle, TRUE);
+				colorHandle = m_pinkTextureHandle;
+				normalHandle = m_nPinkTextureHandle;
 			}
 			else if (m_2dMap[y][x] == 2)// グリーンの場合
 			{
-				SetUseTextureToShader(0,m_greenTextureHandle);
-				SetUseTextureToShader(1,m_nGreenTextureHandle);
-				DrawExtendGraph(leftX, topY, rightX, bottomY, m_greenTextureHandle, TRUE);
+				colorHandle = m_greenTextureHandle;
+				normalHandle = m_nGreenTextureHandle;
+			}
+			if (colorHandle != -1 && normalHandle != -1)
+			{
+				SetUseTextureToShader(0, colorHandle);
+				SetUseTextureToShader(1, normalHandle);
+
+				// 2Dポリゴンの4頂点データ
+				VERTEX2D vertices[6] =
+				{
+					// 三角形1
+					{ { leftX,  topY,    0.0f }, 1.0f, GetColorU8(255,255,255,255), 0.0f, 0.0f },
+					{ { rightX, topY,    0.0f }, 1.0f, GetColorU8(255,255,255,255), 1.0f, 0.0f },
+					{ { rightX, bottomY, 0.0f }, 1.0f, GetColorU8(255,255,255,255), 1.0f, 1.0f },
+					// 三角形2
+					{ { leftX,  topY,    0.0f }, 1.0f, GetColorU8(255,255,255,255), 0.0f, 0.0f },
+					{ { rightX, bottomY, 0.0f }, 1.0f, GetColorU8(255,255,255,255), 1.0f, 1.0f },
+					{ { leftX, bottomY, 0.0f }, 1.0f, GetColorU8(255,255,255,255), 0.0f, 1.0f }
+				};
+				DrawPolygon2D(vertices, 2, colorHandle, TRUE);
 			}
 		}
 	}
