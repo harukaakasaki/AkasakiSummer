@@ -28,8 +28,8 @@ private:
 	// 1マスのサイズ
 	int m_cellSize;
 	// ステージ縦横のマス数
-	int m_MapWidthSize;
-	int m_MapHeightSize;
+	int m_mapWidthSize;
+	int m_mapHeightSize;
 	// インクのテクスチャ
 	int m_pinkTextureHandle;
 	int m_greenTextureHandle;
@@ -37,7 +37,7 @@ private:
 	int m_nPinkTextureHandle;
 	int m_nGreenTextureHandle;
 	// インクのシェーダーハンドル
-	int m_InkShaderHandle;
+	int m_inkShaderHandle;
 
 };
 

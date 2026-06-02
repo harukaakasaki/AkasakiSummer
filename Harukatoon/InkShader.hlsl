@@ -17,14 +17,15 @@ struct PS_INPUT
 
 float4 main(PS_INPUT Input) : SV_TARGET
 {
-    //return float4(1.0f, 0.0f, 0.0f, 1.0f); // 赤色で描画
+    // return float4(1.0, 0.0, 0.0, 1.0); // 赤色で描画
     //return float4(Input.TexCoord.x, Input.TexCoord.y, 0.0f, 1.0f);
     
 	// テクスチャの色を読み込み
     float4 textureColor = g_Texture.Sample(g_Sampler, Input.TexCoord);
 	
 	// アルファ値がほぼゼロの場所は、描画をスキップする
-    //if (textureColor.a < 0.1f)discard;
+    if (textureColor.a < 0.1f)
+        discard;
     
     float3 normalSample = g_NormalMap.Sample(g_Sampler, Input.TexCoord).rgb; // ノーマルマップから法線をサンプリング
     
@@ -50,13 +51,13 @@ float4 main(PS_INPUT Input) : SV_TARGET
     float3 viewDir = normalize(float3(0.0f, 0.0f, -1.0f)); // 視線の方向
     float3 reflectDir = reflect(lightDir, normal); // 反射ベクトル
     // ツヤの広がり
-    float specular = pow(max(0.0f,dot(viewDir, reflectDir)),20.0f)*1.2f; // ツヤの強さ
+    float specular = pow(max(0.0f,dot(viewDir, reflectDir)),20.0f); // ツヤの強さ
     
     float fresnel = pow(1.0f - dot(normal, viewDir), 3.0f); // フレネル効果の計算
     
     color += fresnel * 0.5f; // フレネル効果を色に加える
     
-    return textureColor; // テクスチャの色をそのまま返す
+ //   return textureColor; // テクスチャの色をそのまま返す
     
-    //return float4(color+specular,textureColor.a);
+    return float4(color + specular, textureColor.a);
 }

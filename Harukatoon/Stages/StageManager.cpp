@@ -7,14 +7,14 @@ namespace
 }
 
 StageManager::StageManager() :
-	m_MapWidthSize(0),
-	m_MapHeightSize(0),
+	m_mapWidthSize(0),
+	m_mapHeightSize(0),
 	m_cellSize(0),
 	m_pinkTextureHandle(-1),
 	m_greenTextureHandle(-1),
 	m_nPinkTextureHandle(-1),
 	m_nGreenTextureHandle(-1),
-	m_InkShaderHandle(-1)
+	m_inkShaderHandle(-1)
 {
 }
 
@@ -37,18 +37,18 @@ void StageManager::Init()
 	m_nGreenTextureHandle = LoadGraph("data/Ink/ink_green_n.png");
 	assert(m_nGreenTextureHandle != -1);
 	// インクのシェーダー
-	m_InkShaderHandle = LoadPixelShader("InkShader.pso");
-	assert(m_InkShaderHandle != -1);
+	m_inkShaderHandle = LoadPixelShader("InkShader.pso");
+	assert(m_inkShaderHandle != -1);
+	
+	m_cellSize = 100.0f;
+	m_mapWidthSize = 64;
+	m_mapHeightSize = 48;
 
-	m_cellSize = 30.0f;
-	m_MapWidthSize = 64;
-	m_MapHeightSize = 48;
-
-	m_2dMap.resize(m_MapHeightSize);// 縦48マスの空きを作る
+	m_2dMap.resize(m_mapHeightSize);// 縦48マスの空きを作る
 	// メモリ内に48x64の紙を作成
-	for (int i = 0; i < m_MapHeightSize; i++)
+	for (int i = 0; i < m_mapHeightSize; i++)
 	{
-		m_2dMap[i].resize(m_MapWidthSize, 0);
+		m_2dMap[i].resize(m_mapWidthSize, 0);
 	}
 }
 void StageManager::Update()
@@ -63,25 +63,25 @@ void StageManager::Draw()
 	SetUseBackCulling(FALSE);// 裏面も描画するようにする（これをしないと裏返ったポリゴンが見えなくなる）
 
 	// インクの描画を開始（シェーダーON）
-	if (m_InkShaderHandle != -1)
+	if (m_inkShaderHandle != -1)
 	{
-		SetUsePixelShader(m_InkShaderHandle);
+		int result = SetUsePixelShader(m_inkShaderHandle);
 	}
 
 	// 3D空間にインクを描画する
 	float size = m_cellSize;// インクの大きさ
 
-	for (int z = 0; z < m_MapHeightSize; z++)
+	for (int z = 0; z < m_mapHeightSize; z++)
 	{
-		for (int x = 0; x < m_MapWidthSize; x++)
+		for (int x = 0; x < m_mapWidthSize; x++)
 		{
 			if (m_2dMap[z][x] == 0)
 			{
 				continue;
 			}
 			// 2Dのマス目を3D空間に変換して描画する
-			float offsetX = (m_MapWidthSize * size) / 2.0f;// ステージのXを原点にするためのオフセット
-			float offsetZ = (m_MapHeightSize * size) / 2.0f;// ステージのZを原点にするためのオフセット
+			float offsetX = (m_mapWidthSize * size) / 2.0f;// ステージのXを原点にするためのオフセット
+			float offsetZ = (m_mapHeightSize * size) / 2.0f;// ステージのZを原点にするためのオフセット
 
 			float leftX = (x * size) - offsetX;
 			float rightX = ((x + 1) * size) - offsetX;
@@ -123,7 +123,19 @@ void StageManager::Draw()
 					{ { leftX,  ground,  frontZ }, {0.0f,1.0f,0.0f}, white, white, 0.0f, 1.0f }
 				};
 
-				//DrawPolygon3DToShader(vertices,2);
+				//VERTEX3DSHADER verticesShader[6] =
+				//{
+				//	// 三角形1
+				//	{ { leftX,  ground,  backZ  }, {0.0f,1.0f,0.0f}, 0.0f, 0.0f },
+				//	{ { rightX, ground,  backZ  }, {0.0f,1.0f,0.0f},1.0f, 0.0f },
+				//	{ { leftX,  ground,  frontZ }, {0.0f,1.0f,0.0f}, 0.0f, 1.0f },
+				//	// 三角形2
+				//	{ { rightX, ground,  backZ  }, {0.0f,1.0f,0.0f},  1.0f, 0.0f },
+				//	{ { rightX, ground,  frontZ }, {0.0f,1.0f,0.0f}, 1.0f, 1.0f },
+				//	{ { leftX,  ground,  frontZ }, {0.0f,1.0f,0.0f},0.0f, 1.0f }
+				//};
+
+				//DrawPolygon3DToShader(verticesShader,2);
 				DxLib::DrawPolygon3D(vertices, 2, colorHandle, true);
 				//DrawPolygon3D()
 
@@ -139,13 +151,13 @@ void StageManager::Draw()
 
 void StageManager::Paint(float x, float z, float who)
 {
-	float offsetX = (m_MapWidthSize * m_cellSize) / 2.0f;// ステージのXを原点にするためのオフセット
-	float offsetZ = (m_MapHeightSize * m_cellSize) / 2.0f;// ステージのZを原点にするためのオフセット
+	float offsetX = (m_mapWidthSize * m_cellSize) / 2.0f;// ステージのXを原点にするためのオフセット
+	float offsetZ = (m_mapHeightSize * m_cellSize) / 2.0f;// ステージのZを原点にするためのオフセット
 
 	int targetX = (x + offsetX) / m_cellSize;
 	int targetZ = (z + offsetZ) / m_cellSize;
 
-	if (targetX >= 0 && targetX < m_MapWidthSize && targetZ >= 0 && targetZ < m_MapHeightSize)
+	if (targetX >= 0 && targetX < m_mapWidthSize && targetZ >= 0 && targetZ < m_mapHeightSize)
 	{
 		m_2dMap[targetZ][targetX] = who;
 	}
