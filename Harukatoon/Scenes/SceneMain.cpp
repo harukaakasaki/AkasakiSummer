@@ -1,5 +1,6 @@
 #include "SceneMain.h"
-#include "DxLib.h"
+#include <DxLib.h>
+#include <cmath>
 #include "../GameObjects/Player.h"
 #include "../Systems/Camera.h"
 #include "../Stages/StageManager.h"
@@ -30,11 +31,12 @@ void SceneMain::Init()
 	SetUseZBuffer3D(true);	// Zバッファを使います
 	SetWriteZBuffer3D(true);	// 描画する物体はZバッファにも距離を書き込む
 
-	SetBackgroundColor(255, 255, 255);
+	SetBackgroundColor(200, 200, 200);
 
 	SetCameraPositionAndTarget_UpVecY(VGet(0.0f, 300.0f, -700), VGet(0.0f, 0.0f, 0.0f));
 	SetupCamera_Perspective(DX_PI_F / 3.0f);
-	SetCameraNearFar(200.0f, 1500.0f);
+//	SetCameraNearFar(200.0f, 1500.0f);
+	SetCameraNearFar(1.0f, 1500.0f);
 
 	m_pPlayer->Init();
 	m_pCamera->Init();
@@ -55,15 +57,32 @@ void SceneMain::InkPaint()
 	int mouseX, mouseY;
 	GetMousePoint(&mouseX, &mouseY);
 
+	// マウスの座標を3Dに変換する
+	VECTOR rayStart = ConvScreenPosToWorldPos(VGet((float)mouseX, (float)mouseY, 0.0f));
+	VECTOR rayEnd   = ConvScreenPosToWorldPos(VGet((float)mouseX, (float)mouseY, 1.0f));
+
+	float vecY = rayEnd.y - rayStart.y;
+
+	float paintX = 0.0f;
+	float paintZ = 0.0f;
+
+	if (std::abs(vecY) > 0.0001f)
+	{
+		float t = -rayStart.y / vecY;
+
+		paintX = rayStart.x + t * (rayEnd.x - rayStart.x);
+		paintZ = rayStart.z + t * (rayEnd.z - rayStart.z);
+	}
+
 	// もしマウスの左クリックを押したら、テクスチャに色が付く
 	if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0)
 	{
-		m_pStageManager->Paint(mouseX, mouseY, 1);
+		m_pStageManager->Paint(paintX, paintZ, 1);
 	}
 	// もしマウスの右クリックを押したら、テクスチャに色が付く
 	else if ((GetMouseInput() & MOUSE_INPUT_RIGHT) != 0)
 	{
-		m_pStageManager->Paint(mouseX, mouseY, 2);
+		m_pStageManager->Paint(paintX, paintZ, 2);
 	}
 }
 

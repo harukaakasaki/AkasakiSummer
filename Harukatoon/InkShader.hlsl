@@ -16,6 +16,8 @@ struct PS_INPUT
 
 float4 main(PS_INPUT Input) : SV_TARGET
 {
+    return float4(1.0f, 0.0f, 0.0f, 1.0f); // 赤色で描画
+    
 	// テクスチャの色を読み込み
     float4 textureColor = g_Texture.Sample(g_Sampler, Input.TexCoord);
 	

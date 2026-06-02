@@ -9,7 +9,7 @@ namespace
 StageManager::StageManager():
 	m_MapWidthSize(0),
 	m_MapHeightSize(0),
-	m_pixelSize(0),
+	m_cellSize(0),
 	m_pinkTextureHandle(-1),
 	m_greenTextureHandle(-1),
 	m_nPinkTextureHandle(-1),
@@ -40,7 +40,7 @@ void StageManager::Init()
 	m_InkShaderHandle = LoadPixelShader("InkShader.pso");
 	assert(m_InkShaderHandle != -1);
 
-	m_pixelSize = 200;
+	m_cellSize = 10.0f;
 	m_MapWidthSize = 64;
 	m_MapHeightSize = 48;
 
@@ -57,24 +57,10 @@ void StageManager::Update()
 }
 void StageManager::Draw()
 {
-	// 床のマスを描画
-	for (int y = 0; y < m_MapHeightSize; y++)
-	{
-		for (int x = 0; x < m_MapWidthSize; x++)
-		{
-			if (m_2dMap[y][x] == 0)
-			{
-				int leftX = x * m_pixelSize;
-				int topY = y * m_pixelSize;
-				int rightX = (x + 1) * m_pixelSize;
-				int bottomY = (y + 1) * m_pixelSize;
-			}
-			
-		}
-	}
-
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	SetUseAlphaTestFlag(TRUE);// アルファテストをONにする（アルファ値が0の部分は描画されないようになる）
+
+	SetUseBackCulling(FALSE);// 裏面も描画するようにする（これをしないと裏返ったポリゴンが見えなくなる）
 
 	// インクの描画を開始（シェーダーON）
 	if (m_InkShaderHandle != -1)
@@ -82,68 +68,87 @@ void StageManager::Draw()
 		SetUsePixelShader(m_InkShaderHandle);
 	}
 
-	for (int y = 0; y < m_MapHeightSize; y++)
+	// 3D空間にインクを描画する
+	float size = m_cellSize;// インクの大きさ
+
+	for (int z = 0; z < m_MapHeightSize; z++)
 	{
 		for (int x = 0; x < m_MapWidthSize; x++)
 		{
-			int leftX = x * m_pixelSize;
-			int topY = y * m_pixelSize;
-			int rightX = (x + 1) * m_pixelSize;
-			int bottomY = (y + 1) * m_pixelSize;
+			if (m_2dMap[z][x] == 0)
+			{
+				continue;
+			}
+			// 2Dのマス目を3D空間に変換して描画する
+			float offsetX = (m_MapWidthSize * size) / 2.0f;// ステージのXを原点にするためのオフセット
+			float offsetZ = (m_MapHeightSize * size) / 2.0f;// ステージのZを原点にするためのオフセット
+
+			float leftX = (x * size) - offsetX;
+			float rightX = ((x + 1) * size) - offsetX;
+			float frontZ = (z * size) - offsetZ;
+			float backZ = ((z + 1) * size) - offsetZ;
+
+			float ground = 0.05f;// 床の高さ(0より少し高くする)
 
 			int colorHandle = -1;
 			int normalHandle = -1;
 			
-			if (m_2dMap[y][x] == 1)// ピンクの場合
+			if (m_2dMap[z][x] == 1)// ピンクの場合
 			{
 				colorHandle = m_pinkTextureHandle;
 				normalHandle = m_nPinkTextureHandle;
 			}
-			else if (m_2dMap[y][x] == 2)// グリーンの場合
+			else if (m_2dMap[z][x] == 2)// グリーンの場合
 			{
 				colorHandle = m_greenTextureHandle;
 				normalHandle = m_nGreenTextureHandle;
 			}
 			if (colorHandle != -1 && normalHandle != -1)
 			{
+				if (m_InkShaderHandle != -1)
+				{
+					SetUsePixelShader(m_InkShaderHandle);
+				}
+
 				SetUseTextureToShader(0, colorHandle);
 				SetUseTextureToShader(1, normalHandle);
 
-				// 2Dポリゴンの4頂点データ
-				VERTEX2D vertices[6] =
+				// 3Dポリゴンの頂点データ
+				VERTEX3DSHADER vertices[6] =
 				{
 					// 三角形1
-					{ { leftX,  topY,    0.0f }, 1.0f, GetColorU8(255,255,255,255), 0.0f, 0.0f },
-					{ { rightX, topY,    0.0f }, 1.0f, GetColorU8(255,255,255,255), 1.0f, 0.0f },
-					{ { rightX, bottomY, 0.0f }, 1.0f, GetColorU8(255,255,255,255), 1.0f, 1.0f },
+					{ { leftX,  ground,   backZ  }, {0.0f,1.0f,0.0f}, 0.0f, 0.0f},
+					{ { rightX, ground,   backZ  }, {0.0f,1.0f,0.0f}, 1.0f, 0.0f},
+					{ { leftX,  ground,   frontZ }, {0.0f,1.0f,0.0f}, 0.0f, 1.0f},
 					// 三角形2
-					{ { leftX,  topY,    0.0f }, 1.0f, GetColorU8(255,255,255,255), 0.0f, 0.0f },
-					{ { rightX, bottomY, 0.0f }, 1.0f, GetColorU8(255,255,255,255), 1.0f, 1.0f },
-					{ { leftX, bottomY,  0.0f }, 1.0f, GetColorU8(255,255,255,255), 0.0f, 1.0f }
+					{ { rightX, ground,   backZ  }, {0.0f,1.0f,0.0f}, 1.0f, 0.0f},
+					{ { rightX, ground,   frontZ }, {0.0f,1.0f,0.0f}, 1.0f, 1.0f},
+					{ { leftX,  ground,   frontZ }, {0.0f,1.0f,0.0f}, 0.0f, 1.0f}
 				};
-				DrawPolygon2D(vertices, 2, colorHandle, TRUE);
+
+				DrawPolygon3DToShader(vertices,2);
+				
 			}
 		}
 	}
-
-	if (m_InkShaderHandle != -1)
-	{
 		// インクを書き終えたら元の描画にリセットする
-		SetUsePixelShader(-1);
-	}
-
+	SetUsePixelShader(-1);
 	SetUseAlphaTestFlag(FALSE);// アルファテストをOFFにする
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	SetUseBackCulling(TRUE);// カリングを元に戻す
 }
 
-void StageManager::Paint(float x, float y, float who)
+void StageManager::Paint(float x, float z, float who)
 {
-	int targetX = x / m_pixelSize;
-	int targetY = y / m_pixelSize;
+	float offsetX = (m_MapWidthSize * m_cellSize) / 2.0f;// ステージのXを原点にするためのオフセット
+	float offsetZ = (m_MapHeightSize * m_cellSize) / 2.0f;// ステージのZを原点にするためのオフセット
 
-	if (targetX >= 0 && targetX < m_MapWidthSize && targetY >= 0 && targetY < m_MapHeightSize)
+	int targetX = (x + offsetX) / m_cellSize;
+	int targetZ = (z + offsetZ) / m_cellSize;
+
+	if (targetX >= 0 && targetX < m_MapWidthSize && targetZ >= 0 && targetZ < m_MapHeightSize)
 	{
-		m_2dMap[targetY][targetX] = who;
+		m_2dMap[targetZ][targetX] = who;
 	}
 	
 }
