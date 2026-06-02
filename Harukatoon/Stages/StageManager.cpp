@@ -6,7 +6,7 @@ namespace
 {
 }
 
-StageManager::StageManager():
+StageManager::StageManager() :
 	m_MapWidthSize(0),
 	m_MapHeightSize(0),
 	m_cellSize(0),
@@ -40,7 +40,7 @@ void StageManager::Init()
 	m_InkShaderHandle = LoadPixelShader("InkShader.pso");
 	assert(m_InkShaderHandle != -1);
 
-	m_cellSize = 10.0f;
+	m_cellSize = 30.0f;
 	m_MapWidthSize = 64;
 	m_MapHeightSize = 48;
 
@@ -48,7 +48,7 @@ void StageManager::Init()
 	// メモリ内に48x64の紙を作成
 	for (int i = 0; i < m_MapHeightSize; i++)
 	{
-		m_2dMap[i].resize(m_MapWidthSize,0);
+		m_2dMap[i].resize(m_MapWidthSize, 0);
 	}
 }
 void StageManager::Update()
@@ -92,7 +92,7 @@ void StageManager::Draw()
 
 			int colorHandle = -1;
 			int normalHandle = -1;
-			
+
 			if (m_2dMap[z][x] == 1)// ピンクの場合
 			{
 				colorHandle = m_pinkTextureHandle;
@@ -105,33 +105,32 @@ void StageManager::Draw()
 			}
 			if (colorHandle != -1 && normalHandle != -1)
 			{
-				if (m_InkShaderHandle != -1)
-				{
-					SetUsePixelShader(m_InkShaderHandle);
-				}
-
 				SetUseTextureToShader(0, colorHandle);
 				SetUseTextureToShader(1, normalHandle);
 
+				COLOR_U8 white = GetColorU8(255, 255, 255, 255);
+
 				// 3Dポリゴンの頂点データ
-				VERTEX3DSHADER vertices[6] =
+				VERTEX3D vertices[6] =
 				{
 					// 三角形1
-					{ { leftX,  ground,   backZ  }, {0.0f,1.0f,0.0f}, 0.0f, 0.0f},
-					{ { rightX, ground,   backZ  }, {0.0f,1.0f,0.0f}, 1.0f, 0.0f},
-					{ { leftX,  ground,   frontZ }, {0.0f,1.0f,0.0f}, 0.0f, 1.0f},
+					{ { leftX,  ground,  backZ  }, {0.0f,1.0f,0.0f}, white, white, 0.0f, 0.0f },
+					{ { rightX, ground,  backZ  }, {0.0f,1.0f,0.0f}, white, white, 1.0f, 0.0f },
+					{ { leftX,  ground,  frontZ }, {0.0f,1.0f,0.0f}, white, white, 0.0f, 1.0f },
 					// 三角形2
-					{ { rightX, ground,   backZ  }, {0.0f,1.0f,0.0f}, 1.0f, 0.0f},
-					{ { rightX, ground,   frontZ }, {0.0f,1.0f,0.0f}, 1.0f, 1.0f},
-					{ { leftX,  ground,   frontZ }, {0.0f,1.0f,0.0f}, 0.0f, 1.0f}
+					{ { rightX, ground,  backZ  }, {0.0f,1.0f,0.0f}, white, white, 1.0f, 0.0f },
+					{ { rightX, ground,  frontZ }, {0.0f,1.0f,0.0f}, white, white, 1.0f, 1.0f },
+					{ { leftX,  ground,  frontZ }, {0.0f,1.0f,0.0f}, white, white, 0.0f, 1.0f }
 				};
 
-				DrawPolygon3DToShader(vertices,2);
-				
+				//DrawPolygon3DToShader(vertices,2);
+				DxLib::DrawPolygon3D(vertices, 2, colorHandle, true);
+				//DrawPolygon3D()
+
 			}
 		}
 	}
-		// インクを書き終えたら元の描画にリセットする
+	// インクを書き終えたら元の描画にリセットする
 	SetUsePixelShader(-1);
 	SetUseAlphaTestFlag(FALSE);// アルファテストをOFFにする
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -150,6 +149,6 @@ void StageManager::Paint(float x, float z, float who)
 	{
 		m_2dMap[targetZ][targetX] = who;
 	}
-	
+
 }
 
