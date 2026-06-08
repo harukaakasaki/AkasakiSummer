@@ -9,7 +9,7 @@ public:
 	~Camera();
 
 	void Init();
-	void Update(Vector3 playerPos);
+	void Update(VECTOR playerPos);
 	void Draw();
 
 	float GetAngle() const { return m_cameraAngle; }
@@ -19,7 +19,7 @@ private:
 	int m_skyModelHandle;// ‹ó‚Ìƒ‚ƒfƒ‹
 	
 
-	Vector3 m_cameraPos;
-	Vector3 m_cameraTarget;
+	VECTOR m_cameraPos;
+	VECTOR m_cameraTarget;
 };
 

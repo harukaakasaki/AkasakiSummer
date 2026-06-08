@@ -1,4 +1,7 @@
 #pragma once
+#include <vector>
+#include <memory>
+#include "Bullet.h"
 #include "../GameObjects/Player.h"
 // ウェポンクラスはバレットクラスです！
 
@@ -12,9 +15,11 @@ public:
 	void Draw();
 	// ウェポンで撃つ関数
 	// もしプレイヤーのインク容量がなくなると撃てなくなるようにしたい
-	void UseWeapon();// ウェポンを使ったらバレットクラスに伝える
+	void UseWeapon(VECTOR playerPos,VECTOR shotVel);// ウェポンを使ったらバレットクラスに伝える
 
 private:
+	// 弾の動的配列
+	std::vector<std::unique_ptr<Bullet>>m_bullets;
 	
 	float m_whoShot;// 誰が撃った？（プレイヤー1 or プレイヤー2）
 

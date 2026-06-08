@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <DxLib.h>
+#include <cmath>
 #include "../Systems/Pad.h"
 #include "../Weapons/Weapon.h"
 #include "../Weapons/Bomb.h"
@@ -16,7 +17,7 @@ Player::Player():
 	m_modelHandle(-1),
 	m_angle(0.0f),
 	m_move{0.0f,0.0f,0.0f},
-	m_pos(0.0f, 0.0f, 0.0f),
+	m_pos{ 0.0f, 0.0f, 0.0f },
 	isShooting(false)
 {
 	m_pWeapon = new Weapon();
@@ -36,6 +37,7 @@ void Player::Init()
 }
 void Player::Update(float cameraAngle,float timeScale)
 {
+	
 	Pad::Update();
 
 	int x, y;
@@ -86,7 +88,17 @@ void Player::Update(float cameraAngle,float timeScale)
 	// 入力情報は優先度をつけて管理する
 	if (isWeaponPress)
 	{
-		m_pWeapon->UseWeapon();
+		VECTOR weaponPos = VGet(m_pos.x, m_pos.y + 200.0f, m_pos.z);
+
+		float speed = 5.0f;
+
+		VECTOR shotVelocity;
+		shotVelocity.x = cosf(cameraAngle) * speed;
+		shotVelocity.y = 2.0f;
+		shotVelocity.z = sinf(cameraAngle) * speed;
+
+
+		m_pWeapon->UseWeapon(weaponPos,shotVelocity);
 		
 		isShooting = true;
 	}
@@ -107,12 +119,16 @@ void Player::Update(float cameraAngle,float timeScale)
 	{
 		// カメラ方向を見ながらインクを撃つ
 		// atan2fでcos,sinのカメラアングルを合わせる
-		m_angle = atan2f(cos(cameraAngle),sin(cameraAngle));
+		m_angle = atan2f(cosf(cameraAngle),sinf(cameraAngle));
 	}
+
+	m_pWeapon->Update();
 
 }
 void Player::Draw()
 {
+	m_pWeapon->Draw();
+
 	// プレイヤーの描画
 	int playerCapsule = DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+100.0f, m_pos.z+0.0f), 
 		VGet(m_pos.x+0.0f, m_pos.y+180.0f, m_pos.z+0.0f), 
@@ -132,7 +148,7 @@ void Player::Draw()
 	MV1DrawModel(m_modelHandle);// プレイヤー表示
 }
 
-Vector3 Player::GetPos() const
+VECTOR Player::GetPos() const
 {
 	return m_pos;
 }

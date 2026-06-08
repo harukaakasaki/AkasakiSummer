@@ -1,9 +1,10 @@
 #pragma once
+#include <DxLib.h>
 #include "../Systems/Vector3.h"
 class Bullet
 {
 public:
-	Bullet();
+	Bullet(VECTOR startPos, VECTOR startVel);
 	~Bullet();
 
 	void Init();
@@ -18,11 +19,11 @@ public:
 
 private:
 	// 自分の位置pos
-	Vector3 m_pos;
+	VECTOR m_pos;
 
 
 	// 速度velocity
-	float m_velocity;
+	VECTOR m_velocity;
 
 	// 弾が生きているかのフラグ
 	bool m_isAlive;

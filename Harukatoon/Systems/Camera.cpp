@@ -6,8 +6,8 @@
 
 Camera::Camera():
 	m_cameraAngle(0.0f),
-	m_cameraPos(0.0f,0.0f,0.0f),
-	m_cameraTarget(0.0f, 0.0f, 0.0f),
+	m_cameraPos{ 0.0f,0.0f,0.0f },
+	m_cameraTarget{ 0.0f, 0.0f, 0.0f },
 	m_skyModelHandle(-1)
 {
 }
@@ -34,7 +34,7 @@ void Camera::Init()
 
 	m_cameraAngle = DX_PI_F / 2;
 }
-void Camera::Update(Vector3 playerPos)
+void Camera::Update(VECTOR playerPos)
 {
 	// 毎フレームカメラにエフェクトを描画する
 	// とてもすんごく重要
