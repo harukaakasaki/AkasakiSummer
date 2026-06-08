@@ -8,6 +8,7 @@
 namespace
 {
 	constexpr float kSpeed = 15.0f;// プレイヤーの移動速度
+	constexpr float kAttackingSpeed = 5.0f;// プレイヤーの攻撃中の移動速度
 	constexpr float kDiveSpeed = 25.0f;// プレイヤーの潜り移動速度
 
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
@@ -82,6 +83,13 @@ void Player::Update(float cameraAngle,float timeScale)
 
 	GetJoypadXInputState(DX_INPUT_PAD1, &xinputState);
 	bool isWeaponPress = (xinputState.RightTrigger > 128);// RTが押された
+	// 攻撃中はプレイヤーのスピードが遅くなるようにしたい
+	if (isWeaponPress)
+	{
+		m_move.x = m_move.x * kAttackingSpeed * timeScale;
+		m_move.z = m_move.z * kAttackingSpeed * timeScale;
+		
+	}
 	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
 	bool isBombPress = Pad::IsPress(PAD_INPUT_6);         // RBが押された
 

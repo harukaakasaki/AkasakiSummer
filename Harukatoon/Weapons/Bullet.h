@@ -11,6 +11,8 @@ public:
 	// Œ‚‚Â¨‘¬“x * d—Í‚Å•ú•¨ü‚ğ•`‚­‚æ‚¤‚É”­Ë‚Å‚«‚é‚Í‚¸I
 	void Update();
 	void Draw();
+
+	VECTOR GetPos();
 	// ’e‚ª¶‚«‚Ä‚¢‚é‚©
 	bool IsBulletAlive()const { return m_isAlive; };
 

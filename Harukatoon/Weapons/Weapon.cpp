@@ -24,7 +24,7 @@ void Weapon::Update()
 
 		if (!bullet->IsBulletAlive())
 		{
-
+			VECTOR paintPos = bullet->GetPos();
 		}
 
 	}
