@@ -88,14 +88,14 @@ void Player::Update(float cameraAngle,float timeScale)
 	// “ü—Íî•ñ‚Í—Dæ“x‚ð‚Â‚¯‚ÄŠÇ—‚·‚é
 	if (isWeaponPress)
 	{
-		VECTOR weaponPos = VGet(m_pos.x, m_pos.y + 200.0f, m_pos.z);
+		VECTOR weaponPos = VGet(m_pos.x, m_pos.y + 300.0f, m_pos.z);
 
-		float speed = 5.0f;
+		float speed = 10.0f;
 
 		VECTOR shotVelocity;
-		shotVelocity.x = cosf(cameraAngle) * speed;
+		shotVelocity.x = -cosf(cameraAngle) * speed;
 		shotVelocity.y = 2.0f;
-		shotVelocity.z = sinf(cameraAngle) * speed;
+		shotVelocity.z = -sinf(cameraAngle) * speed;
 
 
 		m_pWeapon->UseWeapon(weaponPos,shotVelocity);
