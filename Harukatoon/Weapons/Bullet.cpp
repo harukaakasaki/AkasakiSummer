@@ -46,9 +46,4 @@ void Bullet::Draw()
 	DrawSphere3D(m_pos, 10.0f, 8, GetColor(0, 255, 0), GetColor(0, 255, 0),true);
 }
 
-void Bullet::Shot()
-{
-	m_isAlive = true;
-}
-
 
