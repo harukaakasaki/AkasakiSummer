@@ -75,12 +75,12 @@ void SceneMain::InkPaint()
 		paintZ = rayStart.z + t * (rayEnd.z - rayStart.z);
 	}
 
-	// もしマウスの左クリックを押したら、テクスチャに色が付く
+	// もしマウスの左クリックを押したら、テクスチャに赤色が付く
 	if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0)
 	{
 		m_pStageManager->Paint(paintX, paintZ, 1);
 	}
-	// もしマウスの右クリックを押したら、テクスチャに色が付く
+	// もしマウスの右クリックを押したら、テクスチャに緑色が付く
 	else if ((GetMouseInput() & MOUSE_INPUT_RIGHT) != 0)
 	{
 		m_pStageManager->Paint(paintX, paintZ, 2);

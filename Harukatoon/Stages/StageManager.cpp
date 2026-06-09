@@ -10,10 +10,10 @@ StageManager::StageManager() :
 	m_mapWidthSize(0),
 	m_mapHeightSize(0),
 	m_cellSize(0),
-	m_pinkTextureHandle(-1),
-	m_greenTextureHandle(-1),
-	m_nPinkTextureHandle(-1),
-	m_nGreenTextureHandle(-1),
+	m_orangeTextureHandle(-1),
+	m_blueTextureHandle(-1),
+	m_nOrangeTextureHandle(-1),
+	m_nBlueTextureHandle(-1),
 	m_inkShaderHandle(-1)
 {
 }
@@ -24,18 +24,18 @@ StageManager::~StageManager()
 
 void StageManager::Init()
 {
-	// ピンクのインクテクスチャ
-	m_pinkTextureHandle = LoadGraph("data/Ink/ink_pink.png");
-	assert(m_pinkTextureHandle != -1);
-	// グリーンのインクテクスチャ
-	m_greenTextureHandle = LoadGraph("data/Ink/ink_green.png");
-	assert(m_greenTextureHandle != -1);
-	// ピンクのノーマルマップ
-	m_nPinkTextureHandle = LoadGraph("data/Ink/ink_pink_n.png");
-	assert(m_nPinkTextureHandle != -1);
-	// グリーンのノーマルマップ
-	m_nGreenTextureHandle = LoadGraph("data/Ink/ink_green_n.png");
-	assert(m_nGreenTextureHandle != -1);
+	// プレイヤー1のインクテクスチャ
+	m_orangeTextureHandle = LoadGraph("data/Ink/ink_orange.png");
+	assert(m_orangeTextureHandle != -1);
+	// プレイヤー2のインクテクスチャ
+	m_blueTextureHandle = LoadGraph("data/Ink/ink_blue.png");
+	assert(m_blueTextureHandle != -1);
+	// プレイヤー1のノーマルマップ
+	m_nOrangeTextureHandle = LoadGraph("data/Ink/ink_orange_n.png");
+	assert(m_nOrangeTextureHandle != -1);
+	// プレイヤー2のノーマルマップ
+	m_nBlueTextureHandle = LoadGraph("data/Ink/ink_blue_n.png");
+	assert(m_nBlueTextureHandle != -1);
 	// インクのシェーダー
 	m_inkShaderHandle = LoadPixelShader("InkShader.pso");
 	assert(m_inkShaderHandle != -1);
@@ -93,15 +93,15 @@ void StageManager::Draw()
 			int colorHandle = -1;
 			int normalHandle = -1;
 
-			if (m_2dMap[z][x] == 1)// ピンクの場合
+			if (m_2dMap[z][x] == 1)// プレイヤー1の場合
 			{
-				colorHandle = m_pinkTextureHandle;
-				normalHandle = m_nPinkTextureHandle;
+				colorHandle = m_orangeTextureHandle;
+				normalHandle = m_nOrangeTextureHandle;
 			}
-			else if (m_2dMap[z][x] == 2)// グリーンの場合
+			else if (m_2dMap[z][x] == 2)// プレイヤー2の場合
 			{
-				colorHandle = m_greenTextureHandle;
-				normalHandle = m_nGreenTextureHandle;
+				colorHandle = m_blueTextureHandle;
+				normalHandle = m_nBlueTextureHandle;
 			}
 			if (colorHandle != -1 && normalHandle != -1)
 			{

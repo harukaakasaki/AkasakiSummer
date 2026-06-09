@@ -34,8 +34,6 @@ void Bullet::Update()
 		m_pos.y = 0.0f;
 		m_isAlive = false;
 	}
-
-
 }
 void Bullet::Draw()
 {
@@ -43,7 +41,7 @@ void Bullet::Draw()
 	if (!m_isAlive)return;
 
 	// 緑の弾を表示
-	DrawSphere3D(m_pos, 10.0f, 8, GetColor(0, 255, 0), GetColor(0, 255, 0),true);
+	DrawSphere3D(m_pos, 10.0f, 8, GetColor(255,0, 0), GetColor(255, 0, 0),true);
 }
 
 VECTOR Bullet::GetPos()

@@ -31,11 +31,11 @@ private:
 	int m_mapWidthSize;
 	int m_mapHeightSize;
 	// インクのテクスチャ
-	int m_pinkTextureHandle;
-	int m_greenTextureHandle;
+	int m_orangeTextureHandle;
+	int m_blueTextureHandle;
 	// インクのノーマルマップ
-	int m_nPinkTextureHandle;
-	int m_nGreenTextureHandle;
+	int m_nOrangeTextureHandle;
+	int m_nBlueTextureHandle;
 	// インクのシェーダーハンドル
 	int m_inkShaderHandle;
 

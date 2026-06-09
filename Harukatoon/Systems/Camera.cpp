@@ -54,9 +54,10 @@ void Camera::Update(VECTOR playerPos)
 
 	// 縦回転(あとで)
 	
-
-	float distance = 1000.0f;
-	float height = 400.0f;
+	// カメラとプレイヤーとの距離
+	float distance = 800.0f;
+	// カメラの高さ
+	float height = 200.0f;
 
 	// カメラズーム（サブウェポンを投げるときに長押しでズームするようにしたい！）
 	// そんな時はラープ！

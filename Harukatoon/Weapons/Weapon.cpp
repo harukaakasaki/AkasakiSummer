@@ -30,6 +30,7 @@ void Weapon::Update()
 
 			m_stageManager->Paint(paintPos.x, paintPos.z, 1);
 		}
+		// ‚±‚±‚©‚çæ‚ğÁ‚µ‚½ê‡A‰i‰“‚É“h‚ê‚é
 		else
 		{
 			aliveBullets.push_back(std::move(bullet));
