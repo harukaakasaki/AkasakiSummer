@@ -27,5 +27,7 @@ private:
 	Player* m_pPlayer;
 	Camera* m_pCamera;
 	StageManager* m_pStageManager;
+
+	int m_gameUI;
 };
 

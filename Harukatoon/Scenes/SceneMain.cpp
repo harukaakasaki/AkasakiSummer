@@ -1,6 +1,7 @@
 #include "SceneMain.h"
 #include <DxLib.h>
 #include <cmath>
+#include <cassert>
 #include "../GameObjects/Player.h"
 #include "../Systems/Camera.h"
 #include "../Stages/StageManager.h"
@@ -12,7 +13,6 @@ SceneMain::SceneMain() :
 	m_pStageManager = new StageManager();
 	m_pPlayer = new Player(m_pStageManager);
 	m_pCamera = new Camera();
-	
 }
 
 SceneMain::~SceneMain()
@@ -42,6 +42,9 @@ void SceneMain::Init()
 	m_pPlayer->Init();
 	m_pCamera->Init();
 	m_pStageManager->Init();
+
+	m_gameUI = LoadGraph("data/UI/GameUI_1.png");
+	assert(m_gameUI != -1);
 }
 
 void SceneMain::Update()
@@ -100,6 +103,11 @@ void SceneMain::Draw()
 	
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);
+
+	int width, height;
+	GetGraphSize(m_gameUI, &width, &height);
+	
+	DrawExtendGraph(270, 10, 100 + width / 4, 100 + height / 5, m_gameUI, true);
 }
 
 void SceneMain::DrawGrid()

@@ -2,7 +2,6 @@
 
 namespace
 {
-	constexpr float shotSpeed = 5.0f;
 }
 
 Bullet::Bullet(VECTOR startPos, VECTOR startVel):
