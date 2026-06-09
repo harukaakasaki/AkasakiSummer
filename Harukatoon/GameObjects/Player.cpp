@@ -14,14 +14,14 @@ namespace
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// ƒvƒŒƒCƒ„[‚Ì‘å‚«‚³
 }
 
-Player::Player():
+Player::Player(StageManager* stageManager):
 	m_modelHandle(-1),
 	m_angle(0.0f),
 	m_move{0.0f,0.0f,0.0f},
 	m_pos{ 0.0f, 0.0f, 0.0f },
 	isShooting(false)
 {
-	m_pWeapon = new Weapon();
+	m_pWeapon = new Weapon(stageManager);
 	m_pBomb = new Bomb();
 }
 

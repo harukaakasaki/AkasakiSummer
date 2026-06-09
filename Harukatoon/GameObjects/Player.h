@@ -1,6 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include "../Systems/Vector3.h"
+#include "../Stages/StageManager.h"
 
 class Weapon;
 class Bomb;
@@ -8,7 +9,7 @@ class Bomb;
 class Player
 {
 public:
-	Player();
+	Player(StageManager* stageManager);
 	~Player();
 
 	void Init();
@@ -31,5 +32,7 @@ private:
 
 	Weapon* m_pWeapon;// プレイヤーが持つウェポン
 	Bomb* m_pBomb;// プレイヤーが持つボム
+	// Stageマネージャーのポインタ
+	StageManager* m_stageManager;
 };
 

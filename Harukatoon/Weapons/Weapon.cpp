@@ -1,11 +1,13 @@
 #include "Weapon.h"
+#include <vector>
 #include <DxLib.h>
 
-Weapon::Weapon():
+Weapon::Weapon(StageManager* stageManager):
 	m_whoShot(0.0f),
 	m_bullets(0.0f),
 	m_shootTimer(0.0f)
 {
+	m_stageManager = stageManager;
 }
 
 Weapon::~Weapon()
@@ -25,11 +27,15 @@ void Weapon::Update()
 		if (!bullet->IsBulletAlive())
 		{
 			VECTOR paintPos = bullet->GetPos();
+
+			m_stageManager->Paint(paintPos.x, paintPos.z, 1);
 		}
-
+		else
+		{
+			aliveBullets.push_back(std::move(bullet));
+		}
 	}
-	
-
+	m_bullets = std::move(aliveBullets);
 }
 void Weapon::Draw()
 {

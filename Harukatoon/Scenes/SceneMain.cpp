@@ -9,9 +9,10 @@ SceneMain::SceneMain() :
 	m_frameCount(0),
 	m_timeScale(1.0)
 {
-	m_pPlayer = new Player();
-	m_pCamera = new Camera();
 	m_pStageManager = new StageManager();
+	m_pPlayer = new Player(m_pStageManager);
+	m_pCamera = new Camera();
+	
 }
 
 SceneMain::~SceneMain()
