@@ -8,7 +8,8 @@
 
 SceneMain::SceneMain() :
 	m_frameCount(0),
-	m_timeScale(1.0)
+	m_timeScale(1.0),
+	m_gameUI(-1)
 {
 	m_pStageManager = new StageManager();
 	m_pPlayer = new Player(m_pStageManager);

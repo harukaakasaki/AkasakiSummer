@@ -10,15 +10,12 @@ SamplerState g_Sampler : register(s0);
 struct PS_INPUT
 {
     float4 Pos      : SV_POSITION; // 頂点の位置
-    float4 Color    : COLOR0;      // 頂点の色
+    float3 Normal   : NORMAL0;     // 頂点シェーダーから渡される法線
     float2 TexCoord : TEXCOORD0;   // テクスチャのUV座標
-    float4 Specular : COLOR1; // 頂点のスペキュラカラー（ツヤの色）
 };
 
 float4 main(PS_INPUT Input) : SV_TARGET
 {
-    // return float4(1.0, 0.0, 0.0, 1.0); // 赤色で描画
-    //return float4(Input.TexCoord.x, Input.TexCoord.y, 0.0f, 1.0f);
     
 	// テクスチャの色を読み込み
     float4 textureColor = g_Texture.Sample(g_Sampler, Input.TexCoord);
@@ -26,8 +23,8 @@ float4 main(PS_INPUT Input) : SV_TARGET
 	// アルファ値がほぼゼロの場所は、描画をスキップする
     if (textureColor.a < 0.1f)
         discard;
-    
-    float3 normalSample = g_NormalMap.Sample(g_Sampler, Input.TexCoord).rgb; // ノーマルマップから法線をサンプリング
+    // ノーマルマップから法線をサンプリング
+    float3 normalSample = g_NormalMap.Sample(g_Sampler, Input.TexCoord).rgb; 
     
     // 法線ベクトルを計算
     float3 normal;
@@ -53,11 +50,12 @@ float4 main(PS_INPUT Input) : SV_TARGET
     // ツヤの広がり
     float specular = pow(max(0.0f,dot(viewDir, reflectDir)),20.0f); // ツヤの強さ
     
-    float fresnel = pow(1.0f - dot(normal, viewDir), 3.0f); // フレネル効果の計算
+    //// フレネル効果
+    //float fresnel = pow(1.0f - dot(normal, viewDir), 3.0f); // フレネル効果の計算
     
-    color += fresnel * 0.5f; // フレネル効果を色に加える
+    //color += fresnel * 0.5f; // フレネル効果を色に加える
     
- //   return textureColor; // テクスチャの色をそのまま返す
+//    return textureColor; // テクスチャの色をそのまま返す
     
     return float4(color + specular, textureColor.a);
 }

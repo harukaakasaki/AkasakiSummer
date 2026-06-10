@@ -88,7 +88,7 @@ void StageManager::Draw()
 			float frontZ = (z * size) - offsetZ;
 			float backZ = ((z + 1) * size) - offsetZ;
 
-			float ground = 0.05f;// 床の高さ(0より少し高くする)
+			float ground = 0.5f;// 床の高さ(0より少し高くする)
 
 			int colorHandle = -1;
 			int normalHandle = -1;
@@ -105,24 +105,46 @@ void StageManager::Draw()
 			}
 			if (colorHandle != -1 && normalHandle != -1)
 			{
-				SetUseTextureToShader(0, colorHandle);
-				SetUseTextureToShader(1, normalHandle);
+				SetUseTextureToShader(0, colorHandle);// シェーダー側(t0)にインクの色
+				SetUseTextureToShader(1, normalHandle);// シェーダー側(t1)にノーマルマップ
 
 				COLOR_U8 white = GetColorU8(255, 255, 255, 255);
 
 				// 3Dポリゴンの頂点データ
-				VERTEX3D vertices[6] =
-				{
-					// 三角形1
-					{ { leftX,  ground,  backZ  }, {0.0f,1.0f,0.0f}, white, white, 0.0f, 0.0f },
-					{ { rightX, ground,  backZ  }, {0.0f,1.0f,0.0f}, white, white, 1.0f, 0.0f },
-					{ { leftX,  ground,  frontZ }, {0.0f,1.0f,0.0f}, white, white, 0.0f, 1.0f },
-					// 三角形2
-					{ { rightX, ground,  backZ  }, {0.0f,1.0f,0.0f}, white, white, 1.0f, 0.0f },
-					{ { rightX, ground,  frontZ }, {0.0f,1.0f,0.0f}, white, white, 1.0f, 1.0f },
-					{ { leftX,  ground,  frontZ }, {0.0f,1.0f,0.0f}, white, white, 0.0f, 1.0f }
-				};
+				VERTEX3DSHADER verticesShader[6];
+				
+				// --- 三角形1 ---
+			    // 頂点0
+				verticesShader[0].pos.x = leftX;  verticesShader[0].pos.y = ground; verticesShader[0].pos.z = backZ;
+				verticesShader[0].norm.x = 0.0f;  verticesShader[0].norm.y = 1.0f; verticesShader[0].norm.z = 0.0f;
+				verticesShader[0].u = 0.0f;        verticesShader[0].v = 0.0f;
 
+				// 頂点1
+				verticesShader[1].pos.x = rightX; verticesShader[1].pos.y = ground; verticesShader[1].pos.z = backZ;
+				verticesShader[1].norm.x = 0.0f;  verticesShader[1].norm.y = 1.0f; verticesShader[1].norm.z = 0.0f;
+				verticesShader[1].u = 1.0f;        verticesShader[1].v = 0.0f;
+
+				// 頂点2
+				verticesShader[2].pos.x = leftX;  verticesShader[2].pos.y = ground; verticesShader[2].pos.z = frontZ;
+				verticesShader[2].norm.x = 0.0f;  verticesShader[2].norm.y = 1.0f; verticesShader[2].norm.z = 0.0f;
+				verticesShader[2].u = 0.0f;        verticesShader[2].v = 1.0f;
+
+				// --- 三角形2 ---
+				// 頂点3
+				verticesShader[3].pos.x = rightX; verticesShader[3].pos.y = ground; verticesShader[3].pos.z = backZ;
+				verticesShader[3].norm.x = 0.0f;  verticesShader[3].norm.y = 1.0f; verticesShader[3].norm.z = 0.0f;
+				verticesShader[3].u = 1.0f;        verticesShader[3].v = 0.0f;
+
+				// 頂点4
+				verticesShader[4].pos.x = rightX; verticesShader[4].pos.y = ground; verticesShader[4].pos.z = frontZ;
+				verticesShader[4].norm.x = 0.0f;  verticesShader[4].norm.y = 1.0f; verticesShader[4].norm.z = 0.0f;
+				verticesShader[4].u = 1.0f;        verticesShader[4].v = 1.0f;
+
+				// 頂点5
+				verticesShader[5].pos.x = leftX;  verticesShader[5].pos.y = ground; verticesShader[5].pos.z = frontZ;
+				verticesShader[5].norm.x = 0.0f;  verticesShader[5].norm.y = 1.0f; verticesShader[5].norm.z = 0.0f;
+				verticesShader[5].u = 0.0f;        verticesShader[5].v = 1.0f;
+				
 				//VERTEX3DSHADER verticesShader[6] =
 				//{
 				//	// 三角形1
@@ -135,8 +157,8 @@ void StageManager::Draw()
 				//	{ { leftX,  ground,  frontZ }, {0.0f,1.0f,0.0f},0.0f, 1.0f }
 				//};
 
-				//DrawPolygon3DToShader(verticesShader,2);
-				DxLib::DrawPolygon3D(vertices, 2, colorHandle, true);
+				DrawPolygon3DToShader(verticesShader,2);
+				//DxLib::DrawPolygon3D(vertices, 2, colorHandle, true);
 				//DrawPolygon3D()
 
 			}
