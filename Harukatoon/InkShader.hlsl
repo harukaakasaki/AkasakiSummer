@@ -50,10 +50,10 @@ float4 main(PS_INPUT Input) : SV_TARGET
     // ツヤの広がり
     float specular = pow(max(0.0f,dot(viewDir, reflectDir)),20.0f); // ツヤの強さ
     
-    //// フレネル効果
-    //float fresnel = pow(1.0f - dot(normal, viewDir), 3.0f); // フレネル効果の計算
+    //// フレネル効果(屈折光)
+    float fresnel = pow(1.0f - dot(normal, viewDir), 1.0f); // フレネル効果の計算
     
-    //color += fresnel * 0.5f; // フレネル効果を色に加える
+    color += fresnel * 0.05f; // フレネル効果を色に加える
     
 //    return textureColor; // テクスチャの色をそのまま返す
     

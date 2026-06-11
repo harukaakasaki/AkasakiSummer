@@ -10,6 +10,7 @@ namespace
 	constexpr float kSpeed = 15.0f;// プレイヤーの移動速度
 	constexpr float kAttackingSpeed = 5.0f;// プレイヤーの攻撃中の移動速度
 	constexpr float kDiveSpeed = 25.0f;// プレイヤーの潜り移動速度
+	constexpr float kShotSpeed = 25.0f;// 弾速度
 
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
 }
@@ -98,7 +99,7 @@ void Player::Update(float cameraAngle,float timeScale)
 	{
 		VECTOR weaponPos = VGet(m_pos.x, m_pos.y + 300.0f, m_pos.z);
 
-		float speed = 16.0f;
+		float speed = kShotSpeed;
 
 		VECTOR shotVelocity;
 		shotVelocity.x = -cosf(cameraAngle) * speed;

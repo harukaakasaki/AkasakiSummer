@@ -51,5 +51,5 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 
 	m_bullets.push_back(std::make_unique<Bullet>(playerPos, shotVel));
 
-	printfDx("ウェポンで攻撃中！\n");
+	//printfDx("ウェポンで攻撃中！\n");
 }
