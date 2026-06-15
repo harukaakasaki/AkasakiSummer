@@ -82,12 +82,12 @@ void SceneMain::InkPaint()
 	// もしマウスの左クリックを押したら、テクスチャに赤色が付く
 	if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0)
 	{
-		m_pStageManager->Paint(paintX, paintZ, 1);
+		m_pStageManager->Paint(paintX, paintZ, 1,100.0f);
 	}
 	// もしマウスの右クリックを押したら、テクスチャに緑色が付く
 	else if ((GetMouseInput() & MOUSE_INPUT_RIGHT) != 0)
 	{
-		m_pStageManager->Paint(paintX, paintZ, 2);
+		m_pStageManager->Paint(paintX, paintZ, 2,100.0f);
 	}
 }
 

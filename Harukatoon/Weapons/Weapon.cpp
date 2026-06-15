@@ -28,7 +28,7 @@ void Weapon::Update()
 		{
 			VECTOR paintPos = bullet->GetPos();
 
-			m_stageManager->Paint(paintPos.x, paintPos.z, 1);
+			m_stageManager->Paint(paintPos.x, paintPos.z, 1,100);
 		}
 		// ‚±‚±‚©‚çæ‚ğÁ‚µ‚½ê‡A‰i‰“‚É“h‚ê‚é
 		else

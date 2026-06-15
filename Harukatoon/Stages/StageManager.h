@@ -19,7 +19,7 @@ public:
 	/// <param name="x">塗った座標X</param>
 	/// <param name="y">塗った座標Y</param>
 	/// <param name="who">誰が塗ったか</param>
-	void Paint(float x,float y,float who);
+	void Paint(float x,float y,float who, float paintRadius);
 
 private:
 
@@ -38,6 +38,8 @@ private:
 	int m_nBlueTextureHandle;
 	// インクのシェーダーハンドル
 	int m_inkShaderHandle;
+	// 塗れる範囲のハンドル
+	int m_inkCanvasHandle;
 
 };
 

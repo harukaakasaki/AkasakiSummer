@@ -135,7 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Systems\Animation.cpp" />
     <ClCompile Include="Stages\StageManager.cpp" />
     <ClCompile Include="Weapons\Bomb.cpp" />
     <ClCompile Include="Weapons\Bullet.cpp" />
@@ -148,7 +148,7 @@
     <ClCompile Include="Weapons\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Systems\Animation.h" />
     <ClInclude Include="Stages\StageManager.h" />
     <ClInclude Include="Weapons\Bomb.h" />
     <ClInclude Include="Weapons\Bullet.h" />

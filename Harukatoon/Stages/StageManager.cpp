@@ -2,6 +2,12 @@
 #include <DxLib.h>
 #include <cassert>
 
+// 現状
+// インクの塗っている場所をマスにして管理している
+// 何したい？
+// マス目上に描画されているため、インク同士を滑らかに重ね塗りができるようにしたい
+// どうやる？
+// 判定はそのままマス目上に管理して、見た目だけインクに変える（MakeScreen）
 namespace
 {
 }
@@ -50,6 +56,18 @@ void StageManager::Init()
 	{
 		m_2dMap[i].resize(m_mapWidthSize, 0);
 	}
+
+	// 一枚のインク書き込み用のキャンバスを作る
+	m_inkCanvasHandle = MakeScreen(1024, 1024, TRUE);
+	assert(m_inkCanvasHandle != -1);
+
+	// 作ったキャンバスを一度透明でクリアにしておく
+	SetDrawScreen(m_inkCanvasHandle);
+	ClearDrawScreen();
+
+	// 描画先を戻しておく
+	SetDrawScreen(DX_SCREEN_BACK);
+
 }
 void StageManager::Update()
 {
@@ -59,13 +77,12 @@ void StageManager::Draw()
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	SetUseAlphaTestFlag(TRUE);// アルファテストをONにする（アルファ値が0の部分は描画されないようになる）
-
 	SetUseBackCulling(FALSE);// 裏面も描画するようにする（これをしないと裏返ったポリゴンが見えなくなる）
 
 	// インクの描画を開始（シェーダーON）
 	if (m_inkShaderHandle != -1)
 	{
-		int result = SetUsePixelShader(m_inkShaderHandle);
+		SetUsePixelShader(m_inkShaderHandle);
 	}
 
 	// 3D空間にインクを描画する
@@ -171,18 +188,86 @@ void StageManager::Draw()
 	SetUseBackCulling(TRUE);// カリングを元に戻す
 }
 
-void StageManager::Paint(float x, float z, float who)
+void StageManager::Paint(float x, float z, float who, float paintRadius)
 {
-	float offsetX = (m_mapWidthSize * m_cellSize) / 2.0f;// ステージのXを原点にするためのオフセット
-	float offsetZ = (m_mapHeightSize * m_cellSize) / 2.0f;// ステージのZを原点にするためのオフセット
+	/*判定用*/
+	// ステージの原点にするためのオフセット
+	float offsetX = (m_mapWidthSize * m_cellSize) / 2.0f;
+	float offsetZ = (m_mapHeightSize * m_cellSize) / 2.0f;
 
-	int targetX = (x + offsetX) / m_cellSize;
+	// 弾の着弾点がなんマス目にあるのかを計算(ここを中心)
+	int centerGridX = static_cast<int>((x + offsetX) / m_cellSize);
+	int centerGridZ = static_cast<int>((z + offsetZ) / m_cellSize);
+
+	// 半径が何マス分になるかの計算
+	int radiusInCells = static_cast<int>(ceilf(paintRadius / m_cellSize));
+
+	// 調べる範囲の開始と終了のマスを決める
+	int startX = max(0, centerGridX - radiusInCells);
+	int endX = min(m_mapWidthSize - 1, centerGridX + radiusInCells);
+	int startZ = max(0, centerGridZ - radiusInCells);
+	int endZ = min(m_mapHeightSize - 1, centerGridZ + radiusInCells);
+
+	// 半径の2乗を計算
+	float radiusSquart = paintRadius * paintRadius;
+
+	// 決めた四角い範囲の中だけをループでチェックする
+	for (int currentZ = startZ; currentZ <= endZ; ++currentZ)
+	{
+		for (int currentX = startX; currentX <= endX; ++currentX)
+		{
+			// 現在チェックしているマスの中心の3D座標を逆算
+			float cellCenterX = (currentX * m_cellSize) + (m_cellSize / 2.0f)-offsetX;
+			float cellCenterZ = (currentZ * m_cellSize) + (m_cellSize / 2.0f)-offsetZ;
+
+			// 着弾点のマスと中心の距離の2乗を逆算
+			float dx = cellCenterX - x;
+			float dz = cellCenterZ - z;
+			float distanceSquart = (dx * dx) + (dz * dz);
+
+			// もし距離の2乗が半径の2乗以下なら円の内側のため、塗る。
+			if (distanceSquart <= radiusSquart)
+			{
+				m_2dMap[currentZ][currentX] = who;
+			}
+		}
+	}
+
+	/*見た目用*/
+	// 3D座標をキャンバス上の2Dピクセル座標に変換する
+	float stageWidth = m_mapWidthSize * m_cellSize;
+	float stageHeight = m_mapHeightSize * m_cellSize;
+
+	int canvasX = static_cast<int>((x + offsetX) / stageWidth * 1024.0f);
+	int canvasZ = static_cast<int>((z + offsetZ) / stageHeight * 1024.0f);
+
+	// 描画先をインクのキャンバスに切り替える
+	SetDrawScreen(m_inkCanvasHandle);
+
+	// 通常の2Dブレンドモードにセット(インク画像をきれいに重ねる)
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	
+	// 塗ったプレイヤーによってインク画像のハンドルを変える
+	int whoHandle = (who == 1.0f) ? m_orangeTextureHandle : m_blueTextureHandle;
+
+	// 弾の塗る半径に合わせて、インクの描画サイズを計算する
+	int inkCanvasSize = static_cast<int>((paintRadius * 2.0f) / stageWidth * 1024.0f);
+	// もしインクサイズが小さすぎたら、16は描画されるようにする
+	if (inkCanvasSize < 16)inkCanvasSize = 16;
+
+	DrawExtendGraph(canvasX - inkCanvasSize / 2, canvasZ - inkCanvasSize / 2,
+		            canvasX + inkCanvasSize / 2, canvasZ - inkCanvasSize / 2,
+		            whoHandle, TRUE);
+
+	SetDrawScreen(DX_SCREEN_BACK);
+	
+	/*int targetX = (x + offsetX) / m_cellSize;
 	int targetZ = (z + offsetZ) / m_cellSize;
 
 	if (targetX >= 0 && targetX < m_mapWidthSize && targetZ >= 0 && targetZ < m_mapHeightSize)
 	{
 		m_2dMap[targetZ][targetX] = who;
-	}
+	}*/
 
 }
 
