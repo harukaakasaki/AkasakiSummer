@@ -1,6 +1,6 @@
 
 
-// テクスチャ
+// カラーテクスチャ
 Texture2D g_Texture : register(t0);
 // テクスチャのノーマルマップ
 Texture2D g_NormalMap : register(t1);
@@ -9,8 +9,8 @@ SamplerState g_Sampler : register(s0);
 
 struct PS_INPUT
 {
-    float4 Pos      : SV_POSITION; // 頂点の位置
-    float3 Normal   : NORMAL0;     // 頂点シェーダーから渡される法線
+    float4 Pos      : SV_POSITION; // 画面上のピクセル位置
+    float3 Normal   : NORMAL0;     // 頂点法線
     float2 TexCoord : TEXCOORD0;   // テクスチャのUV座標
 };
 
