@@ -7,6 +7,8 @@ Texture2D g_NormalMap : register(t1);
 // テクスチャをどう描画するかのサンプラー
 SamplerState g_Sampler : register(s0);
 
+
+
 struct PS_INPUT
 {
     float4 Pos      : SV_POSITION; // 画面上のピクセル位置

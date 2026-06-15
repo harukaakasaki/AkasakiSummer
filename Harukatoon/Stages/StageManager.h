@@ -40,6 +40,8 @@ private:
 	int m_inkShaderHandle;
 	// 塗れる範囲のハンドル
 	int m_inkCanvasHandle;
+	// 塗れる範囲のノーマルハンドル
+	int m_inkNormalCanvasHandle;
 
 };
 

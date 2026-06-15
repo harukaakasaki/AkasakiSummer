@@ -34,7 +34,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_modelHandle = MV1LoadModel("data/Player_Model.mv1");
+	m_modelHandle = MV1LoadModel("data/Player_Orange_Model.mv1");
 	MV1SetScale(m_modelHandle, kScale);// ‰Šú‚Ì‘å‚«‚³
 }
 void Player::Update(float cameraAngle,float timeScale)

@@ -10,6 +10,10 @@
 // 判定はそのままマス目上に管理して、見た目だけインクに変える（MakeScreen）
 namespace
 {
+	constexpr float HandleScale = 4096.0f;
+
+//	constexpr float HandleScaleX = 2048.0f;
+//	constexpr float HandleScaleZ = 1536.0f;
 }
 
 StageManager::StageManager() :
@@ -20,7 +24,9 @@ StageManager::StageManager() :
 	m_blueTextureHandle(-1),
 	m_nOrangeTextureHandle(-1),
 	m_nBlueTextureHandle(-1),
-	m_inkShaderHandle(-1)
+	m_inkShaderHandle(-1),
+	m_inkCanvasHandle(-1),
+	m_inkNormalCanvasHandle(-1)
 {
 }
 
@@ -57,12 +63,19 @@ void StageManager::Init()
 		m_2dMap[i].resize(m_mapWidthSize, 0);
 	}
 
+
 	// 一枚のインク書き込み用のキャンバスを作る
-	m_inkCanvasHandle = MakeScreen(1024, 1024, TRUE);
+	m_inkCanvasHandle = MakeScreen(HandleScale, HandleScale, TRUE);
 	assert(m_inkCanvasHandle != -1);
+	// 書き込み用のキャンバスを作る
+	m_inkNormalCanvasHandle = MakeScreen(HandleScale, HandleScale, TRUE);
+	assert(m_inkNormalCanvasHandle != -1);
 
 	// 作ったキャンバスを一度透明でクリアにしておく
 	SetDrawScreen(m_inkCanvasHandle);
+	ClearDrawScreen();
+	// 書き込み用もクリアにする
+	SetDrawScreen(m_inkNormalCanvasHandle);
 	ClearDrawScreen();
 
 	// 描画先を戻しておく
@@ -85,102 +98,69 @@ void StageManager::Draw()
 		SetUsePixelShader(m_inkShaderHandle);
 	}
 
-	// 3D空間にインクを描画する
-	float size = m_cellSize;// インクの大きさ
 
-	for (int z = 0; z < m_mapHeightSize; z++)
-	{
-		for (int x = 0; x < m_mapWidthSize; x++)
-		{
-			if (m_2dMap[z][x] == 0)
-			{
-				continue;
-			}
+	SetUseTextureToShader(0, m_inkCanvasHandle);
+	SetUseTextureToShader(1, m_inkNormalCanvasHandle);
+
+	
+
+
+	
 			// 2Dのマス目を3D空間に変換して描画する
-			float offsetX = (m_mapWidthSize * size) / 2.0f;// ステージのXを原点にするためのオフセット
-			float offsetZ = (m_mapHeightSize * size) / 2.0f;// ステージのZを原点にするためのオフセット
+	float totalWidth = m_mapWidthSize * m_cellSize;
+	float totalHeight = m_mapHeightSize * m_cellSize;
+	float offsetX = totalWidth / 2.0f;// ステージのXを原点にするためのオフセット
+	float offsetZ = totalHeight / 2.0f;// ステージのZを原点にするためのオフセット
 
-			float leftX = (x * size) - offsetX;
-			float rightX = ((x + 1) * size) - offsetX;
-			float frontZ = (z * size) - offsetZ;
-			float backZ = ((z + 1) * size) - offsetZ;
+	float leftX = - offsetX;
+	float rightX = offsetX;
+	float frontZ = - offsetZ;
+	float backZ = offsetZ;
+	float ground = 0.5f;// 床の高さ(0より少し高くする)
 
-			float ground = 0.5f;// 床の高さ(0より少し高くする)
+	
 
-			int colorHandle = -1;
-			int normalHandle = -1;
+     // 3Dポリゴンの頂点データ
+     VERTEX3DSHADER verticesShader[6];
+     
+     // --- 三角形1 ---
+        // 頂点0
+     verticesShader[0].pos.x = leftX;  verticesShader[0].pos.y = ground; verticesShader[0].pos.z = backZ;
+     verticesShader[0].norm.x = 0.0f;  verticesShader[0].norm.y = 1.0f; verticesShader[0].norm.z = 0.0f;
+     verticesShader[0].u = 0.0f;        verticesShader[0].v = 1.0f;
+     
+     // 頂点1
+     verticesShader[1].pos.x = rightX; verticesShader[1].pos.y = ground; verticesShader[1].pos.z = backZ;
+     verticesShader[1].norm.x = 0.0f;  verticesShader[1].norm.y = 1.0f; verticesShader[1].norm.z = 0.0f;
+     verticesShader[1].u = 1.0f;        verticesShader[1].v = 1.0f;
+     
+     // 頂点2
+     verticesShader[2].pos.x = leftX;  verticesShader[2].pos.y = ground; verticesShader[2].pos.z = frontZ;
+     verticesShader[2].norm.x = 0.0f;  verticesShader[2].norm.y = 1.0f; verticesShader[2].norm.z = 0.0f;
+     verticesShader[2].u = 0.0f;        verticesShader[2].v = 0.0f;
+     
+     // --- 三角形2 ---
+     // 頂点3
+     verticesShader[3].pos.x = rightX; verticesShader[3].pos.y = ground; verticesShader[3].pos.z = backZ;
+     verticesShader[3].norm.x = 0.0f;  verticesShader[3].norm.y = 1.0f; verticesShader[3].norm.z = 0.0f;
+     verticesShader[3].u = 1.0f;        verticesShader[3].v = 1.0f;
+     
+     // 頂点4
+     verticesShader[4].pos.x = rightX; verticesShader[4].pos.y = ground; verticesShader[4].pos.z = frontZ;
+     verticesShader[4].norm.x = 0.0f;  verticesShader[4].norm.y = 1.0f; verticesShader[4].norm.z = 0.0f;
+     verticesShader[4].u = 1.0f;        verticesShader[4].v = 0.0f;
+     
+     // 頂点5
+     verticesShader[5].pos.x = leftX;  verticesShader[5].pos.y = ground; verticesShader[5].pos.z = frontZ;
+     verticesShader[5].norm.x = 0.0f;  verticesShader[5].norm.y = 1.0f; verticesShader[5].norm.z = 0.0f;
+     verticesShader[5].u = 0.0f;        verticesShader[5].v = 0.0f;
+     
+     
+     DrawPolygon3DToShader(verticesShader,2);
+		
 
-			if (m_2dMap[z][x] == 1)// プレイヤー1の場合
-			{
-				colorHandle = m_orangeTextureHandle;
-				normalHandle = m_nOrangeTextureHandle;
-			}
-			else if (m_2dMap[z][x] == 2)// プレイヤー2の場合
-			{
-				colorHandle = m_blueTextureHandle;
-				normalHandle = m_nBlueTextureHandle;
-			}
-			if (colorHandle != -1 && normalHandle != -1)
-			{
-				SetUseTextureToShader(0, colorHandle);// シェーダー側(t0)にインクの色
-				SetUseTextureToShader(1, normalHandle);// シェーダー側(t1)にノーマルマップ
-
-				COLOR_U8 white = GetColorU8(255, 255, 255, 255);
-
-				// 3Dポリゴンの頂点データ
-				VERTEX3DSHADER verticesShader[6];
-				
-				// --- 三角形1 ---
-			    // 頂点0
-				verticesShader[0].pos.x = leftX;  verticesShader[0].pos.y = ground; verticesShader[0].pos.z = backZ;
-				verticesShader[0].norm.x = 0.0f;  verticesShader[0].norm.y = 1.0f; verticesShader[0].norm.z = 0.0f;
-				verticesShader[0].u = 0.0f;        verticesShader[0].v = 0.0f;
-
-				// 頂点1
-				verticesShader[1].pos.x = rightX; verticesShader[1].pos.y = ground; verticesShader[1].pos.z = backZ;
-				verticesShader[1].norm.x = 0.0f;  verticesShader[1].norm.y = 1.0f; verticesShader[1].norm.z = 0.0f;
-				verticesShader[1].u = 1.0f;        verticesShader[1].v = 0.0f;
-
-				// 頂点2
-				verticesShader[2].pos.x = leftX;  verticesShader[2].pos.y = ground; verticesShader[2].pos.z = frontZ;
-				verticesShader[2].norm.x = 0.0f;  verticesShader[2].norm.y = 1.0f; verticesShader[2].norm.z = 0.0f;
-				verticesShader[2].u = 0.0f;        verticesShader[2].v = 1.0f;
-
-				// --- 三角形2 ---
-				// 頂点3
-				verticesShader[3].pos.x = rightX; verticesShader[3].pos.y = ground; verticesShader[3].pos.z = backZ;
-				verticesShader[3].norm.x = 0.0f;  verticesShader[3].norm.y = 1.0f; verticesShader[3].norm.z = 0.0f;
-				verticesShader[3].u = 1.0f;        verticesShader[3].v = 0.0f;
-
-				// 頂点4
-				verticesShader[4].pos.x = rightX; verticesShader[4].pos.y = ground; verticesShader[4].pos.z = frontZ;
-				verticesShader[4].norm.x = 0.0f;  verticesShader[4].norm.y = 1.0f; verticesShader[4].norm.z = 0.0f;
-				verticesShader[4].u = 1.0f;        verticesShader[4].v = 1.0f;
-
-				// 頂点5
-				verticesShader[5].pos.x = leftX;  verticesShader[5].pos.y = ground; verticesShader[5].pos.z = frontZ;
-				verticesShader[5].norm.x = 0.0f;  verticesShader[5].norm.y = 1.0f; verticesShader[5].norm.z = 0.0f;
-				verticesShader[5].u = 0.0f;        verticesShader[5].v = 1.0f;
-				
-				//VERTEX3DSHADER verticesShader[6] =
-				//{
-				//	// 三角形1
-				//	{ { leftX,  ground,  backZ  }, {0.0f,1.0f,0.0f}, 0.0f, 0.0f },
-				//	{ { rightX, ground,  backZ  }, {0.0f,1.0f,0.0f},1.0f, 0.0f },
-				//	{ { leftX,  ground,  frontZ }, {0.0f,1.0f,0.0f}, 0.0f, 1.0f },
-				//	// 三角形2
-				//	{ { rightX, ground,  backZ  }, {0.0f,1.0f,0.0f},  1.0f, 0.0f },
-				//	{ { rightX, ground,  frontZ }, {0.0f,1.0f,0.0f}, 1.0f, 1.0f },
-				//	{ { leftX,  ground,  frontZ }, {0.0f,1.0f,0.0f},0.0f, 1.0f }
-				//};
-
-				DrawPolygon3DToShader(verticesShader,2);
-				//DxLib::DrawPolygon3D(vertices, 2, colorHandle, true);
-				//DrawPolygon3D()
-
-			}
-		}
-	}
+		
+	
 	// インクを書き終えたら元の描画にリセットする
 	SetUsePixelShader(-1);
 	SetUseAlphaTestFlag(FALSE);// アルファテストをOFFにする
@@ -238,26 +218,37 @@ void StageManager::Paint(float x, float z, float who, float paintRadius)
 	float stageWidth = m_mapWidthSize * m_cellSize;
 	float stageHeight = m_mapHeightSize * m_cellSize;
 
-	int canvasX = static_cast<int>((x + offsetX) / stageWidth * 1024.0f);
-	int canvasZ = static_cast<int>((z + offsetZ) / stageHeight * 1024.0f);
+	int canvasX = static_cast<int>((x + offsetX) / stageWidth * HandleScale);
+	int canvasZ = static_cast<int>((z + offsetZ) / stageHeight * HandleScale);
 
 	// 描画先をインクのキャンバスに切り替える
 	SetDrawScreen(m_inkCanvasHandle);
 
 	// 通常の2Dブレンドモードにセット(インク画像をきれいに重ねる)
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
-	
+
+	SetDrawMode(DX_DRAWMODE_BILINEAR);
 	// 塗ったプレイヤーによってインク画像のハンドルを変える
-	int whoHandle = (who == 1.0f) ? m_orangeTextureHandle : m_blueTextureHandle;
+	int colorHandle = (who == 1.0f) ? m_orangeTextureHandle : m_blueTextureHandle;
+	int normalHandle = (who == 1.0f) ? m_nOrangeTextureHandle : m_nBlueTextureHandle;
 
 	// 弾の塗る半径に合わせて、インクの描画サイズを計算する
-	int inkCanvasSize = static_cast<int>((paintRadius * 2.0f) / stageWidth * 1024.0f);
+	int inkCanvasSizeX = static_cast<int>((paintRadius * 2.0f) / stageWidth * HandleScale);
+	int inkCanvasSizeZ = static_cast<int>((paintRadius * 2.0f) / stageHeight * HandleScale);
 	// もしインクサイズが小さすぎたら、16は描画されるようにする
-	if (inkCanvasSize < 16)inkCanvasSize = 16;
+	if (inkCanvasSizeX < 16)inkCanvasSizeX = 16;
+	if (inkCanvasSizeZ < 16)inkCanvasSizeZ = 16;
 
-	DrawExtendGraph(canvasX - inkCanvasSize / 2, canvasZ - inkCanvasSize / 2,
-		            canvasX + inkCanvasSize / 2, canvasZ - inkCanvasSize / 2,
-		            whoHandle, TRUE);
+	SetDrawScreen(m_inkCanvasHandle);
+	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
+		            canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
+		            colorHandle, TRUE);
+	SetDrawScreen(m_inkNormalCanvasHandle);
+	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
+		            canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
+		            normalHandle, TRUE);
+
+	SetDrawMode(DX_DRAWMODE_NEAREST);
 
 	SetDrawScreen(DX_SCREEN_BACK);
 	
