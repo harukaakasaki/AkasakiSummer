@@ -6,6 +6,8 @@
 #include "../Stages/StageManager.h"
 // ウェポンクラスはバレットクラスです！
 
+class StageManager;
+
 class Weapon
 {
 public:
@@ -26,9 +28,14 @@ private:
 	// Stageマネージャーのポインタ
 	StageManager* m_stageManager;
 	
-	float m_whoShot;// 誰が撃った？（プレイヤー1 or プレイヤー2）
+	// 誰が撃った？（プレイヤー1 or プレイヤー2）
+	float m_whoShot;
 
-	float m_shootTimer;// 連射速度を制御する
+	// 連射速度を制御する
+	int m_shotTimer;
+
+	// 弾と弾の間
+	int m_shotInterval;
 
 };
 

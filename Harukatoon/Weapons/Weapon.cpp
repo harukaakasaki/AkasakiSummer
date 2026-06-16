@@ -2,10 +2,12 @@
 #include <vector>
 #include <DxLib.h>
 
-Weapon::Weapon(StageManager* stageManager):
+Weapon::Weapon(StageManager* stageManager) :
+	m_stageManager(stageManager),
 	m_whoShot(0.0f),
 	m_bullets(0.0f),
-	m_shootTimer(0.0f)
+	m_shotTimer(0),
+	m_shotInterval(6)// このフレームに一発発射する
 {
 	m_stageManager = stageManager;
 }
@@ -20,27 +22,35 @@ void Weapon::Init()
 }
 void Weapon::Update()
 {
+	if (m_shotTimer > 0)
+	{
+		m_shotTimer--;
+	}
+
+	std::vector<std::unique_ptr<Bullet>>nextFrameBullets;
+
 	for (auto& bullet : m_bullets)
 	{
 		bullet->Update();
 
-		if (!bullet->IsBulletAlive())
+		if (bullet->IsBulletAlive())
 		{
-			VECTOR paintPos = bullet->GetPos();
-
-			m_stageManager->Paint(paintPos.x, paintPos.z, 1,100);
+			// 生きている弾だけを次のフレームへ持っていく
+			nextFrameBullets.push_back(std::move(bullet));
 		}
-		// ここから先を消した場合、永遠に塗れる
 		else
 		{
-			aliveBullets.push_back(std::move(bullet));
+			// ステージを塗る
+			VECTOR currentPos = bullet->GetPos();
+
+			m_stageManager->Paint(currentPos.x, currentPos.z, 1, 100);
 		}
 	}
-	m_bullets = std::move(aliveBullets);
+	m_bullets = std::move(nextFrameBullets);
 }
 void Weapon::Draw()
 {
-	for (auto& bullet : m_bullets)
+	for (const auto& bullet : m_bullets)
 	{
 		bullet->Draw();
 	}
@@ -48,8 +58,24 @@ void Weapon::Draw()
 }
 void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 {
-
-	m_bullets.push_back(std::make_unique<Bullet>(playerPos, shotVel));
-
 	//printfDx("ウェポンで攻撃中！\n");
+	if (m_shotTimer == 0)
+	{
+		float rateX = (float)rand() / RAND_MAX;
+		float spreadX = -0.8f + rateX * 4.0f;
+
+		float rateY = (float)rand() / RAND_MAX;
+		float spreadY = -0.8f + rateY * 3.2f;
+
+		VECTOR randomVel = shotVel;
+		randomVel.x += spreadX;
+		randomVel.y += spreadY;
+
+		// 弾を生成して管理リストに追加
+		m_bullets.push_back(std::make_unique<Bullet>(playerPos, randomVel));
+
+		// 次の弾までそのフレーム待つ
+		m_shotTimer = m_shotInterval;
+
+	}
 }

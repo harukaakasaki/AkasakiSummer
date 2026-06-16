@@ -243,22 +243,17 @@ void StageManager::Paint(float x, float z, float who, float paintRadius)
 	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
 		            canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
 		            colorHandle, TRUE);
-	SetDrawScreen(m_inkNormalCanvasHandle);
+
+	// シェーダーに違和感があるため、シェーダーは止める
+	/*SetDrawScreen(m_inkNormalCanvasHandle);
 	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
 		            canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
-		            normalHandle, TRUE);
+		            normalHandle, TRUE);*/
 
 	SetDrawMode(DX_DRAWMODE_NEAREST);
 
 	SetDrawScreen(DX_SCREEN_BACK);
 	
-	/*int targetX = (x + offsetX) / m_cellSize;
-	int targetZ = (z + offsetZ) / m_cellSize;
-
-	if (targetX >= 0 && targetX < m_mapWidthSize && targetZ >= 0 && targetZ < m_mapHeightSize)
-	{
-		m_2dMap[targetZ][targetX] = who;
-	}*/
 
 }
 
