@@ -7,7 +7,7 @@ Weapon::Weapon(StageManager* stageManager) :
 	m_whoShot(0.0f),
 	m_bullets(0.0f),
 	m_shotTimer(0),
-	m_shotInterval(6)// このフレームに一発発射する
+	m_shotInterval(6)// このフレーム内に一発発射する
 {
 	m_stageManager = stageManager;
 }
@@ -54,7 +54,6 @@ void Weapon::Draw()
 	{
 		bullet->Draw();
 	}
-
 }
 void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 {

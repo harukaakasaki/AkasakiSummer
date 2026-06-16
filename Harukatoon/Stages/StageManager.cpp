@@ -228,7 +228,7 @@ void StageManager::Paint(float x, float z, float who, float paintRadius)
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 
 	SetDrawMode(DX_DRAWMODE_BILINEAR);
-	// 塗ったプレイヤーによってインク画像のハンドルを変える
+	// 塗ったプレイヤーによってインク画像のハンドルを変える(1の場合オレンジ2の場合ブルー)
 	int colorHandle = (who == 1.0f) ? m_orangeTextureHandle : m_blueTextureHandle;
 	int normalHandle = (who == 1.0f) ? m_nOrangeTextureHandle : m_nBlueTextureHandle;
 
