@@ -54,6 +54,7 @@ void Camera::Update(VECTOR playerPos)
 
 	// 縦回転(あとで)
 	
+	
 	// カメラとプレイヤーとの距離
 	float distance = 900.0f;
 	// カメラの高さ
