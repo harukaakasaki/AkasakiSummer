@@ -7,7 +7,7 @@ Weapon::Weapon(StageManager* stageManager) :
 	m_whoShot(0.0f),
 	m_bullets(0.0f),
 	m_shotTimer(0),
-	m_shotInterval(6)// このフレーム内に一発発射する
+	m_shotInterval(4)// このフレーム内に一発発射する
 {
 	m_stageManager = stageManager;
 }
@@ -58,6 +58,7 @@ void Weapon::Draw()
 void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 {
 	//printfDx("ウェポンで攻撃中！\n");
+	// x軸、y軸の-0.8～4.0fの間からランダムで弾が飛ぶ
 	if (m_shotTimer == 0)
 	{
 		float rateX = (float)rand() / RAND_MAX;
