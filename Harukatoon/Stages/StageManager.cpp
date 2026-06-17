@@ -244,7 +244,7 @@ void StageManager::Paint(float x, float z, float who, float paintRadius)
 		            canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
 		            colorHandle, TRUE);
 
-	// シェーダーに違和感があるため、シェーダーは止める
+	// 現在のシェーダーは違和感があるため、シェーダーは止める
 	/*SetDrawScreen(m_inkNormalCanvasHandle);
 	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
 		            canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,

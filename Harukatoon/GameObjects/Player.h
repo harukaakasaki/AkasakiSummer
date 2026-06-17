@@ -20,6 +20,8 @@ public:
 	VECTOR GetPos() const;// 位置
 	bool IsShooting() const;// 攻撃中かどうか
 
+	// プレイヤー1、2をインスタンス化する
+
 
 private:
 	int m_modelHandle;// モデル
