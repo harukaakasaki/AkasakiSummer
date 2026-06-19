@@ -7,7 +7,7 @@
 // 何したい？
 // マス目上に描画されているため、インク同士を滑らかに重ね塗りができるようにしたい
 // どうやる？
-// 判定はそのままマス目上に管理して、見た目だけインクに変える（MakeScreen）
+// 判定はそのままマス目上で管理して、見た目だけインクに変える（MakeScreen）
 namespace
 {
 	constexpr float HandleScale = 4096.0f;
@@ -98,15 +98,10 @@ void StageManager::Draw()
 		SetUsePixelShader(m_inkShaderHandle);
 	}
 
-
 	SetUseTextureToShader(0, m_inkCanvasHandle);
 	SetUseTextureToShader(1, m_inkNormalCanvasHandle);
-
 	
-
-
-	
-			// 2Dのマス目を3D空間に変換して描画する
+	// 2Dのマス目を3D空間に変換して描画する
 	float totalWidth = m_mapWidthSize * m_cellSize;
 	float totalHeight = m_mapHeightSize * m_cellSize;
 	float offsetX = totalWidth / 2.0f;// ステージのXを原点にするためのオフセット
@@ -117,8 +112,6 @@ void StageManager::Draw()
 	float frontZ = - offsetZ;
 	float backZ = offsetZ;
 	float ground = 0.5f;// 床の高さ(0より少し高くする)
-
-	
 
      // 3Dポリゴンの頂点データ
      VERTEX3DSHADER verticesShader[6];
@@ -153,13 +146,9 @@ void StageManager::Draw()
      // 頂点5
      verticesShader[5].pos.x = leftX;  verticesShader[5].pos.y = ground; verticesShader[5].pos.z = frontZ;
      verticesShader[5].norm.x = 0.0f;  verticesShader[5].norm.y = 1.0f; verticesShader[5].norm.z = 0.0f;
-     verticesShader[5].u = 0.0f;        verticesShader[5].v = 0.0f;
-     
+	 verticesShader[5].u = 0.0f;        verticesShader[5].v = 0.0f;
      
      DrawPolygon3DToShader(verticesShader,2);
-		
-
-		
 	
 	// インクを書き終えたら元の描画にリセットする
 	SetUsePixelShader(-1);
@@ -244,7 +233,7 @@ void StageManager::Paint(float x, float z, float who, float paintRadius)
 		            canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
 		            colorHandle, TRUE);
 
-	// 現在のシェーダーは違和感があるため、シェーダーは止める
+	// 現在のシェーダーは違和感があるため、シェーダーは止めている
 	/*SetDrawScreen(m_inkNormalCanvasHandle);
 	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
 		            canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,

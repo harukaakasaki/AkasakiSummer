@@ -7,10 +7,10 @@
 
 namespace
 {
-	constexpr float kSpeed = 15.0f;// プレイヤーの移動速度
+	constexpr float kSpeed = 15.0f;        // プレイヤーの移動速度
 	constexpr float kAttackingSpeed = 5.0f;// プレイヤーの攻撃中の移動速度
-	constexpr float kDiveSpeed = 25.0f;// プレイヤーの潜り移動速度
-	constexpr float kShotSpeed = 25.0f;// 弾速度
+	constexpr float kDiveSpeed = 25.0f;    // プレイヤーの潜り移動速度
+	constexpr float kShotSpeed = 25.0f;    // 弾速度
 
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
 }
@@ -35,7 +35,7 @@ Player::~Player()
 void Player::Init()
 {
 	m_modelHandle = MV1LoadModel("data/Player_Orange_Model.mv1");
-	MV1SetScale(m_modelHandle, kScale);// 初期の大きさ
+	MV1SetScale(m_modelHandle, kScale);// 初期のプレイヤーの大きさ
 }
 void Player::Update(float cameraAngle,float timeScale)
 {
