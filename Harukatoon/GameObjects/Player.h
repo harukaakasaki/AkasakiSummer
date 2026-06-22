@@ -55,8 +55,9 @@ private:
 
 	VECTOR m_pos;// 位置
 	VECTOR m_move;// 移動
-	float m_gravity;// 重力
-	bool isShooting = false;// 攻撃しているかどうか
+	float m_velocityY;// 上に飛ぶ力
+	bool m_isGround = false;  // 地面にいるかどうか
+	bool m_isShooting = false;// 攻撃しているかどうか
 
 	Weapon* m_pWeapon;// プレイヤーが持つウェポン
 	Bomb* m_pBomb;// プレイヤーが持つボム

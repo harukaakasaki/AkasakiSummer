@@ -16,7 +16,8 @@ namespace
 	constexpr float kAttackingSpeed = 5.0f;// プレイヤーの攻撃中の移動速度
 	constexpr float kDiveSpeed = 25.0f;    // プレイヤーの潜り移動速度
 	constexpr float kShotSpeed = 25.0f;    // 弾速度
-	constexpr float kJumpPower = 5.0f;     // ジャンプ力
+	constexpr float kGravity   = 0.8f;     // 重力
+	constexpr float kJumpPower = 20.0f;     // ジャンプ力
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
 }
 
@@ -25,7 +26,7 @@ Player::Player(StageManager* stageManager):
 	m_angle(0.0f),
 	m_move{0.0f,0.0f,0.0f},
 	m_pos{ 0.0f, 0.0f, 0.0f },
-	isShooting(false)
+	m_isShooting(false)
 {
 	m_pWeapon = new Weapon(stageManager);
 	m_pBomb = new Bomb();
@@ -110,7 +111,7 @@ void Player::Update(float cameraAngle,float timeScale)
 		m_move.x = m_move.x * kAttackingSpeed * timeScale;
 		m_move.z = m_move.z * kAttackingSpeed * timeScale;
 
-		isShooting = true;
+		m_isShooting = true;
 	}
 
 	else if (len > 0)
@@ -132,7 +133,7 @@ void Player::Update(float cameraAngle,float timeScale)
 	
 	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
 	bool isBombPress = Pad::IsPress(PAD_INPUT_6);         // RBが押された
-	bool isJumpPress = Pad::IsTrigger(PAD_INPUT_1);       //  Aが押された
+	
 
 	// 入力情報は優先度をつけて管理する
 	if (isWeaponPress)
@@ -149,11 +150,11 @@ void Player::Update(float cameraAngle,float timeScale)
 
 		m_pWeapon->UseWeapon(weaponPos,shotVelocity);
 		
-		isShooting = true;
+		m_isShooting = true;
 	}
 	else
 	{
-		isShooting = false;
+		m_isShooting = false;
 	}
 	if (isBombPress)
 	{
@@ -164,12 +165,7 @@ void Player::Update(float cameraAngle,float timeScale)
 		printfDx("潜ってる～\n");
 	}
 
-	if (isJumpPress)
-	{
-		printfDx("ジャンプ！\n");
-	}
-
-	if (isShooting)
+	if (m_isShooting)
 	{
 		// カメラ方向を見ながらインクを撃つ
 		// atan2fでcos,sinのカメラアングルを合わせる
@@ -177,7 +173,7 @@ void Player::Update(float cameraAngle,float timeScale)
 	}
 
 	m_pWeapon->Update();
-
+	Jump();
 	// アニメーションの再生速度
 	m_animation.SetGlobalSpeed(0.7f * timeScale);
 	m_animation.Update();
@@ -206,6 +202,22 @@ void Player::Draw()
 
 void Player::Jump()
 {
+	if (m_isGround && Pad::IsTrigger(PAD_INPUT_1))//  A(ジャンプボタン)が押された
+	{
+		m_velocityY = kJumpPower;
+		m_isGround = false;
+	}
+	// 重力
+	m_velocityY -= kGravity;
+
+	// 位置更新
+	m_pos.y += m_velocityY;
+	if (m_pos.y <= 0.0f)
+	{
+		m_pos.y = 0.0f;
+		m_velocityY = 0.0f;
+		m_isGround = true;
+	}
 }
 
 VECTOR Player::GetPos() const
@@ -215,6 +227,6 @@ VECTOR Player::GetPos() const
 
 bool Player::IsShooting() const
 {
-	return isShooting;
+	return m_isShooting;
 }
 
