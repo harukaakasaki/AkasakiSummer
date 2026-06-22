@@ -2,6 +2,12 @@
 #include <vector>
 #include <DxLib.h>
 
+namespace
+{
+	constexpr int kOrange = 1;// プレイヤーオレンジ
+	constexpr int kBlue   = 2;// プレイヤーブルー
+}
+
 Weapon::Weapon(StageManager* stageManager) :
 	m_stageManager(stageManager),
 	m_whoShot(0.0f),
@@ -43,7 +49,7 @@ void Weapon::Update()
 			// ステージを塗る
 			VECTOR currentPos = bullet->GetPos();
 
-			m_stageManager->Paint(currentPos.x, currentPos.z, 1, 100);
+			m_stageManager->Paint(currentPos.x, currentPos.z, kOrange, 100);
 		}
 	}
 	m_bullets = std::move(nextFrameBullets);

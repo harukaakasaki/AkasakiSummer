@@ -47,6 +47,9 @@ void Player::Init()
 	m_runAnim = MV1GetAnimIndex(m_modelHandle, kRunAnim);
 	
 	MV1SetScale(m_modelHandle, kScale);// 初期のプレイヤーの大きさ
+
+	m_animation.Play(m_idleAnim, true, 1.0f);
+	m_state = PlayerState::Idle;
 }
 void Player::Update(float cameraAngle,float timeScale)
 {
@@ -129,6 +132,7 @@ void Player::Update(float cameraAngle,float timeScale)
 	
 	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
 	bool isBombPress = Pad::IsPress(PAD_INPUT_6);         // RBが押された
+	bool isJumpPress = Pad::IsTrigger(PAD_INPUT_1);       //  Aが押された
 
 	// 入力情報は優先度をつけて管理する
 	if (isWeaponPress)
@@ -155,9 +159,14 @@ void Player::Update(float cameraAngle,float timeScale)
 	{
 		m_pBomb->Throw();
 	}
-	else if (isDivePress)
+	if (isDivePress)
 	{
 		printfDx("潜ってる～\n");
+	}
+
+	if (isJumpPress)
+	{
+		printfDx("ジャンプ！\n");
 	}
 
 	if (isShooting)
@@ -177,11 +186,12 @@ void Player::Draw()
 {
 	m_pWeapon->Draw();
 
-	// プレイヤーの描画
+	// プレイヤーの当たり判定の描画
+#ifdef _DEBUG
 	int playerCapsule = DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+100.0f, m_pos.z+0.0f), 
 		VGet(m_pos.x+0.0f, m_pos.y+180.0f, m_pos.z+0.0f), 
 		40.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), false);
-
+#endif
 	// プレイヤーモデルの回転
 	MATRIX rot = MGetRotY(m_angle);// 向き
 	MATRIX scale = MGetScale(kScale);// 大きさ
