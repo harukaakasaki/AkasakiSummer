@@ -39,8 +39,8 @@ void Bullet::Draw()
 	// 弾が存在している間のみ描画する
 	if (!m_isAlive)return;
 
-	// 緑の弾を表示
-	DrawSphere3D(m_pos, 10.0f, 8, GetColor(255,0, 0), GetColor(255, 0, 0),true);
+	// 弾を表示
+	DrawSphere3D(VGet(m_pos.x,m_pos.y,m_pos.z), 10.0f, 8, GetColor(255, 0, 0), GetColor(255, 0, 0), true);
 }
 
 VECTOR Bullet::GetPos()

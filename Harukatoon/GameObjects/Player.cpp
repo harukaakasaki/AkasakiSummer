@@ -7,11 +7,16 @@
 
 namespace
 {
+	// アニメーションのインデックス
+	const char* const kIdleAnim = "root|Idle";  // 待機アニメーション
+	const char* const kShotAnim = "root|Shot";  // 射撃アニメーション
+	const char* const kRunAnim =   "root|Run";	// 走るアニメーション
+
 	constexpr float kSpeed = 15.0f;        // プレイヤーの移動速度
 	constexpr float kAttackingSpeed = 5.0f;// プレイヤーの攻撃中の移動速度
 	constexpr float kDiveSpeed = 25.0f;    // プレイヤーの潜り移動速度
 	constexpr float kShotSpeed = 25.0f;    // 弾速度
-
+	constexpr float kJumpPower = 5.0f;     // ジャンプ力
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
 }
 
@@ -34,7 +39,13 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_modelHandle = MV1LoadModel("data/Player_Orange_Model.mv1");
+	m_modelHandle = MV1LoadModel("data/Player.mv1");
+	m_animation.Init(m_modelHandle);
+
+	m_idleAnim = MV1GetAnimIndex(m_modelHandle, kIdleAnim);
+	m_shotAnim = MV1GetAnimIndex(m_modelHandle, kShotAnim);
+	m_runAnim = MV1GetAnimIndex(m_modelHandle, kRunAnim);
+	
 	MV1SetScale(m_modelHandle, kScale);// 初期のプレイヤーの大きさ
 }
 void Player::Update(float cameraAngle,float timeScale)
@@ -87,10 +98,35 @@ void Player::Update(float cameraAngle,float timeScale)
 	// 攻撃中はプレイヤーのスピードが遅くなるようにしたい
 	if (isWeaponPress)
 	{
+		if (m_state!=PlayerState::Shot)
+		{
+			m_animation.Play(m_shotAnim, true, 1.0f);
+			m_state = PlayerState::Shot;
+		}
+		
 		m_move.x = m_move.x * kAttackingSpeed * timeScale;
 		m_move.z = m_move.z * kAttackingSpeed * timeScale;
-		
+
+		isShooting = true;
 	}
+
+	else if (len > 0)
+	{
+		if (m_state != PlayerState::Run)
+		{
+			m_animation.Play(m_runAnim, true, 1.0f);
+			m_state = PlayerState::Run;
+		}
+	}
+	else
+	{
+		if (m_state != PlayerState::Idle)
+		{
+			m_animation.Play(m_idleAnim, true, 1.0f);
+			m_state = PlayerState::Idle;
+		}
+	}
+	
 	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
 	bool isBombPress = Pad::IsPress(PAD_INPUT_6);         // RBが押された
 
@@ -133,6 +169,9 @@ void Player::Update(float cameraAngle,float timeScale)
 
 	m_pWeapon->Update();
 
+	// アニメーションの再生速度
+	m_animation.SetGlobalSpeed(0.7f * timeScale);
+	m_animation.Update();
 }
 void Player::Draw()
 {
@@ -148,13 +187,15 @@ void Player::Draw()
 	MATRIX scale = MGetScale(kScale);// 大きさ
 	MATRIX trans = MGetTranslate(VGet(m_pos.x, m_pos.y, m_pos.z));// 動き
 	MATRIX mtx = MMult(rot, scale);// 合成
-	mtx = MMult(mtx, trans);
+	mtx = MMult(mtx, trans);// 合成
 
 	MV1SetMatrix(m_modelHandle, mtx);// モデルハンドルと合わせる
 
-	
-
 	MV1DrawModel(m_modelHandle);// プレイヤー表示
+}
+
+void Player::Jump()
+{
 }
 
 VECTOR Player::GetPos() const
