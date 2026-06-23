@@ -24,7 +24,8 @@ private:
 private:
 	int m_frameCount;
 	float m_timeScale;
-	Player* m_pPlayer;
+	Player* m_pPlayer1;
+	Player* m_pPlayer2;
 	Camera* m_pCamera;
 	StageManager* m_pStageManager;
 

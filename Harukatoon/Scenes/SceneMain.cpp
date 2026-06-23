@@ -4,6 +4,7 @@
 #include <cassert>
 #include "../GameObjects/Player.h"
 #include "../Systems/Camera.h"
+#include "../Systems/Pad.h"
 #include "../Stages/StageManager.h"
 
 SceneMain::SceneMain() :
@@ -12,14 +13,16 @@ SceneMain::SceneMain() :
 	m_gameUI(-1)
 {
 	m_pStageManager = new StageManager();
-	m_pPlayer = new Player(m_pStageManager);
+	m_pPlayer1 = new Player(m_pStageManager, DX_INPUT_PAD1);
+	m_pPlayer2 = new Player(m_pStageManager, DX_INPUT_PAD2);
 	m_pCamera = new Camera();
 }
 
 SceneMain::~SceneMain()
 {
 	delete m_pStageManager;
-	delete m_pPlayer;
+	delete m_pPlayer1;
+	delete m_pPlayer2;
 	delete m_pCamera;
 }
 
@@ -40,7 +43,10 @@ void SceneMain::Init()
 //	SetCameraNearFar(200.0f, 1500.0f);
 	SetCameraNearFar(1.0f, 1500.0f);
 
-	m_pPlayer->Init();
+	m_pPlayer1->Init();
+	m_pPlayer2->SetPos(VGet(0.0f, 0.0f, 0.0f));
+	m_pPlayer2->Init();
+	m_pPlayer2->SetPos(VGet(200.0f, 0.0f, 0.0f));
 	m_pCamera->Init();
 	m_pStageManager->Init();
 
@@ -50,9 +56,13 @@ void SceneMain::Init()
 
 void SceneMain::Update()
 {
+	Pad::Update();
+
 	m_frameCount++;
-	m_pPlayer->Update(m_pCamera->GetYaw(),m_pCamera->GetPitch(), m_timeScale);
-	m_pCamera->Update(m_pPlayer->GetPos());
+	m_pPlayer1->Update(m_pCamera->GetYaw(),m_pCamera->GetPitch(), m_timeScale);
+	m_pPlayer2->Update(m_pCamera->GetYaw(),m_pCamera->GetPitch(), m_timeScale);
+	m_pCamera->Update(m_pPlayer1->GetPos());
+//	m_pCamera->Update(m_pPlayer2->GetPos());
 	m_pStageManager->Update();
 	InkPaint();
 }
@@ -94,7 +104,8 @@ void SceneMain::InkPaint()
 void SceneMain::Draw()
 {
 	DrawGrid();
-	m_pPlayer->Draw();
+	m_pPlayer1->Draw();
+	m_pPlayer2->Draw();
 	m_pCamera->Draw();
 	m_pStageManager->Draw();
 

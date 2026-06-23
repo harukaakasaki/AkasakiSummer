@@ -21,7 +21,7 @@ namespace
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
 }
 
-Player::Player(StageManager* stageManager):
+Player::Player(StageManager* stageManager,int padNo):
 	m_modelHandle(-1),
 	m_angle(0.0f),
 	m_move{0.0f,0.0f,0.0f},
@@ -30,7 +30,8 @@ Player::Player(StageManager* stageManager):
 	m_velocityY(0.0f),
 	m_idleAnim(-1),
 	m_runAnim(-1),
-	m_shotAnim(-1)
+	m_shotAnim(-1),
+	m_padNo(padNo)
 {
 	m_pWeapon = new Weapon(stageManager);
 	m_pBomb = new Bomb();
@@ -58,13 +59,10 @@ void Player::Init()
 }
 void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 {
-	
-	Pad::Update();
 
 	int x, y;
-	// プレイヤー1,2
-	GetJoypadAnalogInput(&x, &y, DX_INPUT_PAD1);
-	//GetJoypadAnalogInput(&x, &y, DX_INPUT_PAD2);
+	// プレイヤー
+	GetJoypadAnalogInput(&x, &y, m_padNo);
 
 	float stickX = x / 1000.0f;
 	float stickY = y / 1000.0f;
@@ -103,8 +101,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	// 攻撃
 	XINPUT_STATE xinputState;
 
-	GetJoypadXInputState(DX_INPUT_PAD1, &xinputState);
-//	GetJoypadXInputState(DX_INPUT_PAD2, &xinputState);
+	GetJoypadXInputState(m_padNo, &xinputState);
 	bool isWeaponPress = (xinputState.RightTrigger > 128);// RTが押された
 	// 攻撃中はプレイヤーのスピードが遅くなるようにしたい
 	if (isWeaponPress)
@@ -139,7 +136,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	}
 	
 	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
-	bool isBombPress = Pad::IsPress(PAD_INPUT_6);         // RBが押された
+	bool isBombPress = Pad::IsPress(m_padNo,PAD_INPUT_6);         // RBが押された
 	
 
 	// 入力情報は優先度をつけて管理する
@@ -210,7 +207,7 @@ void Player::Draw()
 
 void Player::Jump()
 {
-	if (m_isGround && Pad::IsTrigger(PAD_INPUT_1))//  A(ジャンプボタン)が押された
+	if (m_isGround && Pad::IsTrigger(m_padNo,PAD_INPUT_1))//  A(ジャンプボタン)が押された
 	{
 		m_velocityY = kJumpPower;
 		m_isGround = false;
@@ -231,6 +228,11 @@ void Player::Jump()
 VECTOR Player::GetPos() const
 {
 	return m_pos;
+}
+
+void Player::SetPos(VECTOR pos)
+{
+	m_pos = pos;
 }
 
 bool Player::IsShooting() const

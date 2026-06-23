@@ -22,7 +22,7 @@ class Player
 	};
 
 public:
-	Player(StageManager* stageManager);
+	Player(StageManager* stageManager,int padNo);
 	~Player();
 
 	void Init();
@@ -34,9 +34,10 @@ public:
 
 	// プレイヤー情報の取得
 	VECTOR GetPos() const;// 位置
-	bool IsShooting() const;// 攻撃中かどうか
 
-	// プレイヤー1、2をインスタンス化する
+	void SetPos(VECTOR pos);
+
+	bool IsShooting() const;// 攻撃中かどうか
 
 
 private:
@@ -56,6 +57,7 @@ private:
 
 	VECTOR m_pos;// 位置
 	VECTOR m_move;// 移動
+	int m_padNo;// コントローラーの番号
 	float m_velocityY;// 上に飛ぶ力
 	bool m_isGround = false;  // 地面にいるかどうか
 	bool m_isShooting = false;// 攻撃しているかどうか

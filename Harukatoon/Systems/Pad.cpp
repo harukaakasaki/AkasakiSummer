@@ -4,37 +4,40 @@
 namespace
 {
 	// 現在のフレームの押され状態
-	int nowPad = 0;
+	int nowPad[2] = {};
 	// 前のフレームの押され状態
-	int lastPad = 0;
+	int lastPad[2] = {};
 }
 
 namespace Pad
 {
 	void Update()
 	{
-		// 前のフレームに取得したパッドの情報を入れ替え
-		lastPad = nowPad;
+		for (int i = 0; i < 2; i++)
+		{
+			// 前のフレームに取得したパッドの情報を入れ替え
+			lastPad[i] = nowPad[i];
 
-		// 現在のフレームのパッドの情報を取得
-		nowPad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+			// 現在のフレームのパッドの情報を取得
+			nowPad[i] = GetJoypadInputState(i);
+		}
+		
 	}
 
-	bool IsPress(int key)
+	bool IsPress(int padNo,int key)
 	{
 		// このフレームに押されていればOK
-		if (nowPad & key)	return true;
 
-		return false;
+		return (nowPad[padNo] & key) != 0;
 	}
 
-	bool IsTrigger(int key)
+	bool IsTrigger(int padNo,int key)
 	{
 		// このフレームに押されていない
-		if (!(nowPad & key))	return false;
+		if (!(nowPad[padNo] & key))	return false;
 
 		// 前のフレームには押していない
-		if (!(lastPad & key))	return true;
+		if (!(lastPad[padNo] & key))	return true;
 
 		// 前のフレームにも押していた(押しっぱなし)
 		return false;

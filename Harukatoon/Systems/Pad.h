@@ -7,9 +7,9 @@ namespace Pad
 	void Update();
 
 	// ボタンが押されているかを取得
-	bool IsPress(int key);
+	bool IsPress(int padNo,int key);
 
 	// ボタンが押された瞬間を取得
-	bool IsTrigger(int key);
+	bool IsTrigger(int padNo,int key);
 
 }
