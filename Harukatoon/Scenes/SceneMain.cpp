@@ -18,9 +18,9 @@ SceneMain::SceneMain() :
 
 SceneMain::~SceneMain()
 {
+	delete m_pStageManager;
 	delete m_pPlayer;
 	delete m_pCamera;
-	delete m_pStageManager;
 }
 
 
@@ -51,7 +51,7 @@ void SceneMain::Init()
 void SceneMain::Update()
 {
 	m_frameCount++;
-	m_pPlayer->Update(m_pCamera->GetAngle(), m_timeScale);
+	m_pPlayer->Update(m_pCamera->GetYaw(),m_pCamera->GetPitch(), m_timeScale);
 	m_pCamera->Update(m_pPlayer->GetPos());
 	m_pStageManager->Update();
 	InkPaint();

@@ -5,7 +5,8 @@
 #include "EffekseerForDXLib.h"
 
 Camera::Camera():
-	m_cameraAngle(0.0f),
+	m_cameraYaw(0.0f),
+	m_cameraPitch(0.0f),
 	m_cameraPos{ 0.0f,0.0f,0.0f },
 	m_cameraTarget{ 0.0f, 0.0f, 0.0f },
 	m_skyModelHandle(-1)
@@ -32,7 +33,7 @@ void Camera::Init()
 	m_cameraTarget.y = 100.0f;
 	m_cameraTarget.z = 0.0f;
 
-	m_cameraAngle = DX_PI_F / 2;
+	m_cameraYaw = DX_PI_F / 2;
 }
 void Camera::Update(VECTOR playerPos)
 {
@@ -50,10 +51,10 @@ void Camera::Update(VECTOR playerPos)
 	float sensitivity = 0.05f;
 
 	// 横回転
-	m_cameraAngle += x * sensitivity;
+	m_cameraYaw += x * sensitivity;
 
 	// 縦回転(あとで)
-	
+	m_cameraPitch += y * sensitivity;
 	
 	// カメラとプレイヤーとの距離
 	float distance = 900.0f;
@@ -68,10 +69,16 @@ void Camera::Update(VECTOR playerPos)
 		height = 50.0f;
 	}*/
 
+	// カメラの制限
+	float limit = DX_PI_F / 3.0f;
+	if (m_cameraPitch > limit)m_cameraPitch = limit;
+	if (m_cameraPitch < -limit)m_cameraPitch = -limit;
+
+
 	// カメラ位置(プレイヤーを中心に回転する)
-	m_cameraPos.x = playerPos.x + cosf(m_cameraAngle) * distance;
-	m_cameraPos.z = playerPos.z + sinf(m_cameraAngle) * distance;
-	m_cameraPos.y = playerPos.y + height;
+	m_cameraPos.x = playerPos.x + cosf(m_cameraPitch) * cosf(m_cameraYaw) * distance;
+	m_cameraPos.z = playerPos.z + cosf(m_cameraPitch) * sinf(m_cameraYaw) * distance;
+	m_cameraPos.y = playerPos.y + sinf(m_cameraPitch) * distance + height;
 
 	m_cameraTarget = playerPos;
 

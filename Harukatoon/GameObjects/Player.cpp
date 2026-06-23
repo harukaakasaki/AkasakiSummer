@@ -13,11 +13,11 @@ namespace
 	const char* const kRunAnim =   "root|Run";	// 走るアニメーション
 
 	constexpr float kSpeed = 15.0f;        // プレイヤーの移動速度
-	constexpr float kAttackingSpeed = 5.0f;// プレイヤーの攻撃中の移動速度
+	constexpr float kAttackingSpeed = 10.0f;// プレイヤーの攻撃中の移動速度
 	constexpr float kDiveSpeed = 25.0f;    // プレイヤーの潜り移動速度
 	constexpr float kShotSpeed = 25.0f;    // 弾速度
 	constexpr float kGravity   = 0.8f;     // 重力
-	constexpr float kJumpPower = 20.0f;     // ジャンプ力
+	constexpr float kJumpPower = 20.0f;    // ジャンプ力
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
 }
 
@@ -26,7 +26,11 @@ Player::Player(StageManager* stageManager):
 	m_angle(0.0f),
 	m_move{0.0f,0.0f,0.0f},
 	m_pos{ 0.0f, 0.0f, 0.0f },
-	m_isShooting(false)
+	m_isShooting(false),
+	m_velocityY(0.0f),
+	m_idleAnim(-1),
+	m_runAnim(-1),
+	m_shotAnim(-1)
 {
 	m_pWeapon = new Weapon(stageManager);
 	m_pBomb = new Bomb();
@@ -52,13 +56,15 @@ void Player::Init()
 	m_animation.Play(m_idleAnim, true, 1.0f);
 	m_state = PlayerState::Idle;
 }
-void Player::Update(float cameraAngle,float timeScale)
+void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 {
 	
 	Pad::Update();
 
 	int x, y;
+	// プレイヤー1,2
 	GetJoypadAnalogInput(&x, &y, DX_INPUT_PAD1);
+	//GetJoypadAnalogInput(&x, &y, DX_INPUT_PAD2);
 
 	float stickX = x / 1000.0f;
 	float stickY = y / 1000.0f;
@@ -98,6 +104,7 @@ void Player::Update(float cameraAngle,float timeScale)
 	XINPUT_STATE xinputState;
 
 	GetJoypadXInputState(DX_INPUT_PAD1, &xinputState);
+//	GetJoypadXInputState(DX_INPUT_PAD2, &xinputState);
 	bool isWeaponPress = (xinputState.RightTrigger > 128);// RTが押された
 	// 攻撃中はプレイヤーのスピードが遅くなるようにしたい
 	if (isWeaponPress)
@@ -142,10 +149,11 @@ void Player::Update(float cameraAngle,float timeScale)
 
 		float speed = kShotSpeed;
 
+		// 撃っている向き
 		VECTOR shotVelocity;
-		shotVelocity.x = -cosf(cameraAngle) * speed;
-		shotVelocity.y = 2.0f;
-		shotVelocity.z = -sinf(cameraAngle) * speed;
+		shotVelocity.x = -cosf(cameraPitch) * cosf(cameraAngle)*speed;
+		shotVelocity.z = -cosf(cameraPitch) * sinf(cameraAngle) * speed;
+		shotVelocity.y = -sinf(cameraPitch) * speed;
 
 
 		m_pWeapon->UseWeapon(weaponPos,shotVelocity);

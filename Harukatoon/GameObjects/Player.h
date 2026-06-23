@@ -26,9 +26,10 @@ public:
 	~Player();
 
 	void Init();
-	void Update(float cameraAngle,float timeScale);
+	void Update(float cameraAngle, float cameraPitch, float timeScale);
 	void Draw();
 
+	// ジャンプ処理
 	void Jump();
 
 	// プレイヤー情報の取得
