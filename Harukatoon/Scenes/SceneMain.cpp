@@ -119,8 +119,10 @@ void SceneMain::Draw()
 
 	SetUseZBuffer3D(true);*/
 	
+#ifdef DEBUG
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);
+#endif // DEBUG
 
 	int width, height;
 	GetGraphSize(m_gameUI, &width, &height);

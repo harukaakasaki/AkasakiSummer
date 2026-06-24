@@ -168,7 +168,9 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	}
 	if (isDivePress)
 	{
+#ifdef DEBUG
 		printfDx("ö‚Á‚Ä‚é`\n");
+#endif // DEBUG
 	}
 
 	if (m_isShooting)
