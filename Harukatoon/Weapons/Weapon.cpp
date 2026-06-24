@@ -4,12 +4,12 @@
 
 namespace
 {
-	constexpr int kOrange = 1;// プレイヤーオレンジ
-	constexpr int kBlue   = 2;// プレイヤーブルー
+
 }
 
-Weapon::Weapon(StageManager* stageManager) :
+Weapon::Weapon(StageManager* stageManager,int playerColor) :
 	m_stageManager(stageManager),
+	m_playerColor(playerColor),
 	m_whoShot(0.0f),
 	m_bullets(0.0f),
 	m_shotTimer(0),
@@ -49,7 +49,7 @@ void Weapon::Update()
 			// ステージを塗る
 			VECTOR currentPos = bullet->GetPos();
 
-			m_stageManager->Paint(currentPos.x, currentPos.z, kOrange, 100);
+			m_stageManager->Paint(currentPos.x, currentPos.z, m_playerColor, 100);
 		}
 	}
 	m_bullets = std::move(nextFrameBullets);

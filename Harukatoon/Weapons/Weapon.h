@@ -11,7 +11,7 @@ class StageManager;
 class Weapon
 {
 public:
-	Weapon(StageManager* stageManager);
+	Weapon(StageManager* stageManager,int playerColor);
 	~Weapon();
 	void Init();
 	void Update();
@@ -36,6 +36,9 @@ private:
 
 	// 弾と弾の間
 	int m_shotInterval;
+
+	// プレイヤーの色
+	int m_playerColor;
 
 };
 

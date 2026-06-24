@@ -7,14 +7,20 @@
 #include "../Systems/Pad.h"
 #include "../Stages/StageManager.h"
 
+namespace
+{
+	constexpr int kPlayerOrange = 1;// プレイヤーがオレンジ
+	constexpr int kPlayerBlue = 2;  // プレイヤーがブルー
+}
+
 SceneMain::SceneMain() :
 	m_frameCount(0),
 	m_timeScale(1.0),
 	m_gameUI(-1)
 {
 	m_pStageManager = new StageManager();
-	m_pPlayer1 = new Player(m_pStageManager, DX_INPUT_PAD1);
-	m_pPlayer2 = new Player(m_pStageManager, DX_INPUT_PAD2);
+	m_pPlayer1 = new Player(m_pStageManager, DX_INPUT_PAD1,kPlayerOrange);
+	m_pPlayer2 = new Player(m_pStageManager, DX_INPUT_PAD2,kPlayerBlue);
 	m_pCamera = new Camera();
 }
 

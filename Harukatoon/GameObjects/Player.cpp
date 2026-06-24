@@ -12,16 +12,17 @@ namespace
 	const char* const kShotAnim = "root|Shot";  // 射撃アニメーション
 	const char* const kRunAnim =   "root|Run";	// 走るアニメーション
 
-	constexpr float kSpeed = 15.0f;        // プレイヤーの移動速度
+	constexpr float kSpeed = 15.0f;         // プレイヤーの移動速度
 	constexpr float kAttackingSpeed = 10.0f;// プレイヤーの攻撃中の移動速度
-	constexpr float kDiveSpeed = 25.0f;    // プレイヤーの潜り移動速度
-	constexpr float kShotSpeed = 25.0f;    // 弾速度
-	constexpr float kGravity   = 0.8f;     // 重力
-	constexpr float kJumpPower = 20.0f;    // ジャンプ力
+	constexpr float kDiveSpeed = 25.0f;     // プレイヤーの潜り移動速度
+	constexpr float kShotSpeed = 25.0f;     // 弾速度
+	constexpr float kGravity   = 0.8f;      // 重力
+	constexpr float kJumpPower = 20.0f;     // ジャンプ力
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
 }
 
-Player::Player(StageManager* stageManager,int padNo):
+Player::Player(StageManager* stageManager,int padNo,int playerColor):
+	m_stageManager(stageManager),
 	m_modelHandle(-1),
 	m_angle(0.0f),
 	m_move{0.0f,0.0f,0.0f},
@@ -33,7 +34,7 @@ Player::Player(StageManager* stageManager,int padNo):
 	m_shotAnim(-1),
 	m_padNo(padNo)
 {
-	m_pWeapon = new Weapon(stageManager);
+	m_pWeapon = new Weapon(stageManager,playerColor);
 	m_pBomb = new Bomb();
 }
 

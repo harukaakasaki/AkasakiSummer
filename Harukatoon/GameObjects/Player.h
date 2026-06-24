@@ -22,7 +22,7 @@ class Player
 	};
 
 public:
-	Player(StageManager* stageManager,int padNo);
+	Player(StageManager* stageManager,int padNo,int playerColor);
 	~Player();
 
 	void Init();
