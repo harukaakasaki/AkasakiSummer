@@ -22,18 +22,44 @@ class Player
 	};
 
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="stageManager"></param>
+	/// <param name="padNo">コントローラー番号</param>
+	/// <param name="playerColor">プレイヤーのインクの色</param>
 	Player(StageManager* stageManager,int padNo,int playerColor);
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Player();
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Init();
-	void Update(float cameraAngle, float cameraPitch, float timeScale);
+
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="cameraAngle">カメラの横回転</param>
+	/// <param name="cameraPitch">カメラの縦回転</param>
+	/// <param name="timeScale">プレイヤー自体のスピード</param>
+	void Update(float cameraYaw, float cameraPitch, float timeScale);
 	void Draw();
 
-	// ジャンプ処理
+	/// <summary>
+	/// ジャンプ処理
+	/// </summary>
 	void Jump();
 
 	// プレイヤー情報の取得
-	VECTOR GetPos() const;// 位置
+	/// <summary>
+	/// 位置の取得
+	/// </summary>
+	/// <returns></returns>
+	VECTOR GetPos() const;
 
 	void SetPos(VECTOR pos);
 
