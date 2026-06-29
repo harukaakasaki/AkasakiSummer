@@ -15,7 +15,7 @@ namespace
 	constexpr float kSpeed = 15.0f;         // プレイヤーの移動速度
 	constexpr float kAttackingSpeed = 10.0f;// プレイヤーの攻撃中の移動速度
 	constexpr float kDiveSpeed = 25.0f;     // プレイヤーの潜り移動速度
-	constexpr float kShotSpeed = 25.0f;     // 弾速度
+	constexpr float kShotSpeed = 30.0f;     // 弾速度
 	constexpr float kGravity   = 0.8f;      // 重力
 	constexpr float kJumpPower = 20.0f;     // ジャンプ力
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
