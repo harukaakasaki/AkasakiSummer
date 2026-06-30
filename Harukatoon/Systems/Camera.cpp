@@ -92,7 +92,7 @@ void Camera::Update(VECTOR playerPos)
 }
 void Camera::Draw()
 {
-//	DrawCircle(640, 260, 10, GetColor(255, 0, 0), true, true);
+	DrawCircle(640, 260, 10, GetColor(255, 0, 0), false, true);
 
 	//// ‹ó‚ð•`‰æ
 	//MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));

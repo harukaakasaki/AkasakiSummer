@@ -112,8 +112,8 @@ void SceneMain::Draw()
 	DrawGrid();
 	m_pPlayer1->Draw();
 	m_pPlayer2->Draw();
-	m_pCamera->Draw();
 	m_pStageManager->Draw();
+	m_pCamera->Draw();
 
 	/*SetUseZBuffer3D(false);
 
