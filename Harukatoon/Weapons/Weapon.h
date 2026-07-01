@@ -40,5 +40,7 @@ private:
 	// プレイヤーの色
 	int m_playerColor;
 
+	//メインの弾かどうか（遠くに飛ぶ弾かどうか）
+	bool m_isMainBullet;
 };
 

@@ -26,7 +26,7 @@ void Bullet::Update()
 	// 位置を動かす
 	m_pos = VAdd(m_pos, m_velocity);
 	// 弾に重力を掛ける
-	m_velocity.y -= 0.98f;
+	m_velocity.y -= 1.5f;
 	// 床(今は0.0fが床)に当たった場合、弾は消える（m_isAliveの消滅）
 	if (m_pos.y <= 0.0f)
 	{

@@ -1,6 +1,7 @@
 #include "Weapon.h"
 #include <vector>
 #include <DxLib.h>
+#include <algorithm>
 
 namespace
 {
@@ -16,6 +17,7 @@ Weapon::Weapon(StageManager* stageManager,int playerColor) :
 	m_shotInterval(2)// このフレーム内に一発発射する
 {
 	m_stageManager = stageManager;
+	m_isMainBullet = false;
 }
 
 Weapon::~Weapon()
@@ -67,17 +69,37 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 	// x軸、y軸の-0.8～6.0fの間からランダムで弾が飛ぶ
 	if (m_shotTimer == 0)
 	{
-		float rateX = (float)rand() / RAND_MAX;
-		float spreadX = -3.0f + rateX * 6.0f;
+		float tempSpeed = VSize(shotVel);
 
-		float rateY = (float)rand() / RAND_MAX;
-		float spreadY = -0.8f + rateY * 3.2f;
+		// -1～1の範囲でランダムな値を生成
+		int temp = GetRand(512) - 256;
+		float rate = (float)temp / 256.0f;
 
-		VECTOR randomVel = shotVel;
-		randomVel.x += spreadX;
-		randomVel.y += spreadY;
+		VECTOR shotOffsetVel = VCross(shotVel, { 0.0f, 1.0f, 0.0f });
 
-		randomVel.y += 21.0f; // 弾の初速を上に上げる(放物線)
+		//　＊この数字を0に近づけるとシャープマーカーで1にするほどモデラー
+		float shotWidth = 0.05f;
+
+		shotOffsetVel = VScale(shotOffsetVel, rate * shotWidth);
+
+
+		VECTOR randomVel = VNorm(VAdd(shotVel, shotOffsetVel));
+		randomVel = VScale(randomVel, tempSpeed);
+		
+		//弾が上に飛ぶか下に飛ぶか
+		float upPower = 18.0f;
+
+		if (!m_isMainBullet)
+		{
+			// -1～1の範囲でランダムな値を生成
+			int temp2 = GetRand(512) - 256;
+			float rate2 = (float)temp2 / 256.0f;
+			upPower *= rate2; // 上下のランダムな値を生成
+			upPower = std::clamp(upPower, -20.0f, 20.0f); // 上下のランダムな値を制限
+		}
+		m_isMainBullet = !m_isMainBullet;
+
+		randomVel.y += upPower; // 弾の初速を上に上げる(放物線)
 
 		// 弾を生成して管理リストに追加
 		m_bullets.push_back(std::make_unique<Bullet>(playerPos, randomVel));
