@@ -64,11 +64,11 @@ void Weapon::Draw()
 void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 {
 	//printfDx("ウェポンで攻撃中！\n");
-	// x軸、y軸の-0.8～4.0fの間からランダムで弾が飛ぶ
+	// x軸、y軸の-0.8～6.0fの間からランダムで弾が飛ぶ
 	if (m_shotTimer == 0)
 	{
 		float rateX = (float)rand() / RAND_MAX;
-		float spreadX = -0.8f + rateX * 4.0f;
+		float spreadX = -0.8f + rateX * 6.0f;
 
 		float rateY = (float)rand() / RAND_MAX;
 		float spreadY = -0.8f + rateY * 3.2f;
@@ -77,7 +77,7 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 		randomVel.x += spreadX;
 		randomVel.y += spreadY;
 
-		randomVel.y += 18.0f; // 弾の初速を上に上げる
+		randomVel.y += 21.0f; // 弾の初速を上に上げる(放物線)
 
 		// 弾を生成して管理リストに追加
 		m_bullets.push_back(std::make_unique<Bullet>(playerPos, randomVel));
