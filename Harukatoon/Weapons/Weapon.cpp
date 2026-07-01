@@ -68,7 +68,7 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 	if (m_shotTimer == 0)
 	{
 		float rateX = (float)rand() / RAND_MAX;
-		float spreadX = -0.8f + rateX * 6.0f;
+		float spreadX = -3.0f + rateX * 6.0f;
 
 		float rateY = (float)rand() / RAND_MAX;
 		float spreadY = -0.8f + rateY * 3.2f;
