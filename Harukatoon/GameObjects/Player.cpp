@@ -143,7 +143,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	// “ü—Íî•ñ‚Í—Dæ“x‚ğ‚Â‚¯‚ÄŠÇ—‚·‚é
 	if (isWeaponPress)
 	{
-		VECTOR weaponPos = VGet(m_pos.x, m_pos.y + 300.0f, m_pos.z);
+		VECTOR weaponPos = VGet(m_pos.x, m_pos.y + 230.0f, m_pos.z);
 
 		float speed = kShotSpeed;
 

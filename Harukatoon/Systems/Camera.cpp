@@ -57,7 +57,7 @@ void Camera::Update(VECTOR playerPos)
 	m_cameraPitch += y * sensitivity;
 	
 	// カメラとプレイヤーとの距離
-	float distance = 700.0f;
+	float distance = 675.0f;
 	// カメラの高さ
 	float height = 300.0f;
 
@@ -82,7 +82,7 @@ void Camera::Update(VECTOR playerPos)
 
 	m_cameraTarget = playerPos;
 
-	m_cameraTarget.y += 200.0f;
+	m_cameraTarget.y += 300.0f;
 
 
 	// カメラと注視点を設定
@@ -92,7 +92,9 @@ void Camera::Update(VECTOR playerPos)
 }
 void Camera::Draw()
 {
-	DrawCircle(640, 260, 10, GetColor(255, 0, 0), false, true);
+	DrawCircle(640, 300, 5, GetColor(255, 255, 255), false, true);
+	DrawCircle(640, 300, 20, GetColor(255, 125, 0), false, true);
+	DrawCircle(640, 300, 30, GetColor(255, 255, 255), false, true);
 
 	//// 空を描画
 	//MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));

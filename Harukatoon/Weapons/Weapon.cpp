@@ -13,7 +13,7 @@ Weapon::Weapon(StageManager* stageManager,int playerColor) :
 	m_whoShot(0.0f),
 	m_bullets(0.0f),
 	m_shotTimer(0),
-	m_shotInterval(4)// このフレーム内に一発発射する
+	m_shotInterval(3)// このフレーム内に一発発射する
 {
 	m_stageManager = stageManager;
 }
@@ -76,6 +76,8 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 		VECTOR randomVel = shotVel;
 		randomVel.x += spreadX;
 		randomVel.y += spreadY;
+
+		randomVel.y += 18.0f; // 弾の初速を上に上げる
 
 		// 弾を生成して管理リストに追加
 		m_bullets.push_back(std::make_unique<Bullet>(playerPos, randomVel));
