@@ -13,7 +13,7 @@ Weapon::Weapon(StageManager* stageManager,int playerColor) :
 	m_whoShot(0.0f),
 	m_bullets(0.0f),
 	m_shotTimer(0),
-	m_shotInterval(3)// このフレーム内に一発発射する
+	m_shotInterval(2)// このフレーム内に一発発射する
 {
 	m_stageManager = stageManager;
 }

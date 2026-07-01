@@ -13,8 +13,8 @@ namespace
 	const char* const kRunAnim =   "root|Run";	// 走るアニメーション
 
 	constexpr float kSpeed = 15.0f;         // プレイヤーの移動速度
-	constexpr float kAttackingSpeed = 5.0f;// プレイヤーの攻撃中の移動速度
-	constexpr float kDiveSpeed = 1.7f;     // プレイヤーの潜り移動速度
+	constexpr float kAttackingSpeed = 12.0f;// プレイヤーの攻撃中の移動速度
+	constexpr float kDiveSpeed = 30.0f;     // プレイヤーの潜り移動速度
 	constexpr float kShotSpeed = 30.0f;     // 弾速度
 	constexpr float kGravity   = 0.8f;      // 重力
 	constexpr float kJumpPower = 20.0f;     // ジャンプ力
@@ -105,11 +105,16 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
 	bool isBombPress = Pad::IsPress(m_padNo, PAD_INPUT_6);         // RBが押された
 
+	float speed = kSpeed;
+
 	if (isDivePress)
 	{
 		m_isDiving = true;
 		// 潜る処理
 		Dive();
+
+		speed = kDiveSpeed;
+
 #ifdef _DEBUG
 		printfDx("潜ってる～\n");
 #endif // DEBUG
@@ -128,6 +133,9 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 			m_state = PlayerState::Shot;
 		}
 		m_isShooting = true;
+
+		// 攻撃中は移動速度を遅くする
+		speed = kAttackingSpeed;
 	}
 
 	else if (len > 0)
@@ -147,8 +155,8 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 		}
 	}
 	
-	m_move.x = m_move.x * kSpeed * timeScale;
-	m_move.z = m_move.z * kSpeed * timeScale;
+	m_move.x = m_move.x * speed * timeScale;
+	m_move.z = m_move.z * speed * timeScale;
 
 	m_pos.x += m_move.x;
 	m_pos.z += m_move.z;
@@ -156,7 +164,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	
 
 	// 入力情報は優先度をつけて管理する
-	if (isWeaponPress)
+	if (!m_isDiving && isWeaponPress)
 	{
 		VECTOR weaponPos = VGet(m_pos.x, m_pos.y + 170.0f, m_pos.z);
 
@@ -254,9 +262,6 @@ void Player::Jump()
 
 void Player::Dive()
 {
-	
-	m_move.x = m_move.x * kDiveSpeed;
-	m_move.z = m_move.z * kDiveSpeed;
 }
 
 VECTOR Player::GetPos() const
