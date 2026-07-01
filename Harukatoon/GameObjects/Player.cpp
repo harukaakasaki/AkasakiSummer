@@ -13,8 +13,8 @@ namespace
 	const char* const kRunAnim =   "root|Run";	// 走るアニメーション
 
 	constexpr float kSpeed = 15.0f;         // プレイヤーの移動速度
-	constexpr float kAttackingSpeed = 10.0f;// プレイヤーの攻撃中の移動速度
-	constexpr float kDiveSpeed = 25.0f;     // プレイヤーの潜り移動速度
+	constexpr float kAttackingSpeed = 5.0f;// プレイヤーの攻撃中の移動速度
+	constexpr float kDiveSpeed = 1.7f;     // プレイヤーの潜り移動速度
 	constexpr float kShotSpeed = 30.0f;     // 弾速度
 	constexpr float kGravity   = 0.8f;      // 重力
 	constexpr float kJumpPower = 20.0f;     // ジャンプ力
@@ -92,18 +92,33 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 		m_move.x /= len;
 		m_move.z /= len;
 
-		m_move.x = m_move.x * kSpeed * timeScale;
-		m_move.z = m_move.z * kSpeed * timeScale;
+		
 	}
 
-	m_pos.x += m_move.x;
-	m_pos.z += m_move.z;
+	
 
 	// 攻撃
 	XINPUT_STATE xinputState;
 
 	GetJoypadXInputState(m_padNo, &xinputState);
 	bool isWeaponPress = (xinputState.RightTrigger > 128);// RTが押された
+	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
+	bool isBombPress = Pad::IsPress(m_padNo, PAD_INPUT_6);         // RBが押された
+
+	if (isDivePress)
+	{
+		m_isDiving = true;
+		// 潜る処理
+		Dive();
+#ifdef _DEBUG
+		printfDx("潜ってる～\n");
+#endif // DEBUG
+	}
+	else
+	{
+		m_isDiving = false;
+	}
+	
 	// 攻撃中はプレイヤーのスピードが遅くなるようにしたい
 	if (isWeaponPress)
 	{
@@ -112,10 +127,6 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 			m_animation.Play(m_shotAnim, true, 1.0f);
 			m_state = PlayerState::Shot;
 		}
-		
-		m_move.x = m_move.x * kAttackingSpeed * timeScale;
-		m_move.z = m_move.z * kAttackingSpeed * timeScale;
-
 		m_isShooting = true;
 	}
 
@@ -136,8 +147,12 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 		}
 	}
 	
-	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
-	bool isBombPress = Pad::IsPress(m_padNo,PAD_INPUT_6);         // RBが押された
+	m_move.x = m_move.x * kSpeed * timeScale;
+	m_move.z = m_move.z * kSpeed * timeScale;
+
+	m_pos.x += m_move.x;
+	m_pos.z += m_move.z;
+	
 	
 
 	// 入力情報は優先度をつけて管理する
@@ -166,12 +181,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	{
 		m_pBomb->Throw();
 	}
-	if (isDivePress)
-	{
-#ifdef DEBUG
-		printfDx("潜ってる～\n");
-#endif // DEBUG
-	}
+	
 
 	if (m_isShooting)
 	{
@@ -189,6 +199,18 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 void Player::Draw()
 {
 	m_pWeapon->Draw();
+	
+	// 潜り状態のプレイヤーの当たり判定
+	if (m_isDiving)
+	{
+		DrawSphere3D(VGet(m_pos.x, m_pos.y + 25, m_pos.z),
+			60, 16,
+			GetColor(255, 125, 0),
+			GetColor(255, 125, 0),
+			true);
+
+		return;
+	}
 
 	// プレイヤーの当たり判定の描画
 #ifdef _DEBUG
@@ -206,6 +228,8 @@ void Player::Draw()
 	MV1SetMatrix(m_modelHandle, mtx);// モデルハンドルと合わせる
 
 	MV1DrawModel(m_modelHandle);// プレイヤー表示
+
+	
 }
 
 void Player::Jump()
@@ -226,6 +250,13 @@ void Player::Jump()
 		m_velocityY = 0.0f;
 		m_isGround = true;
 	}
+}
+
+void Player::Dive()
+{
+	
+	m_move.x = m_move.x * kDiveSpeed;
+	m_move.z = m_move.z * kDiveSpeed;
 }
 
 VECTOR Player::GetPos() const

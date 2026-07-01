@@ -54,6 +54,11 @@ public:
 	/// </summary>
 	void Jump();
 
+	/// <summary>
+	/// 潜る処理
+	/// </summary>
+	void Dive();
+
 	// プレイヤー情報の取得
 	/// <summary>
 	/// 位置の取得
@@ -87,6 +92,7 @@ private:
 	float m_velocityY;// 上に飛ぶ力
 	bool m_isGround = false;  // 地面にいるかどうか
 	bool m_isShooting = false;// 攻撃しているかどうか
+	bool m_isDiving = false;// 潜っているかどうか
 
 	Weapon* m_pWeapon;// プレイヤーが持つウェポン
 	Bomb* m_pBomb;// プレイヤーが持つボム

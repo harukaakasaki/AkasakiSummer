@@ -94,7 +94,7 @@ void Camera::Draw()
 {
 	DrawCircle(640, 300, 5, GetColor(255, 255, 255), false, true);
 	DrawCircle(640, 300, 20, GetColor(255, 125, 0), false, true);
-	DrawCircle(640, 300, 30, GetColor(255, 255, 255), false, true);
+	DrawCircle(640, 300, 35, GetColor(255, 255, 255), false, true);
 
 	//// ‹ó‚ð•`‰æ
 	//MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
