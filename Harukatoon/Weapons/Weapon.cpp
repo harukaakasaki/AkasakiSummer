@@ -78,7 +78,7 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 		VECTOR shotOffsetVel = VCross(shotVel, { 0.0f, 1.0f, 0.0f });
 
 		//　＊この数字を0に近づけるとシャープマーカーで1にするほどモデラー
-		float shotWidth = 0.05f;
+		float shotWidth = 0.1f;
 
 		shotOffsetVel = VScale(shotOffsetVel, rate * shotWidth);
 
@@ -95,7 +95,7 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 			int temp2 = GetRand(512) - 256;
 			float rate2 = (float)temp2 / 256.0f;
 			upPower *= rate2; // 上下のランダムな値を生成
-			upPower = std::clamp(upPower, -20.0f, 20.0f); // 上下のランダムな値を制限
+			upPower = std::clamp(upPower, -18.0f, 18.0f); // 上下のランダムな値を制限
 		}
 		m_isMainBullet = !m_isMainBullet;
 

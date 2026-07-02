@@ -3,17 +3,18 @@
 
 namespace
 {
+	constexpr int kPadCount = 5;
 	// 現在のフレームの押され状態
-	int nowPad[2] = {};
+	int nowPad[kPadCount] = {};
 	// 前のフレームの押され状態
-	int lastPad[2] = {};
+	int lastPad[kPadCount] = {};
 }
 
 namespace Pad
 {
 	void Update()
 	{
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < kPadCount; i++)
 		{
 			// 前のフレームに取得したパッドの情報を入れ替え
 			lastPad[i] = nowPad[i];

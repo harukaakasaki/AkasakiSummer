@@ -9,7 +9,7 @@ public:
 	~Camera();
 
 	Camera(const Camera&)=delete;
-	void Init();
+	void Init(int padNo);
 	void Update(VECTOR playerPos);
 	void Draw();
 
@@ -21,7 +21,7 @@ private:
 	float m_cameraPitch; // 縦回転
 
 	int m_skyModelHandle;// 空のモデル
-	
+	int m_padNo; // パッド番号
 
 	VECTOR m_cameraPos;
 	VECTOR m_cameraTarget;

@@ -21,7 +21,8 @@ SceneMain::SceneMain() :
 	m_pStageManager = new StageManager();
 	m_pPlayer1 = new Player(m_pStageManager, DX_INPUT_PAD1,kPlayerOrange);
 	m_pPlayer2 = new Player(m_pStageManager, DX_INPUT_PAD2,kPlayerBlue);
-	m_pCamera = new Camera();
+	m_pCamera1 = new Camera();
+	m_pCamera2 = new Camera();
 }
 
 SceneMain::~SceneMain()
@@ -29,7 +30,8 @@ SceneMain::~SceneMain()
 	delete m_pStageManager;
 	delete m_pPlayer1;
 	delete m_pPlayer2;
-	delete m_pCamera;
+	delete m_pCamera1;
+	delete m_pCamera2;
 }
 
 
@@ -53,7 +55,8 @@ void SceneMain::Init()
 	m_pPlayer2->SetPos(VGet(0.0f, 0.0f, 0.0f));
 	m_pPlayer2->Init();
 	m_pPlayer2->SetPos(VGet(200.0f, 0.0f, 0.0f));
-	m_pCamera->Init();
+	m_pCamera1->Init(DX_INPUT_PAD1);
+	m_pCamera2->Init(DX_INPUT_PAD2);
 	m_pStageManager->Init();
 
 	m_gameUI = LoadGraph("data/UI/GameUI_1.png");
@@ -65,10 +68,10 @@ void SceneMain::Update()
 	Pad::Update();
 
 	m_frameCount++;
-	m_pPlayer1->Update(m_pCamera->GetYaw(),m_pCamera->GetPitch(), m_timeScale);
-	m_pPlayer2->Update(m_pCamera->GetYaw(),m_pCamera->GetPitch(), m_timeScale);
-	m_pCamera->Update(m_pPlayer1->GetPos());
-//	m_pCamera->Update(m_pPlayer2->GetPos());
+	m_pPlayer1->Update(m_pCamera1->GetYaw(),m_pCamera1->GetPitch(), m_timeScale);
+	m_pPlayer2->Update(m_pCamera2->GetYaw(),m_pCamera2->GetPitch(), m_timeScale);
+	m_pCamera1->Update(m_pPlayer1->GetPos());
+	m_pCamera2->Update(m_pPlayer2->GetPos());
 	m_pStageManager->Update();
 	InkPaint();
 }
@@ -109,11 +112,38 @@ void SceneMain::InkPaint()
 
 void SceneMain::Draw()
 {
+	// プレイヤー1は描画範囲を左半分にする（x = 640）
+	SetDrawArea(0, 0, 640, 720);
+	//3Dカメラの描画範囲を左半分に合わせる（320）
+	SetCameraScreenCenter(320.0f, 360.0f);
+
+	// プレイヤー1のカメラを描画
+	m_pCamera1->Draw();
+
+	// プレイヤー1に映る世界の描画
 	DrawGrid();
 	m_pPlayer1->Draw();
 	m_pPlayer2->Draw();
 	m_pStageManager->Draw();
-	m_pCamera->Draw();
+	
+	// プレイヤー2は描画範囲を右半分にする（x = 1280）
+	SetDrawArea(640, 0, 1280, 720);
+	//3Dカメラの描画範囲を右半分に合わせる（320）
+	SetCameraScreenCenter(960.0f, 360.0f);
+	
+	// プレイヤー2のカメラを描画
+	m_pCamera2->Draw();
+
+	// プレイヤー2に映る世界の描画
+	DrawGrid();
+	m_pPlayer1->Draw();
+	m_pPlayer2->Draw();
+	m_pStageManager->Draw();
+
+	// 描画範囲を元に戻す
+	SetDrawArea(0, 0, 1280, 720);
+	SetCameraScreenCenter(640.0f, 360.0f);
+
 
 	/*SetUseZBuffer3D(false);
 
@@ -124,6 +154,7 @@ void SceneMain::Draw()
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);
 #endif // DEBUG
 
+	// UIの描画
 	int width, height;
 	GetGraphSize(m_gameUI, &width, &height);
 	

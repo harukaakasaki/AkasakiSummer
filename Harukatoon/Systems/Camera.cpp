@@ -18,8 +18,10 @@ Camera::~Camera()
 	MV1DeleteModel(m_skyModelHandle);
 }
 
-void Camera::Init()
+void Camera::Init(int padNo)
 {
+	m_padNo = padNo;
+
 	// カメラの描画範囲
 	SetCameraNearFar(10.0f, 20000.0f);
 
@@ -42,7 +44,7 @@ void Camera::Update(VECTOR playerPos)
 	Effekseer_Sync3DSetting();
 
 	int camX, camY;
-	GetJoypadAnalogInputRight(&camX, &camY, DX_INPUT_PAD1);
+	GetJoypadAnalogInputRight(&camX, &camY, m_padNo);
 
 	float x = camX / -800.0f;
 	float y = camY / 1000.0f;
@@ -86,16 +88,22 @@ void Camera::Update(VECTOR playerPos)
 	m_cameraTarget.y += 300.0f;
 
 
-	// カメラと注視点を設定
-	SetCameraPositionAndTarget_UpVecY(
-		VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z), 
-		VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
+	
 }
 void Camera::Draw()
 {
-	DrawCircle(640, 300, 2, GetColor(255, 255, 255), true, true);
-	DrawCircle(640, 300, 20, GetColor(255, 255, 255), false, true);
-	DrawCircle(640, 300, 35, GetColor(125, 125, 125), false, true);
+	// カメラと注視点を設定
+	SetCameraPositionAndTarget_UpVecY(
+		VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z),
+		VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
+
+	int centerX = (m_padNo == DX_INPUT_PAD1) ? 320 : 960;
+	int centerY = 300;
+
+	// レティクル
+	DrawCircle(centerX, centerY, 2, GetColor(255, 255, 255), true, true);
+	DrawCircle(centerX, centerY, 20, GetColor(255, 255, 255), false, true);
+	DrawCircle(centerX, centerY, 35, GetColor(125, 125, 125), false, true);
 
 	//// 空を描画
 	//MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));

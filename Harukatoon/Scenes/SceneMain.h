@@ -26,7 +26,8 @@ private:
 	float m_timeScale;
 	Player* m_pPlayer1;
 	Player* m_pPlayer2;
-	Camera* m_pCamera;
+	Camera* m_pCamera1;
+	Camera* m_pCamera2;
 	StageManager* m_pStageManager;
 
 	int m_gameUI;
