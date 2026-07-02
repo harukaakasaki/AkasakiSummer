@@ -5,7 +5,7 @@
 
 namespace
 {
-
+	//弾の間隔はマジックナンバー？？？？
 }
 
 Weapon::Weapon(StageManager* stageManager,int playerColor) :
