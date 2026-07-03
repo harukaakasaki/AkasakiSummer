@@ -9,7 +9,8 @@ Camera::Camera():
 	m_cameraPitch(0.0f),
 	m_cameraPos{ 0.0f,0.0f,0.0f },
 	m_cameraTarget{ 0.0f, 0.0f, 0.0f },
-	m_skyModelHandle(-1)
+	m_skyModelHandle(-1),
+	m_padNo(0)
 {
 }
 
@@ -97,13 +98,13 @@ void Camera::Draw()
 		VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z),
 		VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
 
-	int centerX = (m_padNo == DX_INPUT_PAD1) ? 320 : 960;
-	int centerY = 300;
+	//int centerX = (m_padNo == DX_INPUT_PAD1) ? 320 : 960;
+	//int centerY = 300;
 
-	// レティクル
-	DrawCircle(centerX, centerY, 2, GetColor(255, 255, 255), true, true);
-	DrawCircle(centerX, centerY, 20, GetColor(255, 255, 255), false, true);
-	DrawCircle(centerX, centerY, 35, GetColor(125, 125, 125), false, true);
+	//// レティクル
+	//DrawCircle(centerX, centerY, 2, GetColor(255, 255, 255), true, true);
+	//DrawCircle(centerX, centerY, 20, GetColor(255, 255, 255), false, true);
+	//DrawCircle(centerX, centerY, 35, GetColor(125, 125, 125), false, true);
 
 	//// 空を描画
 	//MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));

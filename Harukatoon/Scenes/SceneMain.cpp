@@ -125,6 +125,11 @@ void SceneMain::Draw()
 	m_pPlayer1->Draw();
 	m_pPlayer2->Draw();
 	m_pStageManager->Draw();
+
+	// レティクル
+	DrawCircle(320, 300, 2, GetColor(255, 255, 255), true, true);
+	DrawCircle(320, 300, 20, GetColor(255, 255, 255), false, true);
+	DrawCircle(320, 300, 35, GetColor(125, 125, 125), false, true);
 	
 	// プレイヤー2は描画範囲を右半分にする（x = 1280）
 	SetDrawArea(640, 0, 1280, 720);
@@ -139,6 +144,11 @@ void SceneMain::Draw()
 	m_pPlayer1->Draw();
 	m_pPlayer2->Draw();
 	m_pStageManager->Draw();
+
+	// レティクル
+	DrawCircle(960, 300, 2, GetColor(255, 255, 255), true, true);
+	DrawCircle(960, 300, 20, GetColor(255, 255, 255), false, true);
+	DrawCircle(960, 300, 35, GetColor(125, 125, 125), false, true);
 
 	// 描画範囲を元に戻す
 	SetDrawArea(0, 0, 1280, 720);
