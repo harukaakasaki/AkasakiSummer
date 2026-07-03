@@ -164,6 +164,8 @@ void SceneMain::Draw()
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);
 #endif // DEBUG
 
+	DrawLine(640, 0, 640, 720, GetColor(0, 0, 0));
+
 	// UI‚Ì•`‰æ
 	int width, height;
 	GetGraphSize(m_gameUI, &width, &height);
