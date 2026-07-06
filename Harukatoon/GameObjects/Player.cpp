@@ -161,8 +161,6 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	m_pos.x += m_move.x;
 	m_pos.z += m_move.z;
 	
-	
-
 	// “ü—Íî•ñ‚Í—Dæ“x‚ğ‚Â‚¯‚ÄŠÇ—‚·‚é
 	if (!m_isDiving && isWeaponPress)
 	{

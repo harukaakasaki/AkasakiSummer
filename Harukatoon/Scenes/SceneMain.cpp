@@ -54,7 +54,7 @@ void SceneMain::Init()
 	m_pPlayer1->Init();
 	m_pPlayer2->SetPos(VGet(0.0f, 0.0f, 0.0f));
 	m_pPlayer2->Init();
-	m_pPlayer2->SetPos(VGet(200.0f, 0.0f, 0.0f));
+	m_pPlayer2->SetPos(VGet(2.0f, 0.0f, 0.0f));
 	m_pCamera1->Init(DX_INPUT_PAD1);
 	m_pCamera2->Init(DX_INPUT_PAD2);
 	m_pStageManager->Init();
@@ -163,8 +163,16 @@ void SceneMain::Draw()
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);
 #endif // DEBUG
-
+	// ‰æ–Ê‚Ì’†‰›‚Éü‚ðˆø‚­
 	DrawLine(640, 0, 640, 720, GetColor(0, 0, 0));
+
+	// ŠeƒvƒŒƒCƒ„[‚Ì“h‚èŠ„‡‚ðŽæ“¾
+	float orangePercent = m_pStageManager->GetPaintPercent(kPlayerOrange);
+	float bluePercent = m_pStageManager->GetPaintPercent(kPlayerBlue);
+
+	DrawFormatString(10, 50, GetColor(255, 125, 0), "Orange : %.2f%%", orangePercent);
+	DrawFormatString(10, 70, GetColor(0, 0, 255), "Blue   : %.2f%%", bluePercent);
+
 
 	// UI‚Ì•`‰æ
 	int width, height;

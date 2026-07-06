@@ -5,7 +5,8 @@
 
 namespace
 {
-	//弾の間隔はマジックナンバー？？？？
+	constexpr int kShotInterval = 2; // このフレーム内に一発発射する
+	constexpr float kShotupPower = 18.0f; // 弾が上に飛ぶか下に飛ぶかの初速
 }
 
 Weapon::Weapon(StageManager* stageManager,int playerColor) :
@@ -14,7 +15,7 @@ Weapon::Weapon(StageManager* stageManager,int playerColor) :
 	m_whoShot(0.0f),
 	m_bullets(0.0f),
 	m_shotTimer(0),
-	m_shotInterval(2)// このフレーム内に一発発射する
+	m_shotInterval(kShotInterval)// このフレーム内に一発発射する
 {
 	m_stageManager = stageManager;
 	m_isMainBullet = false;
@@ -87,7 +88,7 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 		randomVel = VScale(randomVel, tempSpeed);
 		
 		//弾が上に飛ぶか下に飛ぶか
-		float upPower = 18.0f;
+		float upPower = kShotupPower;
 
 		if (!m_isMainBullet)
 		{
@@ -95,7 +96,7 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 			int temp2 = GetRand(512) - 256;
 			float rate2 = (float)temp2 / 256.0f;
 			upPower *= rate2; // 上下のランダムな値を生成
-			upPower = std::clamp(upPower, -18.0f, 18.0f); // 上下のランダムな値を制限
+			upPower = std::clamp(upPower, -kShotupPower, kShotupPower); // 上下のランダムな値を制限
 		}
 		m_isMainBullet = !m_isMainBullet;
 

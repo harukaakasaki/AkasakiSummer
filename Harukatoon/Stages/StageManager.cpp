@@ -246,3 +246,25 @@ void StageManager::Paint(float x, float z, float who, float paintRadius)
 
 }
 
+float StageManager::GetPaintPercent(int playerColor) const
+{
+	int matchCount = 0;
+	// 全体のマス数
+	int totalCells = m_mapWidthSize * m_mapHeightSize;
+
+	if (totalCells == 0)return 0.0f;
+
+	for (const auto& row : m_2dMap)
+	{
+		for (const auto& cell : row)
+		{
+			if (static_cast<int>(cell) == playerColor)
+			{
+				matchCount++;
+			}
+		}
+	}
+	// プレイヤーの塗ったマス/全体のマス*100=塗り割合
+	return (static_cast<float>(matchCount) / static_cast<float>(totalCells)) * 100.0f;
+}
+

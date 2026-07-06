@@ -21,6 +21,9 @@ public:
 	/// <param name="who">誰が塗ったか</param>
 	void Paint(float x,float y,float who, float paintRadius);
 
+	// プレイヤー1、2の塗り割合を計算する関数
+	float GetPaintPercent(int playerColor)const;
+
 private:
 
 	// 2Dマップデータ
