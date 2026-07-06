@@ -35,6 +35,8 @@ SceneMain::~SceneMain()
 	delete m_pPlayer2;
 	delete m_pCamera1;
 	delete m_pCamera2;
+	StopSoundMem(m_bgmHandle);
+	DeleteSoundMem(m_bgmHandle);
 }
 
 
@@ -68,6 +70,12 @@ void SceneMain::Init()
 
 	m_gameUI = LoadGraph("data/UI/GameUI_1.png");
 	assert(m_gameUI != -1);
+
+	// BGM
+	m_bgmHandle = LoadSoundMem("data/bgm/game_bgm.mp3");
+	assert(m_bgmHandle != -1);
+	ChangeVolumeSoundMem(180, m_bgmHandle);
+	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }
 
 void SceneMain::Update()
@@ -114,7 +122,7 @@ void SceneMain::Update()
 				// 引き分け
 				printfDx("引き分け!");
 			}
-			// フィニッシュ！
+			// ゲーム終了フラグ
 			m_isFinish = true;
 		}
 
@@ -199,8 +207,6 @@ void SceneMain::Draw()
 	// 描画範囲を元に戻す
 	SetDrawArea(0, 0, 1280, 720);
 	SetCameraScreenCenter(640.0f, 360.0f);
-
-
 	/*SetUseZBuffer3D(false);
 
 	SetUseZBuffer3D(true);*/

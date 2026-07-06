@@ -79,7 +79,7 @@ void ResultScene::Update()
 	// ‹ó‚Ì‰ñ“]
 	m_skyAngle += 0.008f;
 	// ƒvƒŒƒCƒ„[‚Ì‰ñ“]
-//	m_playerAngle += 0.008f;
+	m_playerAngle += 0.008f;
 	m_blinkAngle += 0.08f;
 }
 

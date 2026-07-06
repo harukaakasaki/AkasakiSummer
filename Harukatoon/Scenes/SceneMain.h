@@ -37,6 +37,7 @@ private:
 
 private:
 	int m_frameCount;
+	int m_bgmHandle;
 	float m_timeScale;
 	bool m_isFinish = false;
 	Player* m_pPlayer1;

@@ -39,8 +39,8 @@ void TitleScene::Init()
 	m_titleLogoHandle = LoadGraph("data/UI/Harukatoon_Logo.png");
 
 	// BGM
-	m_bgmHandle = LoadSoundMem("bgm/title_bgm.mp3");
-	m_selectSeHandle = LoadSoundMem("bgm/select_se.mp3");
+	m_bgmHandle = LoadSoundMem("data/bgm/title_bgm.mp3");
+	m_selectSeHandle = LoadSoundMem("data/bgm/select_se.mp3");
 
 	ChangeVolumeSoundMem(180, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
