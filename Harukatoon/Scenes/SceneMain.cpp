@@ -1,4 +1,5 @@
 #include "SceneMain.h"
+#include "ResultScene.h"
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
@@ -11,7 +12,7 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;// プレイヤーがオレンジ
 	constexpr int kPlayerBlue = 2;  // プレイヤーがブルー
-	constexpr int kTimer = 20*60;  // タイマーの時間(20秒)
+	constexpr int kTimer = 20*60;  // タイマーの時間
 }
 
 SceneMain::SceneMain() :
@@ -53,13 +54,17 @@ void SceneMain::Init()
 //	SetCameraNearFar(200.0f, 1500.0f);
 	SetCameraNearFar(1.0f, 1500.0f);
 
+
+	m_pStageManager->Init();
 	m_pPlayer1->Init();
 	m_pPlayer2->SetPos(VGet(0.0f, 0.0f, 0.0f));
 	m_pPlayer2->Init();
 	m_pPlayer2->SetPos(VGet(200.0f, 0.0f, 0.0f));
+
 	m_pCamera1->Init(DX_INPUT_PAD1);
 	m_pCamera2->Init(DX_INPUT_PAD2);
-	m_pStageManager->Init();
+	m_pCamera1->Update(m_pPlayer1->GetPos());
+	m_pCamera2->Update(m_pPlayer2->GetPos());
 
 	m_gameUI = LoadGraph("data/UI/GameUI_1.png");
 	assert(m_gameUI != -1);
@@ -74,8 +79,10 @@ void SceneMain::Update()
 	{
 		m_pPlayer1->Update(m_pCamera1->GetYaw(), m_pCamera1->GetPitch(), m_timeScale);
 		m_pPlayer2->Update(m_pCamera2->GetYaw(), m_pCamera2->GetPitch(), m_timeScale);
+
 		m_pCamera1->Update(m_pPlayer1->GetPos());
 		m_pCamera2->Update(m_pPlayer2->GetPos());
+
 		m_pStageManager->Update();
 		InkPaint();
 
@@ -107,6 +114,8 @@ void SceneMain::Update()
 				// 引き分け
 				printfDx("引き分け!");
 			}
+			// フィニッシュ！
+			m_isFinish = true;
 		}
 
 	}
@@ -219,6 +228,16 @@ void SceneMain::Draw()
 
 	int seconds = m_timer / 60;
 	DrawFormatString(625, 40, GetColor(255, 255, 255), "%d", seconds);
+}
+
+bool SceneMain::IsEnd() const
+{
+	return m_isFinish;
+}
+
+Scene* SceneMain::GetNextScene()
+{
+	return new ResultScene();// 次のシーンへ移行
 }
 
 void SceneMain::DrawGrid()

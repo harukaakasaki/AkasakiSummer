@@ -1,21 +1,25 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
+#include "Scene.h"
 
 // プロトタイプ宣言
 class Player;
 class Camera;
 class StageManager;
 
-class SceneMain
+class SceneMain :public Scene
 {
 public:
 	SceneMain();
 	~SceneMain();
 
-	void Init();
-	void Update();
-	void Draw();
+	void Init()override;
+	void Update()override;
+	void Draw()override;
+
+	bool IsEnd()const override;
+	Scene* GetNextScene() override;
 
 private:
 	void DrawGrid();
@@ -34,6 +38,7 @@ private:
 private:
 	int m_frameCount;
 	float m_timeScale;
+	bool m_isFinish = false;
 	Player* m_pPlayer1;
 	Player* m_pPlayer2;
 	Camera* m_pCamera1;

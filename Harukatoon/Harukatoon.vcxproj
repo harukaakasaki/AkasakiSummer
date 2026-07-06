@@ -139,8 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Scenes\ResultScene.cpp" />
+    <ClCompile Include="Scenes\SceneController.cpp" />
+    <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Systems\Animation.cpp" />
     <ClCompile Include="Stages\StageManager.cpp" />
+    <ClCompile Include="Scenes\TitleScene.cpp" />
     <ClCompile Include="Weapons\Bomb.cpp" />
     <ClCompile Include="Weapons\Bullet.cpp" />
     <ClCompile Include="Systems\Camera.cpp" />
@@ -152,8 +156,12 @@
     <ClCompile Include="Weapons\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Scenes\ResultScene.h" />
+    <ClInclude Include="Scenes\SceneController.h" />
+    <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Systems\Animation.h" />
     <ClInclude Include="Stages\StageManager.h" />
+    <ClInclude Include="Scenes\TitleScene.h" />
     <ClInclude Include="Weapons\Bomb.h" />
     <ClInclude Include="Weapons\Bullet.h" />
     <ClInclude Include="Systems\Camera.h" />
