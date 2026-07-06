@@ -11,12 +11,14 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;// プレイヤーがオレンジ
 	constexpr int kPlayerBlue = 2;  // プレイヤーがブルー
+	constexpr int kTimer = 20*60;  // タイマーの時間(20秒)
 }
 
 SceneMain::SceneMain() :
 	m_frameCount(0),
 	m_timeScale(1.0),
-	m_gameUI(-1)
+	m_gameUI(-1),
+	m_timer(kTimer)
 {
 	m_pStageManager = new StageManager();
 	m_pPlayer1 = new Player(m_pStageManager, DX_INPUT_PAD1,kPlayerOrange);
@@ -54,7 +56,7 @@ void SceneMain::Init()
 	m_pPlayer1->Init();
 	m_pPlayer2->SetPos(VGet(0.0f, 0.0f, 0.0f));
 	m_pPlayer2->Init();
-	m_pPlayer2->SetPos(VGet(2.0f, 0.0f, 0.0f));
+	m_pPlayer2->SetPos(VGet(200.0f, 0.0f, 0.0f));
 	m_pCamera1->Init(DX_INPUT_PAD1);
 	m_pCamera2->Init(DX_INPUT_PAD2);
 	m_pStageManager->Init();
@@ -66,14 +68,49 @@ void SceneMain::Init()
 void SceneMain::Update()
 {
 	Pad::Update();
-
 	m_frameCount++;
-	m_pPlayer1->Update(m_pCamera1->GetYaw(),m_pCamera1->GetPitch(), m_timeScale);
-	m_pPlayer2->Update(m_pCamera2->GetYaw(),m_pCamera2->GetPitch(), m_timeScale);
-	m_pCamera1->Update(m_pPlayer1->GetPos());
-	m_pCamera2->Update(m_pPlayer2->GetPos());
-	m_pStageManager->Update();
-	InkPaint();
+
+	if (m_gameState == GameState::Playing)
+	{
+		m_pPlayer1->Update(m_pCamera1->GetYaw(), m_pCamera1->GetPitch(), m_timeScale);
+		m_pPlayer2->Update(m_pCamera2->GetYaw(), m_pCamera2->GetPitch(), m_timeScale);
+		m_pCamera1->Update(m_pPlayer1->GetPos());
+		m_pCamera2->Update(m_pPlayer2->GetPos());
+		m_pStageManager->Update();
+		InkPaint();
+
+		// ゲームタイマーを減らす
+		m_timer--;
+
+		if (m_timer <= 0)
+		{
+			m_timer = 0;
+			m_gameState = GameState::Result;
+
+			// オレンジとブルーの塗り割合を取得する
+			int orange = m_pStageManager->GetPaintPercent(kPlayerOrange);
+			int blue = m_pStageManager->GetPaintPercent(kPlayerBlue);
+
+			// 勝敗の判定
+			if (orange > blue)
+			{
+				// オレンジの勝利
+				printfDx("オレンジの勝利!");
+			}
+			else if (blue > orange)
+			{
+				// ブルーの勝利
+				printfDx("ブルーの勝利!");
+			}
+			else
+			{
+				// 引き分け
+				printfDx("引き分け!");
+			}
+		}
+
+	}
+	
 }
 
 void SceneMain::InkPaint()
@@ -98,12 +135,12 @@ void SceneMain::InkPaint()
 		paintZ = rayStart.z + t * (rayEnd.z - rayStart.z);
 	}
 
-	// もしマウスの左クリックを押したら、テクスチャに赤色が付く
+	// もしマウスの左クリックを押したら、テクスチャにオレンジが付く
 	if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0)
 	{
 		m_pStageManager->Paint(paintX, paintZ, 1,100.0f);
 	}
-	// もしマウスの右クリックを押したら、テクスチャに緑色が付く
+	// もしマウスの右クリックを押したら、テクスチャにブルーが付く
 	else if ((GetMouseInput() & MOUSE_INPUT_RIGHT) != 0)
 	{
 		m_pStageManager->Paint(paintX, paintZ, 2,100.0f);
@@ -177,8 +214,11 @@ void SceneMain::Draw()
 	// UIの描画
 	int width, height;
 	GetGraphSize(m_gameUI, &width, &height);
-	
+
 	DrawExtendGraph(270, 10, 100 + width / 4, 100 + height / 5, m_gameUI, true);
+
+	int seconds = m_timer / 60;
+	DrawFormatString(625, 40, GetColor(255, 255, 255), "%d", seconds);
 }
 
 void SceneMain::DrawGrid()

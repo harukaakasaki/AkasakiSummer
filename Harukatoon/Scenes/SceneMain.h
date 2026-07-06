@@ -21,6 +21,16 @@ private:
 	void DrawGrid();
 	void InkPaint();// F‚ğ“h‚é
 
+	// ƒQ[ƒ€‚Ìó‘Ô
+	enum class GameState
+	{
+		Playing,// ƒQ[ƒ€’†
+		Result  // Œ‹‰Ê•\¦
+	};
+
+	GameState m_gameState = GameState::Playing;
+	int m_timer;
+
 private:
 	int m_frameCount;
 	float m_timeScale;
