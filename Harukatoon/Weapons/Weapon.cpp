@@ -7,6 +7,7 @@ namespace
 {
 	constexpr int kShotInterval = 2; // このフレーム内に一発発射する
 	constexpr float kShotupPower = 18.0f; // 弾が上に飛ぶか下に飛ぶかの初速
+	constexpr int kStreatShoothingFrame = 30; // 
 }
 
 Weapon::Weapon(StageManager* stageManager,int playerColor) :
@@ -15,6 +16,7 @@ Weapon::Weapon(StageManager* stageManager,int playerColor) :
 	m_whoShot(0.0f),
 	m_bullets(0.0f),
 	m_shotTimer(0),
+	m_shootingCountFrame(0),
 	m_shotInterval(kShotInterval)// このフレーム内に一発発射する
 {
 	m_stageManager = stageManager;
@@ -38,6 +40,7 @@ void Weapon::Update()
 
 	std::vector<std::unique_ptr<Bullet>>nextFrameBullets;
 
+	bool isAllInactive = true;	//弾が一つも撃たれていないとき
 	for (auto& bullet : m_bullets)
 	{
 		bullet->Update();
@@ -46,6 +49,8 @@ void Weapon::Update()
 		{
 			// 生きている弾だけを次のフレームへ持っていく
 			nextFrameBullets.push_back(std::move(bullet));
+
+			isAllInactive = false;
 		}
 		else
 		{
@@ -56,6 +61,12 @@ void Weapon::Update()
 		}
 	}
 	m_bullets = std::move(nextFrameBullets);
+
+	//弾が一つも撃たれていなければばらけるフレームをリセット
+	if (isAllInactive)
+	{
+		m_shootingCountFrame = 0;
+	}
 }
 void Weapon::Draw()
 {
@@ -66,6 +77,12 @@ void Weapon::Draw()
 }
 void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 {
+	if (m_shootingCountFrame < kStreatShoothingFrame)
+	{
+		m_shootingCountFrame++;
+	}
+	
+
 	//printfDx("ウェポンで攻撃中！\n");
 	// x軸、y軸の-0.8～6.0fの間からランダムで弾が飛ぶ
 	if (m_shotTimer == 0)
@@ -79,7 +96,7 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 		VECTOR shotOffsetVel = VCross(shotVel, { 0.0f, 1.0f, 0.0f });
 
 		//　＊この数字を0に近づけるとシャープマーカーで1にするほどモデラー
-		float shotWidth = 0.1f;
+		float shotWidth = 0.1f * (m_shootingCountFrame/ kStreatShoothingFrame);
 
 		shotOffsetVel = VScale(shotOffsetVel, rate * shotWidth);
 

@@ -42,5 +42,7 @@ private:
 
 	//メインの弾かどうか（遠くに飛ぶ弾かどうか）
 	bool m_isMainBullet;
+	//連続で打ったフレームをカウントする
+	int m_shootingCountFrame;
 };
 
