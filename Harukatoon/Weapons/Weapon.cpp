@@ -5,9 +5,10 @@
 
 namespace
 {
-	constexpr int kShotInterval = 2; // このフレーム内に一発発射する
-	constexpr float kShotupPower = 18.0f; // 弾が上に飛ぶか下に飛ぶかの初速
+	constexpr int kShotInterval = 2;          // このフレーム内に一発発射する
+	constexpr float kShotupPower = 18.0f;     // 弾が上に飛ぶか下に飛ぶかの初速
 	constexpr int kStreatShoothingFrame = 30; // 初めのこのフレームは弾がばらける
+	constexpr int kInkRadius = 150;           // インクの大きさ
 }
 
 Weapon::Weapon(StageManager* stageManager,int playerColor) :
@@ -57,7 +58,7 @@ void Weapon::Update()
 			// ステージを塗る
 			VECTOR currentPos = bullet->GetPos();
 
-			m_stageManager->Paint(currentPos.x, currentPos.z, m_playerColor, 100);
+			m_stageManager->Paint(currentPos.x, currentPos.z, m_playerColor, kInkRadius);
 		}
 	}
 	m_bullets = std::move(nextFrameBullets);

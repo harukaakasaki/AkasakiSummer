@@ -187,8 +187,8 @@ void StageManager::Paint(float x, float z, float who, float paintRadius)
 		for (int currentX = startX; currentX <= endX; ++currentX)
 		{
 			// 現在チェックしているマスの中心の3D座標を逆算
-			float cellCenterX = (currentX * m_cellSize) + (m_cellSize / 2.0f)-offsetX;
-			float cellCenterZ = (currentZ * m_cellSize) + (m_cellSize / 2.0f)-offsetZ;
+			float cellCenterX = (currentX * m_cellSize) + (m_cellSize / 2.0f) - offsetX;
+			float cellCenterZ = (currentZ * m_cellSize) + (m_cellSize / 2.0f) - offsetZ;
 
 			// 着弾点のマスと中心の距離の2乗を逆算
 			float dx = cellCenterX - x;
