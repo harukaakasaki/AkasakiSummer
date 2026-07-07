@@ -12,7 +12,7 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;// プレイヤーがオレンジ
 	constexpr int kPlayerBlue = 2;  // プレイヤーがブルー
-	constexpr int kTimer = 120*60;  // タイマーの時間
+	constexpr int kTimer = 20*60;  // タイマーの時間
 }
 
 SceneMain::SceneMain() :
@@ -49,19 +49,18 @@ void SceneMain::Init()
 	SetUseZBuffer3D(true);	// Zバッファを使います
 	SetWriteZBuffer3D(true);	// 描画する物体はZバッファにも距離を書き込む
 
-	SetBackgroundColor(200, 200, 200);
+	// 背景の色設定
+	SetBackgroundColor(250, 250, 250);
 
 	SetCameraPositionAndTarget_UpVecY(VGet(0.0f, 300.0f, -700), VGet(0.0f, 0.0f, 0.0f));
 	SetupCamera_Perspective(DX_PI_F / 3.0f);
-//	SetCameraNearFar(200.0f, 1500.0f);
-	SetCameraNearFar(1.0f, 1500.0f);
 
 
 	m_pStageManager->Init();
 	m_pPlayer1->Init();
-	m_pPlayer2->SetPos(VGet(0.0f, 0.0f, 0.0f));
+	m_pPlayer1->SetPos(VGet(5000.0f, 0.0f, 0.0f));
 	m_pPlayer2->Init();
-	m_pPlayer2->SetPos(VGet(200.0f, 0.0f, 0.0f));
+	m_pPlayer2->SetPos(VGet(-5000.0f, 0.0f, 0.0f));
 
 	m_pCamera1->Init(DX_INPUT_PAD1);
 	m_pCamera2->Init(DX_INPUT_PAD2);
@@ -72,7 +71,7 @@ void SceneMain::Init()
 	assert(m_gameUI != -1);
 
 	// BGM
-	m_bgmHandle = LoadSoundMem("data/bgm/gameRock_.mp3");
+	m_bgmHandle = LoadSoundMem("data/bgm/game_rock_bgm.mp3");
 	assert(m_bgmHandle != -1);
 	ChangeVolumeSoundMem(200, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
@@ -222,8 +221,11 @@ void SceneMain::Draw()
 	float orangePercent = m_pStageManager->GetPaintPercent(kPlayerOrange);
 	float bluePercent = m_pStageManager->GetPaintPercent(kPlayerBlue);
 
+	// 割合を描画
 	DrawFormatString(10, 50, GetColor(255, 125, 0), "Orange : %.2f%%", orangePercent);
 	DrawFormatString(10, 70, GetColor(0, 0, 255), "Blue   : %.2f%%", bluePercent);
+	DrawFormatString(1100, 50, GetColor(255, 125, 0), "Orange : %.2f%%", orangePercent);
+	DrawFormatString(1100, 70, GetColor(0, 0, 255), "Blue   : %.2f%%", bluePercent);
 
 
 	// UIの描画

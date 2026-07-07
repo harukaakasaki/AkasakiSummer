@@ -14,7 +14,6 @@ namespace
 ResultScene::ResultScene() :
 	m_isEnd(false),
 	m_fontHandle(-1),
-	m_stageModelHandle(-1),
 	m_playerModelHandle(-1),
 	m_playerIdleAnim(-1),
 	m_bgmHandle(0),
@@ -25,7 +24,6 @@ ResultScene::ResultScene() :
 ResultScene::~ResultScene()
 {
 	MV1DeleteModel(m_playerModelHandle);
-	MV1DeleteModel(m_stageModelHandle);
 
 	StopSoundMem(m_bgmHandle);
 	DeleteSoundMem(m_bgmHandle);
@@ -38,9 +36,8 @@ void ResultScene::Init()
 	SetBackgroundColor(0, 0, 0);
 
 	// モデルを読み込む
-	m_playerModelHandle = MV1LoadModel("data/player.mv1");
-	m_stageModelHandle = MV1LoadModel("data/WinStage.mv1");
-
+	m_playerModelHandle = MV1LoadModel("data/Models/player.mv1");
+	
 	// BGM
 	m_bgmHandle = LoadSoundMem("data/BGM/result_bgm.mp3");
 	m_selectSeHandle = LoadSoundMem("data/bgm/select_se.mp3");
@@ -87,7 +84,6 @@ void ResultScene::Draw()
 {
 	// モデルを描画
 	MV1DrawModel(m_playerModelHandle);
-	MV1DrawModel(m_stageModelHandle);
 
 	// プレイヤーのモデルの向きの調整
 	MV1SetRotationXYZ(m_playerModelHandle, VGet(0, m_playerAngle, 0));

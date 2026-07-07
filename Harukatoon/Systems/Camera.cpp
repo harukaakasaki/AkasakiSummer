@@ -25,9 +25,10 @@ void Camera::Init(int padNo)
 
 	// 空のモデルを読み込む
 	m_skyModelHandle = MV1LoadModel("data/Models/Sky.mv1");
+	assert(m_skyModelHandle != -1);
 
 	// 空のモデルの大きさを設定
-	MV1SetScale(m_skyModelHandle, VGet(0.0f, 0.0f, 0.0f)); 
+	MV1SetScale(m_skyModelHandle, VGet(5.0f, 5.0f, 5.0f));
 
 	// カメラの描画範囲
 	SetCameraNearFar(10.0f, 20000.0f);
@@ -98,6 +99,8 @@ void Camera::Update(VECTOR playerPos)
 }
 void Camera::Draw()
 {
+	
+
 	// カメラと注視点を設定
 	SetCameraPositionAndTarget_UpVecY(
 		VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z),

@@ -12,8 +12,8 @@ namespace
 	constexpr const char* kShotAnim = "root|Shot";  // 射撃アニメーション
 	constexpr const char* kRunAnim =   "root|Run";	// 走るアニメーション
 
-	constexpr float kSpeed = 15.0f;         // プレイヤーの移動速度
-	constexpr float kAttackingSpeed = 8.0f; // プレイヤーの攻撃中の移動速度
+	constexpr float kSpeed = 16.0f;         // プレイヤーの移動速度
+	constexpr float kAttackingSpeed = 13.0f; // プレイヤーの攻撃中の移動速度
 	constexpr float kDiveSpeed = 30.0f;     // プレイヤーの潜り移動速度
 	constexpr float kShotSpeed = 30.0f;     // 弾速度
 	constexpr float kGravity   = 0.8f;      // 重力

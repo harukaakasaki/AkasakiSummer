@@ -20,7 +20,6 @@ private:
 	// モデル一覧
 	int m_playerModelHandle;// プレイヤーのモデル
 	int m_fontHandle;       // フォントのハンドル
-	int m_stageModelHandle; // ステージのハンドル
 
 	// BGM関連
 	int m_bgmHandle;
