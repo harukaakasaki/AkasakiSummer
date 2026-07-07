@@ -2,18 +2,9 @@
 #include <DxLib.h>
 #include <cassert>
 
-// 現状
-// インクの塗っている場所をマスにして管理している
-// 何したい？
-// マス目上に描画されているため、インク同士を滑らかに重ね塗りができるようにしたい
-// どうやる？
-// 判定はそのままマス目上で管理して、見た目だけインクに変える（MakeScreen）
 namespace
 {
-	constexpr float HandleScale = 4096.0f;
-
-//	constexpr float HandleScaleX = 2048.0f;
-//	constexpr float HandleScaleZ = 1536.0f;
+	constexpr float kHandleScale = 4096.0f;
 }
 
 StageManager::StageManager() :
@@ -60,11 +51,11 @@ void StageManager::Init()
 	MV1SetPosition(m_stageModelHandle, VGet(0.0f, -100.0f, -1700.0f));
 	
 	m_cellSize = 100.0f;
-	m_mapWidthSize = 64;
+	m_mapWidthSize = 128;
 	m_mapHeightSize = 48;
 	
 	m_2dMap.resize(m_mapHeightSize);// 縦48マスの空きを作る
-	// メモリ内に48x64の紙を作成
+	// メモリ内に48x128の紙を作成
 	for (int i = 0; i < m_mapHeightSize; i++)
 	{
 		m_2dMap[i].resize(m_mapWidthSize, 0);
@@ -72,10 +63,10 @@ void StageManager::Init()
 
 
 	// 一枚のインク書き込み用のキャンバスを作る
-	m_inkCanvasHandle = MakeScreen(HandleScale, HandleScale, TRUE);
+	m_inkCanvasHandle = MakeScreen(kHandleScale, kHandleScale, TRUE);
 	assert(m_inkCanvasHandle != -1);
 	// 書き込み用のキャンバスを作る
-	m_inkNormalCanvasHandle = MakeScreen(HandleScale, HandleScale, TRUE);
+	m_inkNormalCanvasHandle = MakeScreen(kHandleScale, kHandleScale, TRUE);
 	assert(m_inkNormalCanvasHandle != -1);
 
 	// 作ったキャンバスを一度透明でクリアにしておく
@@ -217,8 +208,8 @@ void StageManager::Paint(float x, float z, float who, float paintRadius)
 	float stageWidth = m_mapWidthSize * m_cellSize;
 	float stageHeight = m_mapHeightSize * m_cellSize;
 
-	int canvasX = static_cast<int>((x + offsetX) / stageWidth * HandleScale);
-	int canvasZ = static_cast<int>((z + offsetZ) / stageHeight * HandleScale);
+	int canvasX = static_cast<int>((x + offsetX) / stageWidth * kHandleScale);
+	int canvasZ = static_cast<int>((z + offsetZ) / stageHeight * kHandleScale);
 
 	// 描画先をインクのキャンバスに切り替える
 	SetDrawScreen(m_inkCanvasHandle);
@@ -232,8 +223,8 @@ void StageManager::Paint(float x, float z, float who, float paintRadius)
 	int normalHandle = (who == 1.0f) ? m_nOrangeTextureHandle : m_nBlueTextureHandle;
 
 	// 弾の塗る半径に合わせて、インクの描画サイズを計算する
-	int inkCanvasSizeX = static_cast<int>((paintRadius * 2.0f) / stageWidth * HandleScale);
-	int inkCanvasSizeZ = static_cast<int>((paintRadius * 2.0f) / stageHeight * HandleScale);
+	int inkCanvasSizeX = static_cast<int>((paintRadius * 2.0f) / stageWidth * kHandleScale);
+	int inkCanvasSizeZ = static_cast<int>((paintRadius * 2.0f) / stageHeight * kHandleScale);
 	// もしインクサイズが小さすぎたら、16は描画されるようにする
 	if (inkCanvasSizeX < 16)inkCanvasSizeX = 16;
 	if (inkCanvasSizeZ < 16)inkCanvasSizeZ = 16;
