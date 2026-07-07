@@ -7,7 +7,7 @@ namespace
 {
 	constexpr int kShotInterval = 2; // このフレーム内に一発発射する
 	constexpr float kShotupPower = 18.0f; // 弾が上に飛ぶか下に飛ぶかの初速
-	constexpr int kStreatShoothingFrame = 30; // 
+	constexpr int kStreatShoothingFrame = 30; // 初めのこのフレームは弾がばらける
 }
 
 Weapon::Weapon(StageManager* stageManager,int playerColor) :

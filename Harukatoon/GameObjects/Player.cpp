@@ -46,7 +46,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_modelHandle = MV1LoadModel("data/Player.mv1");
+	m_modelHandle = MV1LoadModel("data/Models/Player.mv1");
 	m_animation.Init(m_modelHandle);
 
 	m_idleAnim = MV1GetAnimIndex(m_modelHandle, kIdleAnim);

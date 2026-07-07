@@ -23,6 +23,12 @@ void Camera::Init(int padNo)
 {
 	m_padNo = padNo;
 
+	// 空のモデルを読み込む
+	m_skyModelHandle = MV1LoadModel("data/Models/Sky.mv1");
+
+	// 空のモデルの大きさを設定
+	MV1SetScale(m_skyModelHandle, VGet(0.0f, 0.0f, 0.0f)); 
+
 	// カメラの描画範囲
 	SetCameraNearFar(10.0f, 20000.0f);
 
@@ -60,7 +66,6 @@ void Camera::Update(VECTOR playerPos)
 	m_cameraPitch += y * sensitivity;
 	
 	// カメラとプレイヤーとの距離
-//	float distance = 675.0f;
 	float distance = 800.0f;
 	// カメラの高さ
 	float height = 600.0f;
@@ -98,21 +103,13 @@ void Camera::Draw()
 		VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z),
 		VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
 
-	//int centerX = (m_padNo == DX_INPUT_PAD1) ? 320 : 960;
-	//int centerY = 300;
+	// 空を描画
+	MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
 
-	//// レティクル
-	//DrawCircle(centerX, centerY, 2, GetColor(255, 255, 255), true, true);
-	//DrawCircle(centerX, centerY, 20, GetColor(255, 255, 255), false, true);
-	//DrawCircle(centerX, centerY, 35, GetColor(125, 125, 125), false, true);
+	SetWriteZBuffer3D(false);// 空を描画する前にZバッファへの書き込みをオフにする
+	
 
-	//// 空を描画
-	//MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
-
-	//SetWriteZBuffer3D(false);// 空を描画する前にZバッファへの書き込みをオフにする
-	//
-
-	//MV1DrawModel(m_skyModelHandle);
-	//SetWriteZBuffer3D(true);// 空を描画した後にZバッファへの書き込みをオンにする
+	MV1DrawModel(m_skyModelHandle);
+	SetWriteZBuffer3D(true);// 空を描画した後にZバッファへの書き込みをオンにする
 }
 
