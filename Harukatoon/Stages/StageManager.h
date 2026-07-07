@@ -45,6 +45,8 @@ private:
 	int m_inkCanvasHandle;
 	// 塗れる範囲のノーマルハンドル
 	int m_inkNormalCanvasHandle;
+	// ステージのモデルハンドル
+	int m_stageModelHandle;
 
 };
 

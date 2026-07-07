@@ -26,7 +26,8 @@ StageManager::StageManager() :
 	m_nBlueTextureHandle(-1),
 	m_inkShaderHandle(-1),
 	m_inkCanvasHandle(-1),
-	m_inkNormalCanvasHandle(-1)
+	m_inkNormalCanvasHandle(-1),
+	m_stageModelHandle(-1)
 {
 }
 
@@ -51,11 +52,17 @@ void StageManager::Init()
 	// インクのシェーダー
 	m_inkShaderHandle = LoadPixelShader("InkShader.pso");
 	assert(m_inkShaderHandle != -1);
+
+	// ステージのモデルをロード
+	m_stageModelHandle = MV1LoadModel("data/Stage/stage_box.mv1");
+	assert(m_stageModelHandle != -1);
+	// ステージの位置とスケールを設定
+	MV1SetPosition(m_stageModelHandle, VGet(0.0f, -100.0f, -1700.0f));
 	
 	m_cellSize = 100.0f;
 	m_mapWidthSize = 64;
 	m_mapHeightSize = 48;
-
+	
 	m_2dMap.resize(m_mapHeightSize);// 縦48マスの空きを作る
 	// メモリ内に48x64の紙を作成
 	for (int i = 0; i < m_mapHeightSize; i++)
@@ -88,6 +95,9 @@ void StageManager::Update()
 }
 void StageManager::Draw()
 {
+	MV1DrawModel(m_stageModelHandle);
+	
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	SetUseAlphaTestFlag(TRUE);// アルファテストをONにする（アルファ値が0の部分は描画されないようになる）
 	SetUseBackCulling(FALSE);// 裏面も描画するようにする（これをしないと裏返ったポリゴンが見えなくなる）
