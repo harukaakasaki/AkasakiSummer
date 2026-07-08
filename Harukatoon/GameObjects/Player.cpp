@@ -12,13 +12,15 @@ namespace
 	constexpr const char* kShotAnim = "root|Shot";  // 射撃アニメーション
 	constexpr const char* kRunAnim =   "root|Run";	// 走るアニメーション
 
-	constexpr float kSpeed = 18.0f;         // プレイヤーの移動速度
-	constexpr float kAttackingSpeed = 13.0f;// プレイヤーの攻撃中の移動速度
-	constexpr float kDiveSpeed = 30.0f;     // プレイヤーの潜り移動速度
-	constexpr float kShotSpeed = 30.0f;     // 弾速度
-	constexpr float kGravity   = 0.8f;      // 重力
-	constexpr float kJumpPower = 20.0f;     // ジャンプ力
-	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };// プレイヤーの大きさ
+	constexpr float kAnimSpeed = 1.0f;              // アニメーションスピード
+	constexpr float kSpeed = 18.0f;                 // プレイヤーの移動速度
+	constexpr float kAttackingSpeed = 13.0f;        // プレイヤーの攻撃中の移動速度
+	constexpr float kDiveSpeed = 30.0f;             // プレイヤーの潜り移動速度
+	constexpr float kShotSpeed = 30.0f;             // 弾速度
+	constexpr float kGravity   = 0.8f;              // 重力
+	constexpr float kJumpPower = 20.0f;             // ジャンプ力
+	constexpr float kWeaponPosY = 170.0f;            // ウェポンのy軸の位置
+	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };   // プレイヤーの大きさ
 }
 
 Player::Player(StageManager* stageManager,int padNo,int playerColor):
@@ -54,7 +56,7 @@ void Player::Init()
 	
 	MV1SetScale(m_modelHandle, kScale);// 初期のプレイヤーの大きさ
 
-	m_animation.Play(m_idleAnim, true, 1.0f);
+	m_animation.Play(m_idleAnim, true, kAnimSpeed);
 	m_state = PlayerState::Idle;
 }
 void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
@@ -102,7 +104,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	GetJoypadXInputState(m_padNo, &xinputState);
 	bool isWeaponPress = (xinputState.RightTrigger > 128);// RTが押された
 	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
-	bool isBombPress = Pad::IsPress(m_padNo, PAD_INPUT_6);         // RBが押された
+	bool isBombPress = Pad::IsPress(m_padNo, PAD_INPUT_6);// RBが押された
 
 	float speed = kSpeed;
 
@@ -128,7 +130,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	{
 		if (m_state!=PlayerState::Shot)
 		{
-			m_animation.Play(m_shotAnim, true, 1.0f);
+			m_animation.Play(m_shotAnim, true, kAnimSpeed);
 			m_state = PlayerState::Shot;
 		}
 		m_isShooting = true;
@@ -141,7 +143,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	{
 		if (m_state != PlayerState::Run)
 		{
-			m_animation.Play(m_runAnim, true, 1.0f);
+			m_animation.Play(m_runAnim, true, kAnimSpeed);
 			m_state = PlayerState::Run;
 		}
 	}
@@ -149,7 +151,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	{
 		if (m_state != PlayerState::Idle)
 		{
-			m_animation.Play(m_idleAnim, true, 1.0f);
+			m_animation.Play(m_idleAnim, true, kAnimSpeed);
 			m_state = PlayerState::Idle;
 		}
 	}
@@ -163,7 +165,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	// 入力情報は優先度をつけて管理する
 	if (!m_isDiving && isWeaponPress)
 	{
-		VECTOR weaponPos = VGet(m_pos.x, m_pos.y + 170.0f, m_pos.z);
+		VECTOR weaponPos = VGet(m_pos.x, m_pos.y + kWeaponPosY, m_pos.z);
 
 		float speed = kShotSpeed;
 
