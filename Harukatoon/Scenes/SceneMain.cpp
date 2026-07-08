@@ -12,7 +12,7 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;// プレイヤーがオレンジ
 	constexpr int kPlayerBlue = 2;  // プレイヤーがブルー
-	constexpr int kTimer = 40*60;   // タイマーの時間
+	constexpr int kTimer = 180*60;   // タイマーの時間
 }
 
 SceneMain::SceneMain() :
