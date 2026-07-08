@@ -1,5 +1,6 @@
 #pragma once
 #include <DxLib.h>
+#include <memory>
 #include "../Systems/Animation.h"
 #include "../Systems/Vector3.h"
 #include "../Stages/StageManager.h"
@@ -94,9 +95,10 @@ private:
 	bool m_isShooting = false;// 攻撃しているかどうか
 	bool m_isDiving = false;// 潜っているかどうか
 
-	Weapon* m_pWeapon;// プレイヤーが持つウェポン
-	Bomb* m_pBomb;// プレイヤーが持つボム
+	// ウェポンとボムのポインタ
+	std::unique_ptr<Weapon> m_pWeapon;
+	std::unique_ptr<Bomb> m_pBomb;
 	// Stageマネージャーのポインタ
-	StageManager* m_stageManager;
+	StageManager* m_pStageManager;
 };
 

@@ -22,7 +22,7 @@ namespace
 }
 
 Player::Player(StageManager* stageManager,int padNo,int playerColor):
-	m_stageManager(stageManager),
+	m_pStageManager(stageManager),
 	m_modelHandle(-1),
 	m_angle(0.0f),
 	m_move{0.0f,0.0f,0.0f},
@@ -34,14 +34,13 @@ Player::Player(StageManager* stageManager,int padNo,int playerColor):
 	m_shotAnim(-1),
 	m_padNo(padNo)
 {
-	m_pWeapon = new Weapon(stageManager,playerColor);
-	m_pBomb = new Bomb();
+	m_pWeapon = std::make_unique<Weapon>(stageManager, playerColor);
+	m_pBomb = std::make_unique<Bomb>();
+
 }
 
 Player::~Player()
 {
-	delete m_pWeapon;
-	delete m_pBomb;
 }
 
 void Player::Init()

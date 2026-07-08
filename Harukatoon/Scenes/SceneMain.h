@@ -1,6 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
+#include <memory>
 #include "Scene.h"
 
 // プロトタイプ宣言
@@ -40,12 +41,12 @@ private:
 	int m_bgmHandle;
 	float m_timeScale;
 	bool m_isFinish = false;
-	Player* m_pPlayer1;
-	Player* m_pPlayer2;
-	Camera* m_pCamera1;
-	Camera* m_pCamera2;
-	StageManager* m_pStageManager;
-
+	// 各クラスのポインタ
+	std::unique_ptr<Player> m_pPlayer1;
+	std::unique_ptr<Player> m_pPlayer2;
+	std::unique_ptr<Camera> m_pCamera1;
+	std::unique_ptr<Camera> m_pCamera2;
+	std::unique_ptr<StageManager> m_pStageManager;
 	int m_gameUI;
 };
 

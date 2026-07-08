@@ -12,29 +12,25 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;// プレイヤーがオレンジ
 	constexpr int kPlayerBlue = 2;  // プレイヤーがブルー
-	constexpr int kTimer = 180*60;   // タイマーの時間
+	constexpr int kTimer = 20*60;   // タイマーの時間
 }
 
 SceneMain::SceneMain() :
 	m_frameCount(0),
 	m_timeScale(1.0),
 	m_gameUI(-1),
-	m_timer(kTimer)
+	m_timer(kTimer),
+	m_bgmHandle(-1)
 {
-	m_pStageManager = new StageManager();
-	m_pPlayer1 = new Player(m_pStageManager, DX_INPUT_PAD1,kPlayerOrange);
-	m_pPlayer2 = new Player(m_pStageManager, DX_INPUT_PAD2,kPlayerBlue);
-	m_pCamera1 = new Camera();
-	m_pCamera2 = new Camera();
+	m_pStageManager = std::make_unique<StageManager>();
+	m_pPlayer1 = std::make_unique<Player>(m_pStageManager.get(), DX_INPUT_PAD1,kPlayerOrange);
+	m_pPlayer2 = std::make_unique<Player>(m_pStageManager.get(), DX_INPUT_PAD2,kPlayerBlue);
+	m_pCamera1 = std::make_unique<Camera>();
+	m_pCamera2 = std::make_unique<Camera>();
 }
 
 SceneMain::~SceneMain()
 {
-	delete m_pStageManager;
-	delete m_pPlayer1;
-	delete m_pPlayer2;
-	delete m_pCamera1;
-	delete m_pCamera2;
 	StopSoundMem(m_bgmHandle);
 	DeleteSoundMem(m_bgmHandle);
 }

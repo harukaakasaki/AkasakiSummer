@@ -265,7 +265,7 @@ float StageManager::GetPaintPercent(int playerColor) const
 			}
 		}
 	}
-	// プレイヤーの塗ったマス/全体のマス*100=塗り割合
+	// プレイヤーの塗ったマス/全体のマス*100%=塗り割合(%)
 	return (static_cast<float>(matchCount) / static_cast<float>(totalCells)) * 100.0f;
 }
 
