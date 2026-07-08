@@ -10,9 +10,9 @@ FBXHeaderExtension:  {
 		Month: 7
 		Day: 8
 		Hour: 10
-		Minute: 13
-		Second: 27
-		Millisecond: 535
+		Minute: 14
+		Second: 39
+		Millisecond: 643
 	}
 	Creator: "FBX SDK/FBX Plugins version 2020.3.2"
 	OtherFlags:  {
@@ -31,8 +31,8 @@ FBXHeaderExtension:  {
 			Comment: ""
 		}
 		Properties70:  {
-			P: "DocumentUrl", "KString", "Url", "", "C:\Users\AkasakiHaruka\Documents\GitHub\AkasakiSummer\Harukatoon\data\Stage\sjoc4fts_HarukaStage.fbx"
-			P: "SrcDocumentUrl", "KString", "Url", "", "C:\Users\AkasakiHaruka\Documents\GitHub\AkasakiSummer\Harukatoon\data\Stage\sjoc4fts_HarukaStage.fbx"
+			P: "DocumentUrl", "KString", "Url", "", "C:\Users\AkasakiHaruka\Documents\GitHub\AkasakiSummer\Harukatoon\Stages\ov2w71ou_HarukaStage.fbx"
+			P: "SrcDocumentUrl", "KString", "Url", "", "C:\Users\AkasakiHaruka\Documents\GitHub\AkasakiSummer\Harukatoon\Stages\ov2w71ou_HarukaStage.fbx"
 			P: "Original", "Compound", "", ""
 			P: "Original|ApplicationVendor", "KString", "", "", ""
 			P: "Original|ApplicationName", "KString", "", "", "Unity FBX Exporter"
@@ -78,7 +78,7 @@ GlobalSettings:  {
 
 Documents:  {
 	Count: 1
-	Document: 2672186438320, "Scene", "Scene" {
+	Document: 2672341525808, "Scene", "Scene" {
 		Properties70:  {
 			P: "SourceObject", "object", "", ""
 			P: "ActiveAnimStackName", "KString", "", "", ""
@@ -273,7 +273,7 @@ Definitions:  {
 ;------------------------------------------------------------------
 
 Objects:  {
-	Geometry: 2672064051520, "Geometry::Scene", "Mesh" {
+	Geometry: 2672064060032, "Geometry::Scene", "Mesh" {
 		Vertices: *24 {
 			a: 11065.9629821777,0,3696.3191986084,-1031.02111816406,0,3696.3191986084,11065.9629821777,100,3696.3191986084,-1031.02111816406,100,3696.3191986084,-1031.02111816406,0,-698.672866821289,-1031.02111816406,100,-698.672866821289,11065.9629821777,0,-698.672866821289,11065.9629821777,100,-698.672866821289
 		} 
@@ -363,7 +363,7 @@ Objects:  {
 			}
 		}
 	}
-	Geometry: 2672064065856, "Geometry::Scene", "Mesh" {
+	Geometry: 2672064065408, "Geometry::Scene", "Mesh" {
 		Vertices: *24 {
 			a: 11071.5972900391,0,-596.216011047363,-1034.62448120117,0,-596.216011047363,11071.5972900391,702.156448364258,-596.216011047363,-1034.62448120117,702.156448364258,-596.216011047363,-1034.62448120117,0,-698.672866821289,-1034.62448120117,702.156448364258,-698.672866821289,11071.5972900391,0,-698.672866821289,11071.5972900391,702.156448364258,-698.672866821289
 		} 
@@ -453,7 +453,7 @@ Objects:  {
 			}
 		}
 	}
-	Geometry: 2672064052864, "Geometry::Scene", "Mesh" {
+	Geometry: 2672064059584, "Geometry::Scene", "Mesh" {
 		Vertices: *24 {
 			a: 11071.5972900391,0,-596.216201782227,-1034.62448120117,0,-596.216201782227,11071.5972900391,702.156448364258,-596.216201782227,-1034.62448120117,702.156448364258,-596.216201782227,-1034.62448120117,0,-698.672866821289,-1034.62448120117,702.156448364258,-698.672866821289,11071.5972900391,0,-698.672866821289,11071.5972900391,702.156448364258,-698.672866821289
 		} 
@@ -543,7 +543,7 @@ Objects:  {
 			}
 		}
 	}
-	Geometry: 2672064066304, "Geometry::Scene", "Mesh" {
+	Geometry: 2672064049280, "Geometry::Scene", "Mesh" {
 		Vertices: *24 {
 			a: -696.2890625,0,3873.21929931641,-897.341156005859,0,3873.21929931641,-696.2890625,702.156448364258,3873.21929931641,-897.341156005859,702.156448364258,3873.21929931641,-897.341156005859,0,-698.672866821289,-897.341156005859,702.156448364258,-698.672866821289,-696.2890625,0,-698.672866821289,-696.2890625,702.156448364258,-698.672866821289
 		} 
@@ -633,7 +633,7 @@ Objects:  {
 			}
 		}
 	}
-	Geometry: 2672064061376, "Geometry::Scene", "Mesh" {
+	Geometry: 2672064065856, "Geometry::Scene", "Mesh" {
 		Vertices: *24 {
 			a: -696.2890625,0,3874.0852355957,-897.341156005859,0,3874.0852355957,-696.2890625,702.156448364258,3874.0852355957,-897.341156005859,702.156448364258,3874.0852355957,-897.341156005859,0,-698.672866821289,-897.341156005859,702.156448364258,-698.672866821289,-696.2890625,0,-698.672866821289,-696.2890625,702.156448364258,-698.672866821289
 		} 
@@ -723,7 +723,7 @@ Objects:  {
 			}
 		}
 	}
-	Model: 2668390757104, "Model::HarukaStage", "Null" {
+	Model: 2672066197952, "Model::HarukaStage", "Null" {
 		Version: 232
 		Properties70:  {
 			P: "RotationOrder", "enum", "", "",4
@@ -734,7 +734,7 @@ Objects:  {
 		Shading: Y
 		Culling: "CullingOff"
 	}
-	Model: 2668390751104, "Model::Floor", "Mesh" {
+	Model: 2672066195952, "Model::Floor", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationOrder", "enum", "", "",4
@@ -747,7 +747,7 @@ Objects:  {
 		Shading: W
 		Culling: "CullingOff"
 	}
-	Model: 2668390765104, "Model::Floor__1_", "Mesh" {
+	Model: 2672066201952, "Model::Floor__1_", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationOrder", "enum", "", "",4
@@ -760,7 +760,7 @@ Objects:  {
 		Shading: W
 		Culling: "CullingOff"
 	}
-	Model: 2668390779104, "Model::Floor__2_", "Mesh" {
+	Model: 2672066205952, "Model::Floor__2_", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationOrder", "enum", "", "",4
@@ -773,7 +773,7 @@ Objects:  {
 		Shading: W
 		Culling: "CullingOff"
 	}
-	Model: 2668390769104, "Model::Floor__3_", "Mesh" {
+	Model: 2668390757104, "Model::Floor__3_", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationOrder", "enum", "", "",4
@@ -786,7 +786,7 @@ Objects:  {
 		Shading: W
 		Culling: "CullingOff"
 	}
-	Model: 2668390771104, "Model::Floor__4_", "Mesh" {
+	Model: 2668390761104, "Model::Floor__4_", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationOrder", "enum", "", "",4
@@ -799,7 +799,7 @@ Objects:  {
 		Shading: W
 		Culling: "CullingOff"
 	}
-	Material: 2670278440560, "Material::ProBuilderDefault", "" {
+	Material: 2670278436960, "Material::ProBuilderDefault", "" {
 		Version: 102
 		ShadingModel: "lambert"
 		MultiLayer: 0
@@ -813,23 +813,23 @@ Objects:  {
 			P: "Opacity", "double", "Number", "",1
 		}
 	}
-	Video: 2671417130400, "Video::DiffuseColor_Texture", "Clip" {
+	Video: 2668349924016, "Video::DiffuseColor_Texture", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "C:\Users\AkasakiHaruka\Desktop\Unity\Harukatoon\Library\PackageCache\com.unity.probuilder@5.2.4\Content\Resources\Textures\GridBox_Default.png"
-			P: "RelPath", "KString", "XRefUrl", "", "..\..\..\..\..\..\Desktop\Unity\Harukatoon\Library\PackageCache\com.unity.probuilder@5.2.4\Content\Resources\Textures\GridBox_Default.png"
+			P: "RelPath", "KString", "XRefUrl", "", "..\..\..\..\..\Desktop\Unity\Harukatoon\Library\PackageCache\com.unity.probuilder@5.2.4\Content\Resources\Textures\GridBox_Default.png"
 		}
 		UseMipMap: 0
 		Filename: "C:\Users\AkasakiHaruka\Desktop\Unity\Harukatoon\Library\PackageCache\com.unity.probuilder@5.2.4\Content\Resources\Textures\GridBox_Default.png"
-		RelativeFilename: "..\..\..\..\..\..\Desktop\Unity\Harukatoon\Library\PackageCache\com.unity.probuilder@5.2.4\Content\Resources\Textures\GridBox_Default.png"
+		RelativeFilename: "..\..\..\..\..\Desktop\Unity\Harukatoon\Library\PackageCache\com.unity.probuilder@5.2.4\Content\Resources\Textures\GridBox_Default.png"
 	}
-	Texture: 2671417130880, "Texture::DiffuseColor_Texture", "" {
+	Texture: 2668349924496, "Texture::DiffuseColor_Texture", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::DiffuseColor_Texture"
 		Media: "Video::DiffuseColor_Texture"
 		FileName: "C:\Users\AkasakiHaruka\Desktop\Unity\Harukatoon\Library\PackageCache\com.unity.probuilder@5.2.4\Content\Resources\Textures\GridBox_Default.png"
-		RelativeFilename: "..\..\..\..\..\..\Desktop\Unity\Harukatoon\Library\PackageCache\com.unity.probuilder@5.2.4\Content\Resources\Textures\GridBox_Default.png"
+		RelativeFilename: "..\..\..\..\..\Desktop\Unity\Harukatoon\Library\PackageCache\com.unity.probuilder@5.2.4\Content\Resources\Textures\GridBox_Default.png"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "None"
@@ -843,61 +843,61 @@ Objects:  {
 Connections:  {
 	
 	;Model::HarukaStage, Model::RootNode
-	C: "OO",2668390757104,0
+	C: "OO",2672066197952,0
 	
 	;Model::Floor, Model::HarukaStage
-	C: "OO",2668390751104,2668390757104
+	C: "OO",2672066195952,2672066197952
 	
 	;Model::Floor__1_, Model::HarukaStage
-	C: "OO",2668390765104,2668390757104
+	C: "OO",2672066201952,2672066197952
 	
 	;Model::Floor__2_, Model::HarukaStage
-	C: "OO",2668390779104,2668390757104
+	C: "OO",2672066205952,2672066197952
 	
 	;Model::Floor__3_, Model::HarukaStage
-	C: "OO",2668390769104,2668390757104
+	C: "OO",2668390757104,2672066197952
 	
 	;Model::Floor__4_, Model::HarukaStage
-	C: "OO",2668390771104,2668390757104
+	C: "OO",2668390761104,2672066197952
 	
 	;Material::ProBuilderDefault, Model::Floor
-	C: "OO",2670278440560,2668390751104
+	C: "OO",2670278436960,2672066195952
 	
 	;Geometry::Scene, Model::Floor
-	C: "OO",2672064051520,2668390751104
+	C: "OO",2672064060032,2672066195952
 	
 	;Material::ProBuilderDefault, Model::Floor__1_
-	C: "OO",2670278440560,2668390765104
+	C: "OO",2670278436960,2672066201952
 	
 	;Geometry::Scene, Model::Floor__1_
-	C: "OO",2672064065856,2668390765104
+	C: "OO",2672064065408,2672066201952
 	
 	;Material::ProBuilderDefault, Model::Floor__2_
-	C: "OO",2670278440560,2668390779104
+	C: "OO",2670278436960,2672066205952
 	
 	;Geometry::Scene, Model::Floor__2_
-	C: "OO",2672064052864,2668390779104
+	C: "OO",2672064059584,2672066205952
 	
 	;Material::ProBuilderDefault, Model::Floor__3_
-	C: "OO",2670278440560,2668390769104
+	C: "OO",2670278436960,2668390757104
 	
 	;Geometry::Scene, Model::Floor__3_
-	C: "OO",2672064066304,2668390769104
+	C: "OO",2672064049280,2668390757104
 	
 	;Material::ProBuilderDefault, Model::Floor__4_
-	C: "OO",2670278440560,2668390771104
+	C: "OO",2670278436960,2668390761104
 	
 	;Geometry::Scene, Model::Floor__4_
-	C: "OO",2672064061376,2668390771104
+	C: "OO",2672064065856,2668390761104
 	
 	;Texture::DiffuseColor_Texture, Material::ProBuilderDefault
-	C: "OO",2671417130880,2670278440560
+	C: "OO",2668349924496,2670278436960
 	
 	;Texture::DiffuseColor_Texture, Material::ProBuilderDefault
-	C: "OP",2671417130880,2670278440560, "DiffuseColor"
+	C: "OP",2668349924496,2670278436960, "DiffuseColor"
 	
 	;Video::DiffuseColor_Texture, Texture::DiffuseColor_Texture
-	C: "OO",2671417130400,2671417130880
+	C: "OO",2668349924016,2668349924496
 }
 ;Takes section
 ;----------------------------------------------------
