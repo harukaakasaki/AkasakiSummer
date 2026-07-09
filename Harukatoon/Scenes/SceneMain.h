@@ -39,6 +39,8 @@ private:
 private:
 	int m_frameCount;
 	int m_bgmHandle;
+	int m_gameUI;
+	int m_reticleUI;
 	float m_timeScale;
 	bool m_isFinish = false;
 	// 各クラスのポインタ
@@ -47,6 +49,6 @@ private:
 	std::unique_ptr<Camera> m_pCamera1;
 	std::unique_ptr<Camera> m_pCamera2;
 	std::unique_ptr<StageManager> m_pStageManager;
-	int m_gameUI;
+	
 };
 

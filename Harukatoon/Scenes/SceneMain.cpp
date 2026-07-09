@@ -12,13 +12,14 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;// プレイヤーがオレンジ
 	constexpr int kPlayerBlue = 2;  // プレイヤーがブルー
-	constexpr int kTimer = 20*60;   // タイマーの時間
+	constexpr int kTimer = 60*60;   // タイマーの時間
 }
 
 SceneMain::SceneMain() :
 	m_frameCount(0),
 	m_timeScale(1.0),
 	m_gameUI(-1),
+	m_reticleUI(-1),
 	m_timer(kTimer),
 	m_bgmHandle(-1)
 {
@@ -65,6 +66,8 @@ void SceneMain::Init()
 
 	m_gameUI = LoadGraph("data/UI/GameUI_1.png");
 	assert(m_gameUI != -1);
+	m_reticleUI = LoadGraph("data/UI/reticle4.png");
+	assert(m_reticleUI != -1);
 
 	// BGM
 	m_bgmHandle = LoadSoundMem("data/bgm/game_rock_bgm.mp3");
@@ -171,9 +174,7 @@ void SceneMain::Draw()
 	m_pStageManager->Draw();
 
 	// レティクル
-	DrawCircle(320, 300, 2, GetColor(255, 255, 255), true, true);
-	DrawCircle(320, 300, 20, GetColor(255, 255, 255), false, true);
-	DrawCircle(320, 300, 35, GetColor(125, 125, 125), false, true);
+	DrawGraph(190, 150, m_reticleUI, true);
 	
 	// プレイヤー2は描画範囲を右半分にする（x = 1280）
 	SetDrawArea(640, 0, 1280, 720);
@@ -190,9 +191,7 @@ void SceneMain::Draw()
 	m_pStageManager->Draw();
 
 	// レティクル
-	DrawCircle(960, 300, 2, GetColor(255, 255, 255), true, true);
-	DrawCircle(960, 300, 20, GetColor(255, 255, 255), false, true);
-	DrawCircle(960, 300, 35, GetColor(125, 125, 125), false, true);
+	DrawGraph(830, 150, m_reticleUI, true);
 
 	// 描画範囲を元に戻す
 	SetDrawArea(0, 0, 1280, 720);

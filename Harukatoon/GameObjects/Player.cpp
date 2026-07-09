@@ -19,7 +19,7 @@ namespace
 	constexpr float kShotSpeed = 30.0f;             // 弾速度
 	constexpr float kGravity   = 0.8f;              // 重力
 	constexpr float kJumpPower = 20.0f;             // ジャンプ力
-	constexpr float kWeaponPosY = 170.0f;            // ウェポンのy軸の位置
+	constexpr float kWeaponPosY = 170.0f;           // ウェポンのy軸の位置
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };   // プレイヤーの大きさ
 }
 
@@ -207,7 +207,7 @@ void Player::Draw()
 {
 	m_pWeapon->Draw();
 	
-	// 潜り状態のプレイヤーの当たり判定
+	// 潜り状態のプレイヤーの当たり判定(球)
 	if (m_isDiving)
 	{
 		DrawSphere3D(VGet(m_pos.x, m_pos.y + 25, m_pos.z),
@@ -219,10 +219,10 @@ void Player::Draw()
 		return;
 	}
 
-	// プレイヤーの当たり判定の描画
+	// プレイヤーの当たり判定の描画(カプセル)
 #ifdef _DEBUG
-	int playerCapsule = DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+100.0f, m_pos.z+0.0f), 
-		VGet(m_pos.x+0.0f, m_pos.y+180.0f, m_pos.z+0.0f), 
+	int playerCapsule = DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+40.0f, m_pos.z+0.0f), 
+		VGet(m_pos.x+0.0f, m_pos.y+230.0f, m_pos.z+0.0f), 
 		40.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), false);
 #endif
 	// プレイヤーモデルの回転
