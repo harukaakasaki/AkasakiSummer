@@ -66,7 +66,7 @@ void SceneMain::Init()
 
 	m_gameUI = LoadGraph("data/UI/GameUI_1.png");
 	assert(m_gameUI != -1);
-	m_reticleUI = LoadGraph("data/UI/reticle4.png");
+	m_reticleUI = LoadGraph("data/UI/reticle.png");
 	assert(m_reticleUI != -1);
 
 	// BGM
