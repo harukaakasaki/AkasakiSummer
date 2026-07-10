@@ -10,24 +10,24 @@ namespace
 	// アニメーションのインデックス
 	constexpr const char* kIdleAnim = "root|Idle";  // 待機アニメーション
 	constexpr const char* kShotAnim = "root|Shot";  // 射撃アニメーション
-	constexpr const char* kRunAnim =   "root|Run";	// 走るアニメーション
+	constexpr const char* kRunAnim = "root|Run";	// 走るアニメーション
 
 	constexpr float kAnimSpeed = 1.0f;              // アニメーションスピード
 	constexpr float kSpeed = 18.0f;                 // プレイヤーの移動速度
 	constexpr float kAttackingSpeed = 13.0f;        // プレイヤーの攻撃中の移動速度
 	constexpr float kDiveSpeed = 30.0f;             // プレイヤーの潜り移動速度
 	constexpr float kShotSpeed = 30.0f;             // 弾速度
-	constexpr float kGravity   = 0.8f;              // 重力
+	constexpr float kGravity = 0.8f;                // 重力
 	constexpr float kJumpPower = 20.0f;             // ジャンプ力
 	constexpr float kWeaponPosY = 170.0f;           // ウェポンのy軸の位置
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };   // プレイヤーの大きさ
 }
 
-Player::Player(StageManager* stageManager,int padNo,int playerColor):
+Player::Player(StageManager* stageManager, int padNo, int playerColor) :
 	m_pStageManager(stageManager),
 	m_modelHandle(-1),
 	m_angle(0.0f),
-	m_move{0.0f,0.0f,0.0f},
+	m_move{ 0.0f,0.0f,0.0f },
 	m_pos{ 0.0f, 0.0f, 0.0f },
 	m_isShooting(false),
 	m_velocityY(0.0f),
@@ -54,13 +54,13 @@ void Player::Init()
 	m_idleAnim = MV1GetAnimIndex(m_modelHandle, kIdleAnim);
 	m_shotAnim = MV1GetAnimIndex(m_modelHandle, kShotAnim);
 	m_runAnim = MV1GetAnimIndex(m_modelHandle, kRunAnim);
-	
+
 	MV1SetScale(m_modelHandle, kScale);// 初期のプレイヤーの大きさ
 
 	m_animation.Play(m_idleAnim, true, kAnimSpeed);
 	m_state = PlayerState::Idle;
 }
-void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
+void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 {
 
 	int x, y;
@@ -94,10 +94,10 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 		m_move.x /= len;
 		m_move.z /= len;
 
-		
+
 	}
 
-	
+
 
 	// 攻撃
 	XINPUT_STATE xinputState;
@@ -112,7 +112,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	if (isDivePress)
 	{
 		m_isDiving = true;
-		
+
 		speed = kDiveSpeed;
 
 #ifdef _DEBUG
@@ -123,11 +123,11 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	{
 		m_isDiving = false;
 	}
-	
+
 	// 攻撃中はプレイヤーのスピードが遅くなるようにしたい
 	if (isWeaponPress)
 	{
-		if (m_state!=PlayerState::Shot)
+		if (m_state != PlayerState::Shot)
 		{
 			m_animation.Play(m_shotAnim, true, kAnimSpeed);
 			m_state = PlayerState::Shot;
@@ -154,13 +154,13 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 			m_state = PlayerState::Idle;
 		}
 	}
-	
+
 	m_move.x = m_move.x * speed * timeScale;
 	m_move.z = m_move.z * speed * timeScale;
 
 	m_pos.x += m_move.x;
 	m_pos.z += m_move.z;
-	
+
 	// 入力情報は優先度をつけて管理する
 	if (!m_isDiving && isWeaponPress)
 	{
@@ -170,13 +170,13 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 
 		// 撃っている向き
 		VECTOR shotVelocity;
-		shotVelocity.x = -cosf(cameraPitch) * cosf(cameraAngle)*speed;
+		shotVelocity.x = -cosf(cameraPitch) * cosf(cameraAngle) * speed;
 		shotVelocity.z = -cosf(cameraPitch) * sinf(cameraAngle) * speed;
 		shotVelocity.y = -sinf(cameraPitch) * speed;
 
 
-		m_pWeapon->UseWeapon(weaponPos,shotVelocity);
-		
+		m_pWeapon->UseWeapon(weaponPos, shotVelocity);
+
 		m_isShooting = true;
 	}
 	else
@@ -187,13 +187,13 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	{
 		m_pBomb->Throw();
 	}
-	
+
 
 	if (m_isShooting)
 	{
 		// カメラ方向を見ながらインクを撃つ
 		// atan2fでcos,sinのカメラアングルを合わせる
-		m_angle = atan2f(cosf(cameraAngle),sinf(cameraAngle));
+		m_angle = atan2f(cosf(cameraAngle), sinf(cameraAngle));
 	}
 
 	m_pWeapon->Update();
@@ -205,7 +205,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 void Player::Draw()
 {
 	m_pWeapon->Draw();
-	
+
 	// 潜り状態のプレイヤーの当たり判定(球)
 	if (m_isDiving)
 	{
@@ -214,14 +214,21 @@ void Player::Draw()
 			::GetColor(255, 125, 0),
 			::GetColor(255, 125, 0),
 			true);
+#ifdef _DEBUG
+		DrawSphere3D(VGet(m_pos.x, m_pos.y + 25, m_pos.z),
+			80, 16,
+			::GetColor(0, 255, 0),
+			::GetColor(0, 255, 0),
+			false);
+#endif // DEBUG
 
 		return;
 	}
 
 	// プレイヤーの当たり判定の描画(カプセル)
 #ifdef _DEBUG
-	int playerCapsule = DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+40.0f, m_pos.z+0.0f), 
-		VGet(m_pos.x+0.0f, m_pos.y+230.0f, m_pos.z+0.0f), 
+	int playerCapsule = DrawCapsule3D(VGet(m_pos.x + 0.0f, m_pos.y + 40.0f, m_pos.z + 0.0f),
+		VGet(m_pos.x + 0.0f, m_pos.y + 230.0f, m_pos.z + 0.0f),
 		40.0f, 8, ::GetColor(0, 255, 0), ::GetColor(255, 255, 255), false);
 	DrawSphere3D(VGet(m_pos.x, m_pos.y + 150, m_pos.z),
 		90, 16,
@@ -240,12 +247,12 @@ void Player::Draw()
 
 	MV1DrawModel(m_modelHandle);// プレイヤー表示
 
-	
+
 }
 
 void Player::Jump()
 {
-	if (m_isGround && Pad::IsTrigger(m_padNo,PAD_INPUT_1))//  A(ジャンプボタン)が押された
+	if (m_isGround && Pad::IsTrigger(m_padNo, PAD_INPUT_1))//  A(ジャンプボタン)が押された
 	{
 		m_velocityY = kJumpPower;
 		m_isGround = false;

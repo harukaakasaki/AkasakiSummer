@@ -11,8 +11,8 @@
 
 namespace
 {
-	constexpr int kPlayerOrange = 1;// プレイヤーがオレンジ
-	constexpr int kPlayerBlue = 2;  // プレイヤーがブルー
+	constexpr int kPlayerOrange = 1;// プレイヤーオレンジ
+	constexpr int kPlayerBlue = 2;  // プレイヤーブルー
 	constexpr int kTimer = 30*60;   // タイマーの時間
 }
 
@@ -44,7 +44,7 @@ void SceneMain::Init()
 	SetUseBackCulling(true);
 
 	// Zバッファの設定
-	SetUseZBuffer3D(true);	// Zバッファを使います
+	SetUseZBuffer3D(true);	    // Zバッファを使う
 	SetWriteZBuffer3D(true);	// 描画する物体はZバッファにも距離を書き込む
 
 	// 背景の色設定
@@ -137,9 +137,7 @@ void SceneMain::Update()
 			// ゲーム終了フラグ
 			m_isFinish = true;
 		}
-
 	}
-	
 }
 
 // マウスでインクを塗る処理
@@ -230,7 +228,6 @@ void SceneMain::Draw()
 	DrawFormatString(10, 70, GetColor(0, 0, 255), "Blue   : %.2f%%", bluePercent);
 	DrawFormatString(1100, 50, GetColor(255, 125, 0), "Orange : %.2f%%", orangePercent);
 	DrawFormatString(1100, 70, GetColor(0, 0, 255), "Blue   : %.2f%%", bluePercent);
-
 
 	// UIの描画
 	int width, height;

@@ -46,5 +46,4 @@ private:
 
 	// アニメーションが終了したかどうか
 	bool m_isEnd;
-
 };

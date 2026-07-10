@@ -11,5 +11,4 @@ namespace Pad
 
 	// ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½uŠÔ‚ğæ“¾
 	bool IsTrigger(int padNo,int key);
-
 }

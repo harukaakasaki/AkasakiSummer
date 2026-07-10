@@ -49,18 +49,17 @@ void StageManager::Init()
 	assert(m_stageModelHandle != -1);
 	// ステージの位置とスケールを設定
 	MV1SetPosition(m_stageModelHandle, VGet(0.0f, -100.0f, -1700.0f));
-	
+
 	m_cellSize = 100.0f;
 	m_mapWidthSize = 128;
 	m_mapHeightSize = 48;
-	
+
 	m_2dMap.resize(m_mapHeightSize);// 縦48マスの空きを作る
 	// メモリ内に48x128の紙を作成
 	for (int i = 0; i < m_mapHeightSize; i++)
 	{
 		m_2dMap[i].resize(m_mapWidthSize, 0);
 	}
-
 
 	// 一枚のインク書き込み用のキャンバスを作る
 	m_inkCanvasHandle = MakeScreen(kHandleScale, kHandleScale, TRUE);
@@ -78,7 +77,6 @@ void StageManager::Init()
 
 	// 描画先を戻しておく
 	SetDrawScreen(DX_SCREEN_BACK);
-
 }
 void StageManager::Update()
 {
@@ -87,7 +85,6 @@ void StageManager::Update()
 void StageManager::Draw()
 {
 	MV1DrawModel(m_stageModelHandle);
-	
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	SetUseAlphaTestFlag(TRUE);// アルファテストをONにする（アルファ値が0の部分は描画されないようになる）
@@ -101,56 +98,56 @@ void StageManager::Draw()
 
 	SetUseTextureToShader(0, m_inkCanvasHandle);
 	SetUseTextureToShader(1, m_inkNormalCanvasHandle);
-	
+
 	// 2Dのマス目を3D空間に変換して描画する
 	float totalWidth = m_mapWidthSize * m_cellSize;
 	float totalHeight = m_mapHeightSize * m_cellSize;
 	float offsetX = totalWidth / 2.0f;// ステージのXを原点にするためのオフセット
 	float offsetZ = totalHeight / 2.0f;// ステージのZを原点にするためのオフセット
 
-	float leftX = - offsetX;
+	float leftX = -offsetX;
 	float rightX = offsetX;
-	float frontZ = - offsetZ;
+	float frontZ = -offsetZ;
 	float backZ = offsetZ;
 	float ground = 0.5f;// 床の高さ(0より少し高くする)
 
-     // 3Dポリゴンの頂点データ
-     VERTEX3DSHADER verticesShader[6];
-     
-     // --- 三角形1 ---
-        // 頂点0
-     verticesShader[0].pos.x = leftX;  verticesShader[0].pos.y = ground; verticesShader[0].pos.z = backZ;
-     verticesShader[0].norm.x = 0.0f;  verticesShader[0].norm.y = 1.0f; verticesShader[0].norm.z = 0.0f;
-     verticesShader[0].u = 0.0f;        verticesShader[0].v = 1.0f;
-     
-     // 頂点1
-     verticesShader[1].pos.x = rightX; verticesShader[1].pos.y = ground; verticesShader[1].pos.z = backZ;
-     verticesShader[1].norm.x = 0.0f;  verticesShader[1].norm.y = 1.0f; verticesShader[1].norm.z = 0.0f;
-     verticesShader[1].u = 1.0f;        verticesShader[1].v = 1.0f;
-     
-     // 頂点2
-     verticesShader[2].pos.x = leftX;  verticesShader[2].pos.y = ground; verticesShader[2].pos.z = frontZ;
-     verticesShader[2].norm.x = 0.0f;  verticesShader[2].norm.y = 1.0f; verticesShader[2].norm.z = 0.0f;
-     verticesShader[2].u = 0.0f;        verticesShader[2].v = 0.0f;
-     
-     // --- 三角形2 ---
-     // 頂点3
-     verticesShader[3].pos.x = rightX; verticesShader[3].pos.y = ground; verticesShader[3].pos.z = backZ;
-     verticesShader[3].norm.x = 0.0f;  verticesShader[3].norm.y = 1.0f; verticesShader[3].norm.z = 0.0f;
-     verticesShader[3].u = 1.0f;        verticesShader[3].v = 1.0f;
-     
-     // 頂点4
-     verticesShader[4].pos.x = rightX; verticesShader[4].pos.y = ground; verticesShader[4].pos.z = frontZ;
-     verticesShader[4].norm.x = 0.0f;  verticesShader[4].norm.y = 1.0f; verticesShader[4].norm.z = 0.0f;
-     verticesShader[4].u = 1.0f;        verticesShader[4].v = 0.0f;
-     
-     // 頂点5
-     verticesShader[5].pos.x = leftX;  verticesShader[5].pos.y = ground; verticesShader[5].pos.z = frontZ;
-     verticesShader[5].norm.x = 0.0f;  verticesShader[5].norm.y = 1.0f; verticesShader[5].norm.z = 0.0f;
-	 verticesShader[5].u = 0.0f;        verticesShader[5].v = 0.0f;
-     
-     DrawPolygon3DToShader(verticesShader,2);
-	
+	// 3Dポリゴンの頂点データ
+	VERTEX3DSHADER verticesShader[6];
+
+	// --- 三角形1 ---
+	   // 頂点0
+	verticesShader[0].pos.x = leftX;  verticesShader[0].pos.y = ground; verticesShader[0].pos.z = backZ;
+	verticesShader[0].norm.x = 0.0f;  verticesShader[0].norm.y = 1.0f; verticesShader[0].norm.z = 0.0f;
+	verticesShader[0].u = 0.0f;        verticesShader[0].v = 1.0f;
+
+	// 頂点1
+	verticesShader[1].pos.x = rightX; verticesShader[1].pos.y = ground; verticesShader[1].pos.z = backZ;
+	verticesShader[1].norm.x = 0.0f;  verticesShader[1].norm.y = 1.0f; verticesShader[1].norm.z = 0.0f;
+	verticesShader[1].u = 1.0f;        verticesShader[1].v = 1.0f;
+
+	// 頂点2
+	verticesShader[2].pos.x = leftX;  verticesShader[2].pos.y = ground; verticesShader[2].pos.z = frontZ;
+	verticesShader[2].norm.x = 0.0f;  verticesShader[2].norm.y = 1.0f; verticesShader[2].norm.z = 0.0f;
+	verticesShader[2].u = 0.0f;        verticesShader[2].v = 0.0f;
+
+	// --- 三角形2 ---
+	// 頂点3
+	verticesShader[3].pos.x = rightX; verticesShader[3].pos.y = ground; verticesShader[3].pos.z = backZ;
+	verticesShader[3].norm.x = 0.0f;  verticesShader[3].norm.y = 1.0f; verticesShader[3].norm.z = 0.0f;
+	verticesShader[3].u = 1.0f;        verticesShader[3].v = 1.0f;
+
+	// 頂点4
+	verticesShader[4].pos.x = rightX; verticesShader[4].pos.y = ground; verticesShader[4].pos.z = frontZ;
+	verticesShader[4].norm.x = 0.0f;  verticesShader[4].norm.y = 1.0f; verticesShader[4].norm.z = 0.0f;
+	verticesShader[4].u = 1.0f;        verticesShader[4].v = 0.0f;
+
+	// 頂点5
+	verticesShader[5].pos.x = leftX;  verticesShader[5].pos.y = ground; verticesShader[5].pos.z = frontZ;
+	verticesShader[5].norm.x = 0.0f;  verticesShader[5].norm.y = 1.0f; verticesShader[5].norm.z = 0.0f;
+	verticesShader[5].u = 0.0f;        verticesShader[5].v = 0.0f;
+
+	DrawPolygon3DToShader(verticesShader, 2);
+
 	// インクを書き終えたら元の描画にリセットする
 	SetUsePixelShader(-1);
 	SetUseAlphaTestFlag(FALSE);// アルファテストをOFFにする
@@ -231,20 +228,18 @@ void StageManager::Paint(float x, float z, float who, float paintRadius)
 
 	SetDrawScreen(m_inkCanvasHandle);
 	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
-		            canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
-		            colorHandle, TRUE);
+		canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
+		colorHandle, TRUE);
 
 	// 現在のシェーダーは違和感があるため、シェーダーは止めている
 	/*SetDrawScreen(m_inkNormalCanvasHandle);
 	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
-		            canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
-		            normalHandle, TRUE);*/
+					canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
+					normalHandle, TRUE);*/
 
 	SetDrawMode(DX_DRAWMODE_NEAREST);
 
 	SetDrawScreen(DX_SCREEN_BACK);
-	
-
 }
 
 float StageManager::GetPaintPercent(int playerColor) const

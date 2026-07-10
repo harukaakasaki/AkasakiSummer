@@ -29,7 +29,8 @@ private:
 	Animation m_animation;
 	int m_playerIdleAnim;
 
-	float m_skyAngle = 0.0f;// ‹ó‚Ì‰ñ“]Šp
+	// ‹ó‚Ì‰ñ“]Šp
+	float m_skyAngle = 0.0f;
 	// ƒvƒŒƒCƒ„[‚Ì‰ñ“]Šp
 	float m_playerAngle = 0.0f;
 	// “_–ÅƒAƒ“ƒOƒ‹

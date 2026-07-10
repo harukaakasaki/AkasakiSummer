@@ -9,13 +9,16 @@ public:
 	void Draw();
 
 private:
-	Scene* m_pScene = nullptr;// 現在のシーン
+	// 現在のシーン
+	Scene* m_pScene = nullptr;
 
 	// フェードイン・フェードアウトの制御
 	bool m_isFadeIn = false;
 	bool m_isFadeOut = true;
-	int m_fadeAlpha = 255;// フェードのアルファ値
-	Scene* m_pNextScene = nullptr;// 次のシーン
+	// フェードのアルファ値
+	int m_fadeAlpha = 255;
+	// 次のシーン
+	Scene* m_pNextScene = nullptr;
 
 
 };

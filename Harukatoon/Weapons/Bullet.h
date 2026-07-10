@@ -4,17 +4,36 @@
 class Bullet
 {
 public:
-	Bullet(VECTOR startPos, VECTOR startVel,int color);
+	// コンストラクタ
+	Bullet(VECTOR startPos, VECTOR startVel, int color);
+
 	// 弾の色を取得する
 	int GetColor() const { return m_color; }
+
+	// デストラクタ
 	~Bullet();
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Init();
-	// 撃つ→速度 * 重力で放物線を描くように発射できるはず！
+
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update();
+
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 弾の位置
+	/// </summary>
+	/// <returns></returns>
 	VECTOR GetPos();
+
 	// 弾が生きているか
 	bool IsBulletAlive()const { return m_isAlive; };
 
@@ -33,6 +52,4 @@ private:
 
 	// 弾の色
 	int m_color;
-
 };
-

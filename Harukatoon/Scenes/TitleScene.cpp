@@ -6,7 +6,7 @@
 
 namespace
 {
-	
+
 }
 
 TitleScene::TitleScene() :
@@ -45,7 +45,6 @@ void TitleScene::Init()
 	ChangeVolumeSoundMem(180, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 
-
 	// フォントを作る
 	m_fontHandle = CreateFontToHandle("Nikkyou Sans", 70, -1, DX_FONTTYPE_NORMAL);
 
@@ -62,21 +61,15 @@ void TitleScene::Init()
 
 void TitleScene::Update()
 {
+	// パッドクラスの更新
 	Pad::Update();
-
-	// 待機アニメーション
-	m_animation.Play(m_playerIdleAnim, true, 1.0f);
-	m_animation.Play(m_enemyIdleAnim, true, 1.0f);
-	// アニメーションの再生速度
-	m_animation.SetGlobalSpeed(0.7f);
-	m_animation.Update();
 
 	// 空の回転
 	m_skyAngle += 0.002f;
 	// 点滅
 	m_blinkAngle += 0.08f;
 
-	if (Pad::IsTrigger(DX_INPUT_PAD1,PAD_INPUT_1))
+	if (Pad::IsTrigger(DX_INPUT_PAD1, PAD_INPUT_1))
 	{
 		// SEの再生
 		ChangeVolumeSoundMem(200, m_selectSeHandle);
@@ -87,20 +80,11 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	// スカイドームの回転
-	MV1SetRotationXYZ(m_skyModelHandle, VGet(0, m_skyAngle, 0));
-
-	// モデルを描画
-	MV1DrawModel(m_skyModelHandle);
-	/*MV1DrawModel(m_playerModelHandle);
-	MV1DrawModel(m_enemyModelHandle);*/
-
 	// 2D描画の設定
 	SetUseZBufferFlag(false);
 	// タイトル画面を描画
 //	DrawGraph(0, 0, m_titleLogoHandle, TRUE);
 	DrawString(0, 50, "タイトルシーン", GetColor(255, 255, 255));
-	
 
 	SetUseZBufferFlag(true);
 
@@ -109,7 +93,7 @@ void TitleScene::Draw()
 	// スタートボタンを点滅させる
 	int alpha = static_cast<int>((sinf(m_blinkAngle) * 0.5f + 0.5f) * 255);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-	
+
 	DrawStringToHandle(460, 505, "Aボタンでスタート！", GetColor(0, 0, 0), m_fontHandle);
 	DrawStringToHandle(450, 500, "Aボタンでスタート！", GetColor(255, 255, 255), m_fontHandle);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

@@ -1,10 +1,8 @@
-#include "DxLib.h"
+#include <DxLib.h>
 #include "Scenes/SceneController.h"
 #include "../Systems/Game.h"
 #include <memory>
 #include "../Scenes/Scenemain.h"
-
-
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -18,14 +16,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
-		return -1;			// エラーが起きたら直ちに終了
+		return -1;			    // エラーが起きたら直ちに終了
 	}
 
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//シーンの作成
-	SceneController controller;
-	controller.Init();
+	SceneController sceneController;
+	sceneController.Init();
 
 	while (ProcessMessage() != -1)
 	{
@@ -34,8 +32,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 前のフレーム描画を消す
 		ClearDrawScreen();
 		//（ゲーム内容）
-		controller.Update();
-		controller.Draw();
+		sceneController.Update();
+		sceneController.Draw();
 
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
 		{
@@ -53,9 +51,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	// メモリの開放
-	// shared_ptrはメモリの開放を自動で行ってくれる
+	// スマートポインタはメモリの開放を自動で行ってくれる
 
-	DxLib_End();				// ＤＸライブラリ使用の終了処理
+	DxLib_End();  // ＤＸライブラリ使用の終了処理
 
-	return 0;				// ソフトの終了 
+	return 0;     // ソフトの終了 
 }

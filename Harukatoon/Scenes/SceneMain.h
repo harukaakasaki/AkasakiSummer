@@ -27,7 +27,7 @@ private:
 	void DrawGrid();
 	void InkPaint();// 色を塗る
 
-	// ゲームの状態
+	// ゲームシーンの状態
 	enum class GameState
 	{
 		Playing,// ゲーム中
@@ -54,6 +54,6 @@ private:
 	std::unique_ptr<CollisionManager> m_pCollisionManager;
 
 	std::vector<Player*> m_pPlayerList;
-	
+
 };
 

@@ -37,7 +37,7 @@ void ResultScene::Init()
 
 	// モデルを読み込む
 	m_playerModelHandle = MV1LoadModel("data/Models/player.mv1");
-	
+
 	// BGM
 	m_bgmHandle = LoadSoundMem("data/BGM/result_bgm.mp3");
 	m_selectSeHandle = LoadSoundMem("data/bgm/select_se.mp3");
@@ -65,7 +65,7 @@ void ResultScene::Update()
 	Pad::Update();
 
 	// Aボタンが押されたらシーンを終了する
-	if (Pad::IsTrigger(DX_INPUT_PAD1,PAD_INPUT_1))
+	if (Pad::IsTrigger(DX_INPUT_PAD1, PAD_INPUT_1))
 	{
 		// SEの再生
 		ChangeVolumeSoundMem(200, m_selectSeHandle);

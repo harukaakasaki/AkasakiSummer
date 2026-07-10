@@ -26,7 +26,5 @@ void Bomb::Throw()
 #ifdef DEBUG
 	printfDx("ƒ{ƒ€‚ÅUŒ‚’†I\n");
 #endif // DEBUG
-
-	
 }
 

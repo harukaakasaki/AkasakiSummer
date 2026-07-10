@@ -11,11 +11,11 @@ namespace
 	constexpr int kInkRadius = 150;           // インクの大きさ
 }
 
-Weapon::Weapon(StageManager* stageManager,int playerColor) :
+Weapon::Weapon(StageManager* stageManager, int playerColor) :
 	m_shotTimer(0),
 	m_shootingCountFrame(0),
-	m_shotInterval(kShotInterval),// このフレーム内に一発発射する
-	m_whoShot(0.0f),	
+	m_shotInterval(kShotInterval),
+	m_whoShot(0.0f),
 	m_isMainBullet(false)
 {
 	m_stageManager = stageManager;
@@ -74,15 +74,13 @@ void Weapon::Draw()
 		bullet->Draw();
 	}
 }
-void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
+void Weapon::UseWeapon(VECTOR playerPos, VECTOR shotVel)
 {
 	if (m_shootingCountFrame < kStreatShoothingFrame)
 	{
 		m_shootingCountFrame++;
 	}
-	
 
-	//printfDx("ウェポンで攻撃中！\n");
 	// x軸、y軸の-0.8～6.0fの間からランダムで弾が飛ぶ
 	if (m_shotTimer == 0)
 	{
@@ -95,14 +93,13 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 		VECTOR shotOffsetVel = VCross(shotVel, { 0.0f, 1.0f, 0.0f });
 
 		//　＊この数字を0に近づけるとシャープマーカーで1にするほどモデラー
-		float shotWidth = 0.1f * (m_shootingCountFrame/ kStreatShoothingFrame);
+		float shotWidth = 0.1f * (m_shootingCountFrame / kStreatShoothingFrame);
 
 		shotOffsetVel = VScale(shotOffsetVel, rate * shotWidth);
 
-
 		VECTOR randomVel = VNorm(VAdd(shotVel, shotOffsetVel));
 		randomVel = VScale(randomVel, tempSpeed);
-		
+
 		//弾が上に飛ぶか下に飛ぶか
 		float upPower = kShotupPower;
 
@@ -119,10 +116,9 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 		randomVel.y += upPower; // 弾の初速を上に上げる(放物線)
 
 		// 弾を生成して管理リストに追加
-		m_bullets.push_back(std::make_unique<Bullet>(playerPos, randomVel,m_playerColor));
+		m_bullets.push_back(std::make_unique<Bullet>(playerPos, randomVel, m_playerColor));
 
 		// 次の弾までそのフレーム待つ
 		m_shotTimer = m_shotInterval;
-
 	}
 }

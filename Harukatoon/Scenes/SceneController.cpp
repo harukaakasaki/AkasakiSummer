@@ -6,8 +6,8 @@
 
 namespace
 {
-	constexpr int kFadeSpeed = 10;// フェードの速度
-	constexpr float kFadeOutTime = 360.0f;// フェードアウトの時間
+	constexpr int kFadeSpeed = 10;         // フェードの速度
+	constexpr float kFadeOutTime = 360.0f; // フェードアウトの時間
 }
 
 void SceneController::Init()

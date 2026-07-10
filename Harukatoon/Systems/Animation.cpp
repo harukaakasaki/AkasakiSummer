@@ -121,7 +121,6 @@ void Animation::Play(int animIndex, bool loop, float speed)
 	m_animSpeed = speed;
 
 	m_changeAnimFrame = 0;
-
 }
 
 // アニメーションを停止させる

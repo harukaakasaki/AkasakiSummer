@@ -4,7 +4,7 @@ namespace
 {
 }
 
-Bullet::Bullet(VECTOR startPos, VECTOR startVel, int color):
+Bullet::Bullet(VECTOR startPos, VECTOR startVel, int color) :
 	m_pos(startPos),
 	m_velocity(startVel),
 	m_isAlive(true),
@@ -41,12 +41,10 @@ void Bullet::Draw()
 	if (!m_isAlive)return;
 
 	// 弾を表示
-	DrawSphere3D(VGet(m_pos.x,m_pos.y,m_pos.z), 10.0f, 8, m_color,m_color, true);
+	DrawSphere3D(VGet(m_pos.x, m_pos.y, m_pos.z), 10.0f, 8, m_color, m_color, true);
 }
 
 VECTOR Bullet::GetPos()
 {
 	return m_pos;
 }
-
-

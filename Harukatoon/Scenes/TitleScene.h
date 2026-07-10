@@ -1,6 +1,5 @@
 #pragma once
 #include "Scene.h"
-#include "../Systems/Animation.h"
 
 class TitleScene : public Scene
 {
@@ -22,11 +21,6 @@ private:
 
 	// BGM関連
 	int m_bgmHandle;
-
-	// アニメーション
-	Animation m_animation;
-	int m_playerIdleAnim;
-	int m_enemyIdleAnim;
 	int m_selectSeHandle;
 
 	// 空の回転角

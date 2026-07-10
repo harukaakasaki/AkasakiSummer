@@ -11,6 +11,7 @@ class Bomb;
 
 class Player
 {
+	// プレイヤーの状態の列挙型
 	enum class PlayerState
 	{
 		Idle,   // 通常
@@ -49,13 +50,14 @@ public:
 	/// <param name="cameraPitch">カメラの縦回転</param>
 	/// <param name="timeScale">プレイヤー自体のスピード</param>
 	void Update(float cameraYaw, float cameraPitch, float timeScale);
+
+	// 描画処理
 	void Draw();
 
 	/// <summary>
 	/// ジャンプ処理
 	/// </summary>
 	void Jump();
-
 
 	// プレイヤー情報の取得
 	/// <summary>
@@ -113,4 +115,3 @@ private:
 	// Stageマネージャーのポインタ
 	StageManager* m_pStageManager;
 };
-

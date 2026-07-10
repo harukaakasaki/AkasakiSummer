@@ -4,7 +4,7 @@
 #include "Pad.h"
 #include "EffekseerForDXLib.h"
 
-Camera::Camera():
+Camera::Camera() :
 	m_cameraYaw(0.0f),
 	m_cameraPitch(0.0f),
 	m_cameraPos{ 0.0f,0.0f,0.0f },
@@ -65,7 +65,7 @@ void Camera::Update(VECTOR playerPos)
 
 	// 縦回転(あとで)
 	m_cameraPitch += y * sensitivity;
-	
+
 	// カメラとプレイヤーとの距離
 	float distance = 800.0f;
 	// カメラの高さ
@@ -84,7 +84,6 @@ void Camera::Update(VECTOR playerPos)
 	if (m_cameraPitch > limit)m_cameraPitch = limit;
 	if (m_cameraPitch < -limit)m_cameraPitch = -limit;
 
-
 	// カメラ位置(プレイヤーを中心に回転する)
 	m_cameraPos.x = playerPos.x + cosf(m_cameraPitch) * cosf(m_cameraYaw) * distance;
 	m_cameraPos.z = playerPos.z + cosf(m_cameraPitch) * sinf(m_cameraYaw) * distance;
@@ -93,14 +92,9 @@ void Camera::Update(VECTOR playerPos)
 	m_cameraTarget = playerPos;
 
 	m_cameraTarget.y += 300.0f;
-
-
-	
 }
 void Camera::Draw()
 {
-	
-
 	// カメラと注視点を設定
 	SetCameraPositionAndTarget_UpVecY(
 		VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z),
@@ -108,11 +102,12 @@ void Camera::Draw()
 
 	// 空を描画
 	MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
-
-	SetWriteZBuffer3D(false);// 空を描画する前にZバッファへの書き込みをオフにする
-	
-
 	MV1DrawModel(m_skyModelHandle);
-	SetWriteZBuffer3D(true);// 空を描画した後にZバッファへの書き込みをオンにする
+
+	// 空を描画する前にZバッファへの書き込みをオフにする
+	SetWriteZBuffer3D(false);
+
+	// 空を描画した後にZバッファへの書き込みをオンにする
+	SetWriteZBuffer3D(true);
 }
 

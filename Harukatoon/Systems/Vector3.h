@@ -51,6 +51,7 @@ public:
 		z += vec.z;
 		return *this;
 	}
+
 	// -=
 	Vector3 operator-=(const Vector3& vec)
 	{

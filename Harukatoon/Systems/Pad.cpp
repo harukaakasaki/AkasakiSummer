@@ -22,17 +22,17 @@ namespace Pad
 			// 現在のフレームのパッドの情報を取得
 			nowPad[i] = GetJoypadInputState(i);
 		}
-		
+
 	}
 
-	bool IsPress(int padNo,int key)
+	bool IsPress(int padNo, int key)
 	{
 		// このフレームに押されていればOK
 
 		return (nowPad[padNo] & key) != 0;
 	}
 
-	bool IsTrigger(int padNo,int key)
+	bool IsTrigger(int padNo, int key)
 	{
 		// このフレームに押されていない
 		if (!(nowPad[padNo] & key))	return false;
