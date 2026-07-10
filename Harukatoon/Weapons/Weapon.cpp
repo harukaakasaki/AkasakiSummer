@@ -12,16 +12,14 @@ namespace
 }
 
 Weapon::Weapon(StageManager* stageManager,int playerColor) :
-	m_stageManager(stageManager),
-	m_playerColor(playerColor),
-	m_whoShot(0.0f),
-	m_bullets(0.0f),
 	m_shotTimer(0),
 	m_shootingCountFrame(0),
-	m_shotInterval(kShotInterval)// このフレーム内に一発発射する
+	m_shotInterval(kShotInterval),// このフレーム内に一発発射する
+	m_whoShot(0.0f),	
+	m_isMainBullet(false)
 {
 	m_stageManager = stageManager;
-	m_isMainBullet = false;
+	m_playerColor = playerColor;
 }
 
 Weapon::~Weapon()
@@ -121,7 +119,7 @@ void Weapon::UseWeapon(VECTOR playerPos,VECTOR shotVel)
 		randomVel.y += upPower; // 弾の初速を上に上げる(放物線)
 
 		// 弾を生成して管理リストに追加
-		m_bullets.push_back(std::make_unique<Bullet>(playerPos, randomVel));
+		m_bullets.push_back(std::make_unique<Bullet>(playerPos, randomVel,m_playerColor));
 
 		// 次の弾までそのフレーム待つ
 		m_shotTimer = m_shotInterval;

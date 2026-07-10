@@ -15,6 +15,7 @@ public:
 	~Weapon();
 	void Init();
 	void Update();
+	std::vector<std::unique_ptr<Bullet>>& GetBullets() { return m_bullets; }
 	std::vector<std::unique_ptr<Bullet>>aliveBullets;
 	void Draw();
 	// ƒEƒFƒ|ƒ“‚ÅŒ‚‚ÂŠÖ”

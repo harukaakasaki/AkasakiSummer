@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Systems\CollisionManager.cpp" />
     <ClCompile Include="Scenes\ResultScene.cpp" />
     <ClCompile Include="Scenes\SceneController.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
@@ -157,7 +157,7 @@
     <ClCompile Include="Weapons\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Systems\CollisionManager.h" />
     <ClInclude Include="Scenes\ResultScene.h" />
     <ClInclude Include="Scenes\SceneController.h" />
     <ClInclude Include="Scenes\Scene.h" />

@@ -6,6 +6,7 @@
 #include "../GameObjects/Player.h"
 #include "../Systems/Camera.h"
 #include "../Systems/Pad.h"
+#include "../Systems/CollisionManager.h"
 #include "../Stages/StageManager.h"
 
 namespace
@@ -74,6 +75,14 @@ void SceneMain::Init()
 	assert(m_bgmHandle != -1);
 	ChangeVolumeSoundMem(200, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
+
+	// コリジョンマネージャーの生成
+	m_pCollisionManager = std::make_unique<CollisionManager>();
+
+	m_pPlayerList.clear();
+	m_pPlayerList.push_back(m_pPlayer1.get());
+	m_pPlayerList.push_back(m_pPlayer2.get());
+
 }
 
 void SceneMain::Update()
@@ -88,6 +97,11 @@ void SceneMain::Update()
 
 		m_pCamera1->Update(m_pPlayer1->GetPos());
 		m_pCamera2->Update(m_pPlayer2->GetPos());
+
+		auto& bullet1 = m_pPlayer1->GetBullets();
+		m_pCollisionManager->Update(m_pPlayerList, bullet1);
+		auto& bullet2 = m_pPlayer2->GetBullets();
+		m_pCollisionManager->Update(m_pPlayerList, bullet2);
 
 		m_pStageManager->Update();
 		InkPaint();

@@ -6,6 +6,7 @@
 #include "../Stages/StageManager.h"
 
 class Weapon;
+class Bullet;
 class Bomb;
 
 class Player
@@ -29,7 +30,7 @@ public:
 	/// <param name="stageManager"></param>
 	/// <param name="padNo">コントローラー番号</param>
 	/// <param name="playerColor">プレイヤーのインクの色</param>
-	Player(StageManager* stageManager,int padNo,int playerColor);
+	Player(StageManager* stageManager, int padNo, int playerColor);
 
 	/// <summary>
 	/// デストラクタ
@@ -55,10 +56,6 @@ public:
 	/// </summary>
 	void Jump();
 
-	/// <summary>
-	/// 潜る処理
-	/// </summary>
-	void Dive();
 
 	// プレイヤー情報の取得
 	/// <summary>
@@ -67,14 +64,29 @@ public:
 	/// <returns></returns>
 	VECTOR GetPos() const;
 
+	// プレイヤーのポジションを設定
 	void SetPos(VECTOR pos);
 
-	bool IsShooting() const;// 攻撃中かどうか
+	// 攻撃中かどうか
+	bool IsShooting() const;
 
+	// ダメージを受ける処理
+	void ApplyDamage(float damage);
+
+	// 潜っているかどうか
+	bool IsDiving() const { return m_isDiving; };
+
+	std::vector<std::unique_ptr<Bullet>>& GetBullets();
+
+	int GetColor() const { return m_playerColor; }
 
 private:
 	// 最初のプレイヤーの状態をIdleにする
 	PlayerState m_state = PlayerState::Idle;
+
+	int m_hp = 100;
+	int m_maxHp = 100;
+	int m_playerColor;
 
 	Animation m_animation;
 	// プレイヤーモデル

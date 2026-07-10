@@ -34,7 +34,8 @@ Player::Player(StageManager* stageManager,int padNo,int playerColor):
 	m_idleAnim(-1),
 	m_runAnim(-1),
 	m_shotAnim(-1),
-	m_padNo(padNo)
+	m_padNo(padNo),
+	m_playerColor(playerColor)
 {
 	m_pWeapon = std::make_unique<Weapon>(stageManager, playerColor);
 	m_pBomb = std::make_unique<Bomb>();
@@ -111,9 +112,7 @@ void Player::Update(float cameraAngle,float cameraPitch,float timeScale)
 	if (isDivePress)
 	{
 		m_isDiving = true;
-		// 潜る処理
-		Dive();
-
+		
 		speed = kDiveSpeed;
 
 #ifdef _DEBUG
@@ -212,8 +211,8 @@ void Player::Draw()
 	{
 		DrawSphere3D(VGet(m_pos.x, m_pos.y + 25, m_pos.z),
 			60, 16,
-			GetColor(255, 125, 0),
-			GetColor(255, 125, 0),
+			::GetColor(255, 125, 0),
+			::GetColor(255, 125, 0),
 			true);
 
 		return;
@@ -223,7 +222,12 @@ void Player::Draw()
 #ifdef _DEBUG
 	int playerCapsule = DrawCapsule3D(VGet(m_pos.x+0.0f, m_pos.y+40.0f, m_pos.z+0.0f), 
 		VGet(m_pos.x+0.0f, m_pos.y+230.0f, m_pos.z+0.0f), 
-		40.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), false);
+		40.0f, 8, ::GetColor(0, 255, 0), ::GetColor(255, 255, 255), false);
+	DrawSphere3D(VGet(m_pos.x, m_pos.y + 150, m_pos.z),
+		90, 16,
+		::GetColor(0, 255, 0),
+		::GetColor(0, 255, 0),
+		false);
 #endif
 	// プレイヤーモデルの回転
 	MATRIX rot = MGetRotY(m_angle);// 向き
@@ -259,10 +263,6 @@ void Player::Jump()
 	}
 }
 
-void Player::Dive()
-{
-}
-
 VECTOR Player::GetPos() const
 {
 	return m_pos;
@@ -276,5 +276,15 @@ void Player::SetPos(VECTOR pos)
 bool Player::IsShooting() const
 {
 	return m_isShooting;
+}
+
+void Player::ApplyDamage(float damage)
+{
+
+}
+
+std::vector<std::unique_ptr<Bullet>>& Player::GetBullets()
+{
+	return m_pWeapon->GetBullets();
 }
 

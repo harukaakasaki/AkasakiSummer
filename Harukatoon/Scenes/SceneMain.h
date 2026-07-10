@@ -8,6 +8,7 @@
 class Player;
 class Camera;
 class StageManager;
+class CollisionManager;
 
 class SceneMain :public Scene
 {
@@ -49,6 +50,10 @@ private:
 	std::unique_ptr<Camera> m_pCamera1;
 	std::unique_ptr<Camera> m_pCamera2;
 	std::unique_ptr<StageManager> m_pStageManager;
+
+	std::unique_ptr<CollisionManager> m_pCollisionManager;
+
+	std::vector<Player*> m_pPlayerList;
 	
 };
 
