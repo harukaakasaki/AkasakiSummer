@@ -28,7 +28,7 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
-	SetBackgroundColor(0, 0, 0);
+	SetBackgroundColor(0, 195, 255);
 
 	// モデルを読み込む
 	m_skyModelHandle = MV1LoadModel("data/Sky_Night02.mv1");
@@ -81,7 +81,7 @@ void TitleScene::Draw()
 	// タイトル画面を描画
 	DrawRotaGraph(Game::kScreenWidth/2, Game::kScreenHeight/2,0.6,0, m_titleLogoHandle, TRUE);
 
-	DrawString(0, 50, "タイトルシーン", GetColor(255, 255, 255));
+//	DrawString(0, 50, "タイトルシーン", GetColor(255, 255, 255));
 
 	SetUseZBufferFlag(true);
 
