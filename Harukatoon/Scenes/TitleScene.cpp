@@ -4,14 +4,10 @@
 #include "SceneMain.h"
 #include <DxLib.h>
 
-namespace
-{
-
-}
-
 TitleScene::TitleScene() :
 	m_skyModelHandle(-1),
 	m_titleLogoHandle(-1),
+	m_fontHandle(-1),
 	m_skyAngle(0.0f),
 	m_isEnd(false),
 	m_bgmHandle(0),
@@ -83,19 +79,18 @@ void TitleScene::Draw()
 	// 2D描画の設定
 	SetUseZBufferFlag(false);
 	// タイトル画面を描画
-//	DrawGraph(0, 0, m_titleLogoHandle, TRUE);
+	DrawRotaGraph(Game::kScreenWidth/2, Game::kScreenHeight/2,0.6,0, m_titleLogoHandle, TRUE);
+
 	DrawString(0, 50, "タイトルシーン", GetColor(255, 255, 255));
 
 	SetUseZBufferFlag(true);
-
-	DrawStringToHandle(450, 300, "ハルカトゥーン", GetColor(255, 255, 255), m_fontHandle);
 
 	// スタートボタンを点滅させる
 	int alpha = static_cast<int>((sinf(m_blinkAngle) * 0.5f + 0.5f) * 255);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 
-	DrawStringToHandle(460, 505, "Aボタンでスタート！", GetColor(0, 0, 0), m_fontHandle);
-	DrawStringToHandle(450, 500, "Aボタンでスタート！", GetColor(255, 255, 255), m_fontHandle);
+	DrawStringToHandle(460, 555, "Aボタンでスタート！", GetColor(0, 0, 0), m_fontHandle);
+	DrawStringToHandle(450, 550, "Aボタンでスタート！", GetColor(255, 255, 255), m_fontHandle);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
