@@ -13,7 +13,13 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;// プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;  // プレイヤーブルー
-	constexpr int kTimer = 30*60;   // タイマーの時間
+	constexpr int kTimer = 600*60;   // タイマーの時間
+
+	// ステージの幅
+	constexpr float kStageMinX = -5900.0f;
+	constexpr float kStageMaxX = 5820.0f;
+	constexpr float kStageMinZ = -2120.0f;
+	constexpr float kStageMaxZ = 1680.0f;
 }
 
 SceneMain::SceneMain() :
@@ -105,6 +111,25 @@ void SceneMain::Update()
 
 		m_pStageManager->Update();
 		InkPaint();
+
+		VECTOR player1Pos = m_pPlayer1->GetPos();
+		VECTOR player2Pos = m_pPlayer2->GetPos();
+
+		// ステージ幅
+		if (player1Pos.x < kStageMinX)player1Pos.x = kStageMinX;
+		if (player2Pos.x < kStageMinX)player2Pos.x = kStageMinX;
+
+		if (player1Pos.x > kStageMaxX)player1Pos.x = kStageMaxX;
+		if (player2Pos.x > kStageMaxX)player2Pos.x = kStageMaxX;
+
+		if (player1Pos.z < kStageMinZ)player1Pos.z = kStageMinZ;
+		if (player2Pos.z < kStageMinZ)player2Pos.z = kStageMinZ;
+
+		if (player1Pos.z > kStageMaxZ)player1Pos.z = kStageMaxZ;
+		if (player2Pos.z > kStageMaxZ)player2Pos.z = kStageMaxZ;
+
+		m_pPlayer1->SetPos(player1Pos);
+		m_pPlayer2->SetPos(player2Pos);
 
 		// ゲームタイマーを減らす
 		m_timer--;
@@ -223,12 +248,6 @@ void SceneMain::Draw()
 	float orangePercent = m_pStageManager->GetPaintPercent(kPlayerOrange);
 	float bluePercent = m_pStageManager->GetPaintPercent(kPlayerBlue);
 
-	// 割合を描画
-	DrawFormatString(10, 50, GetColor(255, 125, 0), "Orange : %.2f%%", orangePercent);
-	DrawFormatString(10, 70, GetColor(0, 0, 255), "Blue   : %.2f%%", bluePercent);
-	DrawFormatString(1100, 50, GetColor(255, 125, 0), "Orange : %.2f%%", orangePercent);
-	DrawFormatString(1100, 70, GetColor(0, 0, 255), "Blue   : %.2f%%", bluePercent);
-
 	// UIの描画
 	int width, height;
 	GetGraphSize(m_gameUI, &width, &height);
@@ -237,6 +256,10 @@ void SceneMain::Draw()
 
 	int seconds = m_timer / 60;
 	DrawFormatString(625, 40, GetColor(255, 255, 255), "%d", seconds);
+
+	// 割合を描画
+	DrawFormatString(560, 120, GetColor(255, 255, 255), "%.2f%%", orangePercent);
+	DrawFormatString(680, 120, GetColor(255, 255, 255), "%.2f%%", bluePercent);
 }
 
 bool SceneMain::IsEnd() const
