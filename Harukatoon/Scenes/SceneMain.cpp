@@ -13,7 +13,7 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;// プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;  // プレイヤーブルー
-	constexpr int kTimer = 600*60;   // タイマーの時間
+	constexpr int kTimer = 30*60;   // タイマーの時間
 
 	// ステージの幅
 	constexpr float kStageMinX = -5900.0f;
