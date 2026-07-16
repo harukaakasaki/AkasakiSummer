@@ -86,9 +86,9 @@ private:
 	// 最初のプレイヤーの状態をIdleにする
 	PlayerState m_state = PlayerState::Idle;
 
-	int m_hp = 100;
-	int m_maxHp = 100;
-	int m_playerColor;
+	int m_hp = 100;    // プレイヤーHP
+	int m_maxHp = 100; // プレイヤーの最大HP
+	int m_playerColor; // 各プレイヤーの色
 
 	Animation m_animation;
 	// プレイヤーモデル
@@ -101,13 +101,13 @@ private:
 	// 角度
 	float m_angle = 0.0f;
 
-	VECTOR m_pos;// 位置
-	VECTOR m_move;// 移動
-	int m_padNo;// コントローラーの番号
-	float m_velocityY;// 上に飛ぶ力
+	VECTOR m_pos;             // 位置
+	VECTOR m_move;            // 移動
+	int m_padNo;              // コントローラーの番号
+	float m_velocityY;        // 上に飛ぶ力
 	bool m_isGround = false;  // 地面にいるかどうか
 	bool m_isShooting = false;// 攻撃しているかどうか
-	bool m_isDiving = false;// 潜っているかどうか
+	bool m_isDiving = false;  // 潜っているかどうか
 
 	// ウェポンとボムのポインタ
 	std::unique_ptr<Weapon> m_pWeapon;

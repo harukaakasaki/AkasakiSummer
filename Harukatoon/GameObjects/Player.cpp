@@ -287,7 +287,13 @@ bool Player::IsShooting() const
 
 void Player::ApplyDamage(float damage)
 {
-
+	// 攻撃処理
+	m_hp -= 10;
+	// HPが0になった場合、プレイヤーは初期位置に戻る
+	if (m_hp <= 0)
+	{
+		
+	}
 }
 
 std::vector<std::unique_ptr<Bullet>>& Player::GetBullets()
