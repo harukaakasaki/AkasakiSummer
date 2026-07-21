@@ -24,13 +24,19 @@ StageManager::StageManager() :
 
 StageManager::~StageManager()
 {
-	MV1DeleteModel(m_orangeTextureHandle);
-	MV1DeleteModel(m_blueTextureHandle);
-	MV1DeleteModel(m_blueTextureHandle);
-	MV1DeleteModel(m_nBlueTextureHandle);
-	MV1DeleteModel(m_inkShaderHandle);
-	MV1DeleteModel(m_inkCanvasHandle);
-	MV1DeleteModel(m_inkNormalCanvasHandle);
+	// インクテクスチャの解放
+	DeleteGraph(m_orangeTextureHandle);
+	DeleteGraph(m_blueTextureHandle);
+	DeleteGraph(m_blueTextureHandle);
+	DeleteGraph(m_nBlueTextureHandle);
+	DeleteGraph(m_inkCanvasHandle);
+	DeleteGraph(m_inkNormalCanvasHandle);
+
+	// シェーダーの解放
+	DeleteShader(m_inkShaderHandle);
+	
+	// モデルの解放
+	MV1DeleteModel(m_stageModelHandle);
 }
 
 void StageManager::Init()
@@ -239,10 +245,10 @@ void StageManager::Paint(float x, float z, int who, float paintRadius)
 		colorHandle, TRUE);
 
 	// 現在のシェーダーは違和感があるため、シェーダーは止めている
-	/*SetDrawScreen(m_inkNormalCanvasHandle);
+	SetDrawScreen(m_inkNormalCanvasHandle);
 	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
 					canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
-					normalHandle, TRUE);*/
+					normalHandle, TRUE);
 
 	SetDrawMode(DX_DRAWMODE_NEAREST);
 
