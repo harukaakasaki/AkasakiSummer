@@ -27,7 +27,7 @@ StageManager::~StageManager()
 	// インクテクスチャの解放
 	DeleteGraph(m_orangeTextureHandle);
 	DeleteGraph(m_blueTextureHandle);
-	DeleteGraph(m_blueTextureHandle);
+	DeleteGraph(m_nOrangeTextureHandle);
 	DeleteGraph(m_nBlueTextureHandle);
 	DeleteGraph(m_inkCanvasHandle);
 	DeleteGraph(m_inkNormalCanvasHandle);
@@ -221,16 +221,9 @@ void StageManager::Paint(float x, float z, int who, float paintRadius)
 	int canvasX = static_cast<int>((x + offsetX) / stageWidth * kHandleScale);
 	int canvasZ = static_cast<int>((z + offsetZ) / stageHeight * kHandleScale);
 
-	// 描画先をインクのキャンバスに切り替える
-	SetDrawScreen(m_inkCanvasHandle);
-
-	// 通常の2Dブレンドモードにセット(インク画像をきれいに重ねる)
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
-
-	SetDrawMode(DX_DRAWMODE_BILINEAR);
 	// 塗ったプレイヤーによってインク画像のハンドルを変える(1の場合オレンジ2の場合ブルー)
-	int colorHandle = (who == 1.0f) ? m_orangeTextureHandle : m_blueTextureHandle;
-	int normalHandle = (who == 1.0f) ? m_nOrangeTextureHandle : m_nBlueTextureHandle;
+	int colorHandle = (who == 1) ? m_orangeTextureHandle : m_blueTextureHandle;
+	int normalHandle = (who == 1) ? m_nOrangeTextureHandle : m_nBlueTextureHandle;
 
 	// 弾の塗る半径に合わせて、インクの描画サイズを計算する
 	int inkCanvasSizeX = static_cast<int>((paintRadius * 2.0f) / stageWidth * kHandleScale);
@@ -239,13 +232,19 @@ void StageManager::Paint(float x, float z, int who, float paintRadius)
 	if (inkCanvasSizeX < 16)inkCanvasSizeX = 16;
 	if (inkCanvasSizeZ < 16)inkCanvasSizeZ = 16;
 
+	SetDrawMode(DX_DRAWMODE_BILINEAR);
+
+	// 描画先をインクのキャンバスに切り替える
 	SetDrawScreen(m_inkCanvasHandle);
+	// 通常の2Dブレンドモードにセット(インク画像をきれいに重ねる)
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
 		canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
 		colorHandle, TRUE);
 
-	// 現在のシェーダーは違和感があるため、シェーダーは止めている
+	// 描画先をインクのノーマルキャンバスに切り替える
 	SetDrawScreen(m_inkNormalCanvasHandle);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
 					canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
 					normalHandle, TRUE);
