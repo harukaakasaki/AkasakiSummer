@@ -75,11 +75,14 @@ public:
 	/// <param name="angleY"></param>
 	void SetAngleY(float angleY) { m_angle = angleY; }
 
-	// 攻撃中かどうか
-	bool IsShooting() const;
-
 	// ダメージを受ける処理
 	void ApplyDamage(float damage);
+
+	// リスポーンする処理
+	void Respawn();
+
+	// 攻撃中かどうか
+	bool IsShooting() const;
 
 	// 潜っているかどうか
 	bool IsDiving() const { return m_isDiving; };
@@ -108,6 +111,7 @@ private:
 	float m_angle = 0.0f;
 
 	VECTOR m_pos;             // 位置
+	VECTOR m_respawnPos;      // リスポーン位置
 	VECTOR m_move;            // 移動
 	int m_padNo;              // コントローラーの番号
 	float m_velocityY;        // 上に飛ぶ力

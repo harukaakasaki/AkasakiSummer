@@ -1,5 +1,6 @@
 #include "ResultScene.h"
 #include "../Systems/Pad.h"
+#include "../Systems/Game.h"
 #include "TitleScene.h"
 #include <DxLib.h>
 #include <cmath>
@@ -15,6 +16,7 @@ ResultScene::ResultScene() :
 	m_isEnd(false),
 	m_fontHandle(-1),
 	m_playerModelHandle(-1),
+	m_resultUIHandle(-1),
 	m_playerIdleAnim(-1),
 	m_bgmHandle(0),
 	m_selectSeHandle(0)
@@ -37,6 +39,7 @@ void ResultScene::Init()
 
 	// モデルを読み込む
 	m_playerModelHandle = MV1LoadModel("data/Models/player.mv1");
+	m_resultUIHandle = LoadGraph("data/UI/resultUI.png");
 
 	// BGM
 	m_bgmHandle = LoadSoundMem("data/BGM/result_bgm.mp3");
@@ -54,9 +57,6 @@ void ResultScene::Init()
 
 	// 各モデルの位置
 	MV1SetPosition(m_playerModelHandle, VGet(500, 150, -200));
-	// ステージの位置とスケールを設定
-
-
 }
 
 void ResultScene::Update()
@@ -82,13 +82,14 @@ void ResultScene::Update()
 
 void ResultScene::Draw()
 {
+	// UIを描画
+	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 0.6, 0, m_resultUIHandle, TRUE);
+
 	// モデルを描画
 	MV1DrawModel(m_playerModelHandle);
 
 	// プレイヤーのモデルの向きの調整
 	MV1SetRotationXYZ(m_playerModelHandle, VGet(0, m_playerAngle, 0));
-
-	// 文字を描画
 
 	// スタートボタンを点滅させる
 	int alpha = static_cast<int>((sinf(m_blinkAngle) * 0.5f + 0.5f) * 255);

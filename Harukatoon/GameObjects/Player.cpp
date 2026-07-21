@@ -295,8 +295,13 @@ void Player::ApplyDamage(float damage)
 	{
 		m_state = PlayerState::Death;
 		
-		printfDx("プレイヤー[%d]死亡！\n");
+		printfDx("プレイヤー[%d]死亡！\n",m_padNo);
 	}
+}
+
+void Player::Respawn()
+{
+
 }
 
 std::vector<std::unique_ptr<Bullet>>& Player::GetBullets()

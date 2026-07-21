@@ -13,7 +13,7 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;// プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;  // プレイヤーブルー
-	constexpr int kTimer = 180*60;   // タイマーの時間
+	constexpr int kTimer = 10*60;   // タイマーの時間
 
 	// ステージの範囲
 	constexpr float kStageMinX = -5900.0f;
@@ -287,20 +287,20 @@ Scene* SceneMain::GetNextScene()
 
 void SceneMain::DrawGrid()
 {
-	// 直線の始点と終点
-	VECTOR startPos;
-	VECTOR endPos;
+	//// 直線の始点と終点
+	//VECTOR startPos;
+	//VECTOR endPos;
 
-	for (int z = -300; z <= 300; z += 100)
-	{
-		startPos = VGet(-300.0f, 0.0f, static_cast<float>(z));
-		endPos = VGet(300.0f, 0.0f, static_cast<float>(z));
-		DrawLine3D(startPos, endPos, 0x0000ff);
-	}
-	for (int x = -300; x <= 300; x += 100)
-	{
-		startPos = VGet(static_cast<float>(x), 0.0f, -300.0f);
-		endPos = VGet(static_cast<float>(x), 0.0f, 300.0f);
-		DrawLine3D(startPos, endPos, 0x0000ff);
-	}
+	//for (int z = -300; z <= 300; z += 100)
+	//{
+	//	startPos = VGet(-300.0f, 0.0f, static_cast<float>(z));
+	//	endPos = VGet(300.0f, 0.0f, static_cast<float>(z));
+	//	DrawLine3D(startPos, endPos, 0x0000ff);
+	//}
+	//for (int x = -300; x <= 300; x += 100)
+	//{
+	//	startPos = VGet(static_cast<float>(x), 0.0f, -300.0f);
+	//	endPos = VGet(static_cast<float>(x), 0.0f, 300.0f);
+	//	DrawLine3D(startPos, endPos, 0x0000ff);
+	//}
 }
