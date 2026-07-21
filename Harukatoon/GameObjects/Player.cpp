@@ -11,7 +11,7 @@ namespace
 	constexpr const char* kIdleAnim = "root|Idle";      // 待機アニメーション
 	constexpr const char* kShotAnim = "root|Shot";      // 射撃アニメーション
 	constexpr const char* kRunAnim = "root|Run";	    // 走るアニメーション
-													    
+
 	constexpr float kAnimSpeed = 1.0f;                  // アニメーションスピード
 	constexpr float kSpeed = 18.0f;                     // プレイヤーの移動速度
 	constexpr float kAttackingSpeed = 13.0f;            // プレイヤーの攻撃中の移動速度
@@ -39,7 +39,6 @@ Player::Player(StageManager* stageManager, int padNo, int playerColor) :
 {
 	m_pWeapon = std::make_unique<Weapon>(stageManager, playerColor);
 	m_pBomb = std::make_unique<Bomb>();
-
 }
 
 Player::~Player()
@@ -63,7 +62,6 @@ void Player::Init()
 }
 void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 {
-
 	int x, y;
 	// プレイヤー
 	GetJoypadAnalogInput(&x, &y, m_padNo);
@@ -246,8 +244,6 @@ void Player::Draw()
 	MV1SetMatrix(m_modelHandle, mtx);// モデルハンドルと合わせる
 
 	MV1DrawModel(m_modelHandle);// プレイヤー表示
-
-
 }
 
 void Player::Jump()
@@ -287,12 +283,19 @@ bool Player::IsShooting() const
 
 void Player::ApplyDamage(float damage)
 {
-	// 攻撃処理
-	m_hp -= 10;
+	// 受け取ったダメージ分だけHPを減らす
+	m_hp -= static_cast<int>(damage);
+
+	if (m_hp < 0)m_hp = 0;
+
+	printfDx("プレイヤー[%d] 現在のHP : %d / %d/n\n", m_padNo, m_hp, m_maxHp);
+
 	// HPが0になった場合、プレイヤーは初期位置に戻る
 	if (m_hp <= 0)
 	{
+		m_state = PlayerState::Death;
 		
+		printfDx("プレイヤー[%d]死亡！\n");
 	}
 }
 

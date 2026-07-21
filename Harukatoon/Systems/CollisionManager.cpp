@@ -53,7 +53,7 @@ void CollisionManager::checkPlayerBulletCollisions(std::vector<Player*>& m_playe
 				{
 					// 衝突処理
 					bullet->KillBullet();
-
+					player->ApplyDamage(10.0f);
 #ifdef _DEBUG
 					printfDx("イカ状態のプレイヤーに弾が当たった！\n");
 #endif // DEBUG
@@ -82,6 +82,7 @@ void CollisionManager::checkPlayerBulletCollisions(std::vector<Player*>& m_playe
 				{
 					// 衝突処理
 					bullet->KillBullet();
+					player->ApplyDamage(10.0f);
 #ifdef _DEBUG
 					printfDx("プレイヤーに弾が当たった！\n");
 #endif // DEBUG
