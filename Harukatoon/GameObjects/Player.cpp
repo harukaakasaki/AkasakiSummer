@@ -44,6 +44,7 @@ Player::Player(StageManager* stageManager, int padNo, int playerColor) :
 
 Player::~Player()
 {
+	MV1DeleteModel(m_modelHandle);
 }
 
 void Player::Init()
@@ -93,8 +94,6 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		// ê≥ãKâª
 		m_move.x /= len;
 		m_move.z /= len;
-
-
 	}
 
 

@@ -93,7 +93,6 @@ void ResultScene::Draw()
 	// スタートボタンを点滅させる
 	int alpha = static_cast<int>((sinf(m_blinkAngle) * 0.5f + 0.5f) * 255);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-	DrawStringToHandle(365, 560, "Aボタンでタイトルにもどる", GetColor(0, 0, 0), m_fontHandle);
 	DrawStringToHandle(360, 555, "Aボタンでタイトルにもどる", GetColor(255, 255, 255), m_fontHandle);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 

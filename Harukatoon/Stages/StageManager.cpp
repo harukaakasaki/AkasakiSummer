@@ -24,6 +24,13 @@ StageManager::StageManager() :
 
 StageManager::~StageManager()
 {
+	MV1DeleteModel(m_orangeTextureHandle);
+	MV1DeleteModel(m_blueTextureHandle);
+	MV1DeleteModel(m_blueTextureHandle);
+	MV1DeleteModel(m_nBlueTextureHandle);
+	MV1DeleteModel(m_inkShaderHandle);
+	MV1DeleteModel(m_inkCanvasHandle);
+	MV1DeleteModel(m_inkNormalCanvasHandle);
 }
 
 void StageManager::Init()
@@ -155,7 +162,7 @@ void StageManager::Draw()
 	SetUseBackCulling(TRUE);// カリングを元に戻す
 }
 
-void StageManager::Paint(float x, float z, float who, float paintRadius)
+void StageManager::Paint(float x, float z, int who, float paintRadius)
 {
 	/*判定用*/
 	// ステージの原点にするためのオフセット

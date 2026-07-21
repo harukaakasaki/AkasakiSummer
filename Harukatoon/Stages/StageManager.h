@@ -19,7 +19,7 @@ public:
 	/// <param name="x">塗った座標X</param>
 	/// <param name="y">塗った座標Y</param>
 	/// <param name="who">誰が塗ったか</param>
-	void Paint(float x, float y, float who, float paintRadius);
+	void Paint(float x, float y, int who, float paintRadius);
 
 	// プレイヤー1、2の塗り割合を計算する関数
 	float GetPaintPercent(int playerColor)const;

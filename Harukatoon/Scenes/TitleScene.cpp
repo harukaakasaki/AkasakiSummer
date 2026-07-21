@@ -89,7 +89,7 @@ void TitleScene::Draw()
 	int alpha = static_cast<int>((sinf(m_blinkAngle) * 0.5f + 0.5f) * 255);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 
-	DrawStringToHandle(460, 555, "Aボタンでスタート！", GetColor(0, 0, 0), m_fontHandle);
+	
 	DrawStringToHandle(450, 550, "Aボタンでスタート！", GetColor(255, 255, 255), m_fontHandle);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
