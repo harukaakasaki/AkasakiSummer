@@ -69,6 +69,12 @@ public:
 	// プレイヤーのポジションを設定
 	void SetPos(VECTOR pos);
 
+	/// <summary>
+	/// プレイヤーのY軸回転角度（ラジアン）を設定する
+	/// </summary>
+	/// <param name="angleY"></param>
+	void SetAngleY(float angleY) { m_angle = angleY; }
+
 	// 攻撃中かどうか
 	bool IsShooting() const;
 

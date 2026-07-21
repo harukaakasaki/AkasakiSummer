@@ -8,19 +8,19 @@
 namespace
 {
 	// アニメーションのインデックス
-	constexpr const char* kIdleAnim = "root|Idle";  // 待機アニメーション
-	constexpr const char* kShotAnim = "root|Shot";  // 射撃アニメーション
-	constexpr const char* kRunAnim = "root|Run";	// 走るアニメーション
-
-	constexpr float kAnimSpeed = 1.0f;              // アニメーションスピード
-	constexpr float kSpeed = 18.0f;                 // プレイヤーの移動速度
-	constexpr float kAttackingSpeed = 13.0f;        // プレイヤーの攻撃中の移動速度
-	constexpr float kDiveSpeed = 30.0f;             // プレイヤーの潜り移動速度
-	constexpr float kShotSpeed = 30.0f;             // 弾速度
-	constexpr float kGravity = 0.8f;                // 重力
-	constexpr float kJumpPower = 20.0f;             // ジャンプ力
-	constexpr float kWeaponPosY = 170.0f;           // ウェポンのy軸の位置
-	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };   // プレイヤーの大きさ
+	constexpr const char* kIdleAnim = "root|Idle";      // 待機アニメーション
+	constexpr const char* kShotAnim = "root|Shot";      // 射撃アニメーション
+	constexpr const char* kRunAnim = "root|Run";	    // 走るアニメーション
+													    
+	constexpr float kAnimSpeed = 1.0f;                  // アニメーションスピード
+	constexpr float kSpeed = 18.0f;                     // プレイヤーの移動速度
+	constexpr float kAttackingSpeed = 13.0f;            // プレイヤーの攻撃中の移動速度
+	constexpr float kDiveSpeed = 30.0f;                 // プレイヤーの潜り移動速度
+	constexpr float kShotSpeed = 30.0f;                 // 弾速度
+	constexpr float kGravity = 0.8f;                    // 重力
+	constexpr float kJumpPower = 20.0f;                 // ジャンプ力
+	constexpr float kWeaponPosY = 170.0f;               // ウェポンのy軸の位置
+	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };       // プレイヤーの大きさ
 }
 
 Player::Player(StageManager* stageManager, int padNo, int playerColor) :
@@ -95,8 +95,6 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		m_move.x /= len;
 		m_move.z /= len;
 	}
-
-
 
 	// 攻撃
 	XINPUT_STATE xinputState;
@@ -235,10 +233,13 @@ void Player::Draw()
 		::GetColor(0, 255, 0),
 		false);
 #endif
+
 	// プレイヤーモデルの回転
 	MATRIX rot = MGetRotY(m_angle);// 向き
+
 	MATRIX scale = MGetScale(kScale);// 大きさ
 	MATRIX trans = MGetTranslate(VGet(m_pos.x, m_pos.y, m_pos.z));// 動き
+
 	MATRIX mtx = MMult(rot, scale);// 合成
 	mtx = MMult(mtx, trans);// 合成
 
@@ -251,7 +252,7 @@ void Player::Draw()
 
 void Player::Jump()
 {
-	if (m_isGround && Pad::IsTrigger(m_padNo, PAD_INPUT_1))//  A(ジャンプボタン)が押された
+	if (m_isGround && Pad::IsTrigger(m_padNo, PAD_INPUT_1))// A(ジャンプボタン)が押された
 	{
 		m_velocityY = kJumpPower;
 		m_isGround = false;
@@ -299,4 +300,3 @@ std::vector<std::unique_ptr<Bullet>>& Player::GetBullets()
 {
 	return m_pWeapon->GetBullets();
 }
-

@@ -42,8 +42,6 @@ void Camera::Init(int padNo)
 	m_cameraTarget.x = 0.0f;
 	m_cameraTarget.y = 100.0f;
 	m_cameraTarget.z = 0.0f;
-
-	m_cameraYaw = DX_PI_F / 2;
 }
 void Camera::Update(VECTOR playerPos)
 {

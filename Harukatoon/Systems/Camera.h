@@ -34,15 +34,15 @@ public:
 	void Draw();
 
 	/// <summary>
-	/// ƒJƒƒ‰‚Ì‰¡‰ñ“]‚ğæ“¾
+	/// ƒJƒƒ‰‚Ì‰¡‰ñ“]‚ğİ’è
 	/// </summary>
-	/// <returns></returns>
+	/// <param name="yaw"></param>
+	void SetYaw(float yaw){ m_cameraYaw = yaw; }
+
+	/// ƒJƒƒ‰‚Ì‰¡‰ñ“]‚ğæ“¾
 	float GetYaw() const { return m_cameraYaw; }
 
-	/// <summary>
 	/// ƒJƒƒ‰‚Ìc‰ñ“]‚ğæ“¾
-	/// </summary>
-	/// <returns></returns>
 	float GetPitch() const { return m_cameraPitch; }
 
 private:

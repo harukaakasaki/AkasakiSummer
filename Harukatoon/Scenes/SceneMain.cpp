@@ -61,13 +61,26 @@ void SceneMain::Init()
 
 
 	m_pStageManager->Init();
-	m_pPlayer1->Init();
-	m_pPlayer1->SetPos(VGet(5000.0f, 0.0f, 0.0f));
-	m_pPlayer2->Init();
-	m_pPlayer2->SetPos(VGet(-5000.0f, 0.0f, 0.0f));
 
+	// カメラの更新
 	m_pCamera1->Init(DX_INPUT_PAD1);
 	m_pCamera2->Init(DX_INPUT_PAD2);
+	m_pPlayer1->Init();
+	m_pPlayer2->Init();
+
+	// プレイヤー1の初期化
+	float p1Angle = 0.0f;
+	m_pPlayer1->SetPos(VGet(5000.0f, 0.0f, 0.0f));
+	m_pPlayer1->SetAngleY(p1Angle);
+	m_pCamera1->SetYaw(p1Angle);
+
+	// プレイヤー2の初期化
+	float p2Angle = DX_PI_F;
+	m_pPlayer2->SetPos(VGet(-5000.0f, 0.0f, 0.0f));
+	m_pPlayer2->SetAngleY(p2Angle);
+	m_pCamera2->SetYaw(p2Angle);
+	
+	// 各プレイヤーのカメラの位置設定
 	m_pCamera1->Update(m_pPlayer1->GetPos());
 	m_pCamera2->Update(m_pPlayer2->GetPos());
 
