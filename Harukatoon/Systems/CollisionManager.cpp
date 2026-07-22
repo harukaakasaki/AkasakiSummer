@@ -7,10 +7,10 @@
 void CollisionManager::Update(std::vector<Player*>& m_players,
 	std::vector<std::unique_ptr<Bullet>>& m_bullets)
 {
-	checkPlayerBulletCollisions(m_players, m_bullets);
+	CheckPlayerBulletCollisions(m_players, m_bullets);
 }
 
-void CollisionManager::checkPlayerBulletCollisions(std::vector<Player*>& m_players,
+void CollisionManager::CheckPlayerBulletCollisions(std::vector<Player*>& m_players,
 	std::vector<std::unique_ptr<Bullet>>& m_bullets)
 {
 	// プレイヤーをループする

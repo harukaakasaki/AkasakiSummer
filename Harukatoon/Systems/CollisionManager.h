@@ -27,7 +27,7 @@ private:
 	/// </summary>
 	/// <param name="m_players"></param>
 	/// <param name="m_bullets"></param>
-	void checkPlayerBulletCollisions(std::vector<Player*>& m_players,
+	void CheckPlayerBulletCollisions(std::vector<Player*>& m_players,
 		                             std::vector<std::unique_ptr<Bullet>>& m_bullets);
 };
 
