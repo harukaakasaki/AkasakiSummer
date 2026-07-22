@@ -288,7 +288,7 @@ void Player::ApplyDamage(float damage)
 
 	if (m_hp < 0)m_hp = 0;
 
-	printfDx("プレイヤー[%d] 現在のHP : %d / %d/n\n", m_padNo, m_hp, m_maxHp);
+	printfDx("プレイヤー[%d] 現在のHP : %d / %d:HP\n", m_padNo, m_hp, m_maxHp);
 
 	// HPが0になった場合、プレイヤーは初期位置に戻る
 	if (m_hp <= 0)

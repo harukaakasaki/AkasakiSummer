@@ -175,7 +175,7 @@ void StageManager::Paint(float x, float z, int who, float paintRadius)
 	float offsetX = (m_mapWidthSize * m_cellSize) / 2.0f;
 	float offsetZ = (m_mapHeightSize * m_cellSize) / 2.0f;
 
-	// 弾の着弾点がなんマス目にあるのかを計算(ここを中心)
+	// 弾の着弾点が何マス目にあるのかを計算(ここを中心)
 	int centerGridX = static_cast<int>((x + offsetX) / m_cellSize);
 	int centerGridZ = static_cast<int>((z + offsetZ) / m_cellSize);
 
@@ -243,11 +243,11 @@ void StageManager::Paint(float x, float z, int who, float paintRadius)
 		colorHandle, TRUE);
 
 	// 描画先をインクのノーマルキャンバスに切り替える
-	SetDrawScreen(m_inkNormalCanvasHandle);
+	/*SetDrawScreen(m_inkNormalCanvasHandle);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	DrawExtendGraph(canvasX - inkCanvasSizeX / 2, canvasZ - inkCanvasSizeZ / 2,
 					canvasX + inkCanvasSizeX / 2, canvasZ + inkCanvasSizeZ / 2,
-					normalHandle, TRUE);
+					normalHandle, TRUE);*/
 
 	SetDrawMode(DX_DRAWMODE_NEAREST);
 
