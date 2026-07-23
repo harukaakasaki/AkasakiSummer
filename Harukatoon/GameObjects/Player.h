@@ -66,8 +66,11 @@ public:
 	/// <returns></returns>
 	VECTOR GetPos() const;
 
-	// プレイヤーのポジションを設定
+	// プレイヤーの位置を設定
 	void SetPos(VECTOR pos);
+
+	// プレイヤーのリスポーン位置を設定
+	void SetRespawnPos(const VECTOR& pos);
 
 	/// <summary>
 	/// プレイヤーのY軸回転角度（ラジアン）を設定する
@@ -95,9 +98,10 @@ private:
 	// 最初のプレイヤーの状態をIdleにする
 	PlayerState m_state = PlayerState::Idle;
 
-	int m_hp = 100;    // プレイヤーHP
-	int m_maxHp = 100; // プレイヤーの最大HP
-	int m_playerColor; // 各プレイヤーの色
+	int m_hp = 100;         // プレイヤーHP
+	int m_maxHp = 100;      // プレイヤーの最大HP
+	int m_playerColor;      // 各プレイヤーの色
+	int m_respawnTimer = 0; // リスポーンタイマー
 
 	Animation m_animation;
 	// プレイヤーモデル

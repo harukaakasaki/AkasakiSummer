@@ -5,6 +5,7 @@
 #include <cassert>
 #include "../GameObjects/Player.h"
 #include "../Systems/Camera.h"
+#include "../Systems/Game.h"
 #include "../Systems/Pad.h"
 #include "../Systems/CollisionManager.h"
 #include "../Stages/StageManager.h"
@@ -70,13 +71,13 @@ void SceneMain::Init()
 
 	// プレイヤー1の初期化
 	float p1Angle = 0.0f;
-	m_pPlayer1->SetPos(VGet(5000.0f, 0.0f, 0.0f));
+	m_pPlayer1->SetRespawnPos(VGet(5000.0f, 0.0f, 0.0f));
 	m_pPlayer1->SetAngleY(p1Angle);
 	m_pCamera1->SetYaw(p1Angle);
 
 	// プレイヤー2の初期化
 	float p2Angle = DX_PI_F;
-	m_pPlayer2->SetPos(VGet(-5000.0f, 0.0f, 0.0f));
+	m_pPlayer2->SetRespawnPos(VGet(-5000.0f, 0.0f, 0.0f));
 	m_pPlayer2->SetAngleY(p2Angle);
 	m_pCamera2->SetYaw(p2Angle);
 	
@@ -262,17 +263,14 @@ void SceneMain::Draw()
 	float bluePercent = m_pStageManager->GetPaintPercent(kPlayerBlue);
 
 	// UIの描画
-	int width, height;
-	GetGraphSize(m_gameUI, &width, &height);
-
-	DrawExtendGraph(270, 10, 100 + width / 4, 100 + height / 5, m_gameUI, true);
+	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 0.6, 0, m_gameUI, TRUE);
 
 	int seconds = m_timer / 60;
-	DrawFormatString(625, 40, GetColor(255, 255, 255), "%d", seconds);
+	DrawFormatString(630, 60, GetColor(255, 255, 255), "%d", seconds);
 
 	// 割合を描画
-	DrawFormatString(560, 120, GetColor(255, 255, 255), "%.2f%%", orangePercent);
-	DrawFormatString(680, 120, GetColor(255, 255, 255), "%.2f%%", bluePercent);
+	DrawFormatString(540, 145, GetColor(255, 255, 255), "%.2f%%", orangePercent);
+	DrawFormatString(705, 145, GetColor(255, 255, 255), "%.2f%%", bluePercent);
 }
 
 bool SceneMain::IsEnd() const

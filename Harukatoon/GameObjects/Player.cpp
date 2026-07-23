@@ -29,11 +29,13 @@ Player::Player(StageManager* stageManager, int padNo, int playerColor) :
 	m_angle(0.0f),
 	m_move{ 0.0f,0.0f,0.0f },
 	m_pos{ 0.0f, 0.0f, 0.0f },
+	m_respawnPos{ 0.0f, 0.0f, 0.0f },
 	m_isShooting(false),
 	m_velocityY(0.0f),
 	m_idleAnim(-1),
 	m_runAnim(-1),
 	m_shotAnim(-1),
+	m_respawnTimer(0),
 	m_padNo(padNo),
 	m_playerColor(playerColor)
 {
@@ -55,13 +57,26 @@ void Player::Init()
 	m_shotAnim = MV1GetAnimIndex(m_modelHandle, kShotAnim);
 	m_runAnim = MV1GetAnimIndex(m_modelHandle, kRunAnim);
 
-	MV1SetScale(m_modelHandle, kScale);// 初期のプレイヤーの大きさ
+	// 初期のプレイヤーの大きさ
+	MV1SetScale(m_modelHandle, kScale);
 
 	m_animation.Play(m_idleAnim, true, kAnimSpeed);
 	m_state = PlayerState::Idle;
 }
 void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 {
+	// 死亡処理
+	if (m_state == PlayerState::Death)
+	{
+		m_respawnTimer--;
+
+		if (m_respawnTimer <= 0)
+		{
+			Respawn();
+		}
+		return;
+	}
+
 	int x, y;
 	// プレイヤー
 	GetJoypadAnalogInput(&x, &y, m_padNo);
@@ -199,6 +214,11 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 }
 void Player::Draw()
 {
+	if (m_state == PlayerState::Death)
+	{
+		return;
+	}
+
 	m_pWeapon->Draw();
 
 	// 潜り状態のプレイヤーの当たり判定(球)
@@ -233,22 +253,33 @@ void Player::Draw()
 #endif
 
 	// プレイヤーモデルの回転
-	MATRIX rot = MGetRotY(m_angle);// 向き
 
-	MATRIX scale = MGetScale(kScale);// 大きさ
-	MATRIX trans = MGetTranslate(VGet(m_pos.x, m_pos.y, m_pos.z));// 動き
+	// 向き
+	MATRIX rot = MGetRotY(m_angle);
 
-	MATRIX mtx = MMult(rot, scale);// 合成
-	mtx = MMult(mtx, trans);// 合成
+	// 大きさ
+	MATRIX scale = MGetScale(kScale);
 
-	MV1SetMatrix(m_modelHandle, mtx);// モデルハンドルと合わせる
+	// 動き
+	MATRIX trans = MGetTranslate(VGet(m_pos.x, m_pos.y, m_pos.z));
 
-	MV1DrawModel(m_modelHandle);// プレイヤー表示
+	// 合成
+	MATRIX mtx = MMult(rot, scale);
+
+	// 合成
+	mtx = MMult(mtx, trans);
+
+	// モデルハンドルと合わせる
+	MV1SetMatrix(m_modelHandle, mtx);
+
+	// プレイヤー表示
+	MV1DrawModel(m_modelHandle);
 }
 
 void Player::Jump()
 {
-	if (m_isGround && Pad::IsTrigger(m_padNo, PAD_INPUT_1))// A(ジャンプボタン)が押された
+	// A(ジャンプボタン)が押された
+	if (m_isGround && Pad::IsTrigger(m_padNo, PAD_INPUT_1))
 	{
 		m_velocityY = kJumpPower;
 		m_isGround = false;
@@ -276,6 +307,12 @@ void Player::SetPos(VECTOR pos)
 	m_pos = pos;
 }
 
+void Player::SetRespawnPos(const VECTOR& pos)
+{
+	m_respawnPos = pos;
+	m_pos = pos;
+}
+
 bool Player::IsShooting() const
 {
 	return m_isShooting;
@@ -288,20 +325,25 @@ void Player::ApplyDamage(float damage)
 
 	if (m_hp < 0)m_hp = 0;
 
+#ifdef _DEBUG
 	printfDx("プレイヤー[%d] 現在のHP : %d / %d:HP\n", m_padNo, m_hp, m_maxHp);
+#endif // _DEBUG
 
 	// HPが0になった場合、プレイヤーは初期位置に戻る
-	if (m_hp <= 0)
+	if (m_hp <= 0&&m_state!=PlayerState::Death)
 	{
 		m_state = PlayerState::Death;
-		
-		printfDx("プレイヤー[%d]死亡！\n",m_padNo);
+		m_respawnTimer = 180; // 3秒間のリスポーン時間
 	}
 }
 
 void Player::Respawn()
 {
+	m_pos = m_respawnPos;
 
+	m_hp = m_maxHp;
+
+	m_state = PlayerState::Idle;
 }
 
 std::vector<std::unique_ptr<Bullet>>& Player::GetBullets()
