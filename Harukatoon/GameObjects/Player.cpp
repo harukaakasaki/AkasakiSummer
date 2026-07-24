@@ -24,9 +24,9 @@ namespace
 
 	constexpr float kAnalogInputScale = 1000.0f;        // スティック入力を正規化するために割る
 	constexpr float kDeadZone = 0.2f;                   // スティックのデッドゾーン
-	constexpr float kTrigger = 128;                     // アナログトリガーの判定
-	constexpr float kRespawnFrame = 180;                // リスポーンまでの時間
-	constexpr float kGlobalAnimframe = 0.7f;
+	constexpr float kGlobalAnimframe = 0.7f;            // アニメーション全体の再生速度
+	constexpr int kTrigger = 128;                       // アナログトリガーの判定
+	constexpr int kRespawnFrame = 180;                  // リスポーンまでの時間
 
 	// 当たり判定に関連したマジックナンバー
 	constexpr float kDiveColOffsetY = 25.0f;            // 潜り状態のYオフセット

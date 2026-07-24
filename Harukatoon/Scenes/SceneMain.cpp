@@ -13,9 +13,11 @@
 
 namespace
 {
-	constexpr int kPlayerOrange = 1;// プレイヤーオレンジ
-	constexpr int kPlayerBlue = 2;  // プレイヤーブルー
-	constexpr int kTimer = 60*60;   // タイマーの時間
+	constexpr int kPlayerOrange = 1;         // プレイヤーオレンジ
+	constexpr int kPlayerBlue = 2;           // プレイヤーブルー
+	constexpr int kTimer = 60*60;            // タイマーの時間
+	constexpr float kPlayer1FirstPos = 5000; // プレイヤー1の初期位置
+	constexpr float kPlayer2FirstPos = -5000;// プレイヤー2の初期位置
 
 	// ステージの範囲
 	constexpr float kStageMinX = -5900.0f;
@@ -69,13 +71,13 @@ void SceneMain::Init()
 
 	// プレイヤー1の初期化
 	float p1Angle = 0.0f;
-	m_pPlayer1->SetRespawnPos(VGet(5000.0f, 0.0f, 0.0f));
+	m_pPlayer1->SetRespawnPos(VGet(kPlayer1FirstPos, 0.0f, 0.0f));
 	m_pPlayer1->SetAngleY(p1Angle);
 	m_pCamera1->SetYaw(p1Angle);
 
 	// プレイヤー2の初期化
 	float p2Angle = DX_PI_F;
-	m_pPlayer2->SetRespawnPos(VGet(-5000.0f, 0.0f, 0.0f));
+	m_pPlayer2->SetRespawnPos(VGet(kPlayer2FirstPos, 0.0f, 0.0f));
 	m_pPlayer2->SetAngleY(p2Angle);
 	m_pCamera2->SetYaw(p2Angle);
 	
