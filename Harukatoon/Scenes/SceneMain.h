@@ -25,7 +25,6 @@ public:
 
 private:
 	void DrawGrid();
-	void InkPaint();// 色を塗る
 
 	// ゲームシーンの状態
 	enum class GameState

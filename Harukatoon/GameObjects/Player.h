@@ -15,7 +15,7 @@ class Player
 	enum class PlayerState
 	{
 		Idle,   // ’Êí
-		Run,   // ˆÚ“®
+		Move,   // ˆÚ“®
 		Jump,   // ƒWƒƒƒ“ƒv
 		Shot, // UŒ‚
 		Dive,   // ö‚é

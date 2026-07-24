@@ -2,6 +2,7 @@
 #include "ResultScene.h"
 #include <DxLib.h>
 #include <cmath>
+#include <algorithm>
 #include <cassert>
 #include "../GameObjects/Player.h"
 #include "../Systems/Camera.h"
@@ -57,9 +58,6 @@ void SceneMain::Init()
 	// 背景の色設定
 	SetBackgroundColor(250, 250, 250);
 
-	SetCameraPositionAndTarget_UpVecY(VGet(0.0f, 300.0f, -700), VGet(0.0f, 0.0f, 0.0f));
-	SetupCamera_Perspective(DX_PI_F / 3.0f);
-
 
 	m_pStageManager->Init();
 
@@ -110,6 +108,7 @@ void SceneMain::Update()
 	Pad::Update();
 	m_frameCount++;
 
+	// ゲーム内の処理
 	if (m_gameState == GameState::Playing)
 	{
 		m_pPlayer1->Update(m_pCamera1->GetYaw(), m_pCamera1->GetPitch(), m_timeScale);
@@ -124,25 +123,16 @@ void SceneMain::Update()
 		m_pCollisionManager->Update(m_pPlayerList, bullet2);
 
 		m_pStageManager->Update();
-		InkPaint();
 
+		// プレイヤーを範囲内に収める
 		VECTOR player1Pos = m_pPlayer1->GetPos();
-		VECTOR player2Pos = m_pPlayer2->GetPos();
-
-		// ステージ幅
-		if (player1Pos.x < kStageMinX)player1Pos.x = kStageMinX;
-		if (player2Pos.x < kStageMinX)player2Pos.x = kStageMinX;
-
-		if (player1Pos.x > kStageMaxX)player1Pos.x = kStageMaxX;
-		if (player2Pos.x > kStageMaxX)player2Pos.x = kStageMaxX;
-
-		if (player1Pos.z < kStageMinZ)player1Pos.z = kStageMinZ;
-		if (player2Pos.z < kStageMinZ)player2Pos.z = kStageMinZ;
-
-		if (player1Pos.z > kStageMaxZ)player1Pos.z = kStageMaxZ;
-		if (player2Pos.z > kStageMaxZ)player2Pos.z = kStageMaxZ;
-
+		player1Pos.x = std::clamp(player1Pos.x, kStageMinX, kStageMaxX);
+		player1Pos.z = std::clamp(player1Pos.z, kStageMinZ, kStageMaxZ);
 		m_pPlayer1->SetPos(player1Pos);
+
+		VECTOR player2Pos = m_pPlayer2->GetPos();
+		player2Pos.x = std::clamp(player2Pos.x, kStageMinX, kStageMaxX);
+		player2Pos.z = std::clamp(player2Pos.z, kStageMinZ, kStageMaxZ);
 		m_pPlayer2->SetPos(player2Pos);
 
 		// ゲームタイマーを減らす
@@ -177,35 +167,6 @@ void SceneMain::Update()
 			m_isFinish = true;
 		}
 	}
-}
-
-// マウスでインクを塗る処理
-void SceneMain::InkPaint()
-{
-	//int mouseX, mouseY;
-	//GetMousePoint(&mouseX, &mouseY);
-	//// マウスの座標を3Dに変換する
-	//VECTOR rayStart = ConvScreenPosToWorldPos(VGet((float)mouseX, (float)mouseY, 0.0f));
-	//VECTOR rayEnd   = ConvScreenPosToWorldPos(VGet((float)mouseX, (float)mouseY, 1.0f));
-	//float vecY = rayEnd.y - rayStart.y;
-	//float paintX = 0.0f;
-	//float paintZ = 0.0f;
-	//if (std::abs(vecY) > 0.0001f)
-	//{
-	//	float t = -rayStart.y / vecY;
-	//	paintX = rayStart.x + t * (rayEnd.x - rayStart.x);
-	//	paintZ = rayStart.z + t * (rayEnd.z - rayStart.z);
-	//}
-	//// もしマウスの左クリックを押したら、テクスチャにオレンジが付く
-	//if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0)
-	//{
-	//	m_pStageManager->Paint(paintX, paintZ, 1,100.0f);
-	//}
-	//// もしマウスの右クリックを押したら、テクスチャにブルーが付く
-	//else if ((GetMouseInput() & MOUSE_INPUT_RIGHT) != 0)
-	//{
-	//	m_pStageManager->Paint(paintX, paintZ, 2,100.0f);
-	//}
 }
 
 void SceneMain::Draw()
@@ -247,9 +208,6 @@ void SceneMain::Draw()
 	// 描画範囲を元に戻す
 	SetDrawArea(0, 0, 1280, 720);
 	SetCameraScreenCenter(640.0f, 360.0f);
-	/*SetUseZBuffer3D(false);
-
-	SetUseZBuffer3D(true);*/
 	
 #ifdef _DEBUG
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
@@ -268,7 +226,7 @@ void SceneMain::Draw()
 	int seconds = m_timer / 60;
 	DrawFormatString(630, 60, GetColor(255, 255, 255), "%d", seconds);
 
-	// 割合を描画
+	// 各インクの割合を描画
 	DrawFormatString(540, 145, GetColor(255, 255, 255), "%.2f%%", orangePercent);
 	DrawFormatString(705, 145, GetColor(255, 255, 255), "%.2f%%", bluePercent);
 }
@@ -285,20 +243,22 @@ Scene* SceneMain::GetNextScene()
 
 void SceneMain::DrawGrid()
 {
-	//// 直線の始点と終点
-	//VECTOR startPos;
-	//VECTOR endPos;
+#ifdef _DEBUG
+	// 直線の始点と終点
+	VECTOR startPos;
+	VECTOR endPos;
 
-	//for (int z = -300; z <= 300; z += 100)
-	//{
-	//	startPos = VGet(-300.0f, 0.0f, static_cast<float>(z));
-	//	endPos = VGet(300.0f, 0.0f, static_cast<float>(z));
-	//	DrawLine3D(startPos, endPos, 0x0000ff);
-	//}
-	//for (int x = -300; x <= 300; x += 100)
-	//{
-	//	startPos = VGet(static_cast<float>(x), 0.0f, -300.0f);
-	//	endPos = VGet(static_cast<float>(x), 0.0f, 300.0f);
-	//	DrawLine3D(startPos, endPos, 0x0000ff);
-	//}
+	for (int z = -300; z <= 300; z += 100)
+	{
+		startPos = VGet(-300.0f, 0.0f, static_cast<float>(z));
+		endPos = VGet(300.0f, 0.0f, static_cast<float>(z));
+		DrawLine3D(startPos, endPos, 0x0000ff);
+	}
+	for (int x = -300; x <= 300; x += 100)
+	{
+		startPos = VGet(static_cast<float>(x), 0.0f, -300.0f);
+		endPos = VGet(static_cast<float>(x), 0.0f, 300.0f);
+		DrawLine3D(startPos, endPos, 0x0000ff);
+	}
+#endif // _DEBUG
 }

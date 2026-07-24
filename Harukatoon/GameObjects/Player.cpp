@@ -21,6 +21,24 @@ namespace
 	constexpr float kJumpPower = 20.0f;                 // ジャンプ力
 	constexpr float kWeaponPosY = 170.0f;               // ウェポンのy軸の位置
 	constexpr VECTOR kScale = { 2.0f,2.0f,2.0f };       // プレイヤーの大きさ
+
+	constexpr float kAnalogInputScale = 1000.0f;        // スティック入力を正規化するために割る
+	constexpr float kDeadZone = 0.2f;                   // スティックのデッドゾーン
+	constexpr float kTrigger = 128;                     // アナログトリガーの判定
+	constexpr float kRespawnFrame = 180;                // リスポーンまでの時間
+	constexpr float kGlobalAnimframe = 0.7f;
+
+	// 当たり判定に関連したマジックナンバー
+	constexpr float kDiveColOffsetY = 25.0f;            // 潜り状態のYオフセット
+	constexpr float kDiveColRadius = 60.0f;             // 潜り判定の球の半径
+	constexpr float kDiveHitRadius = 80.0f;             // 潜り状態の球の当たり判定半径
+	constexpr float kCapsuleBottomOffsetY = 40.0f;      // カプセルの下端のオフセット
+	constexpr float kCapsuleTopOffsetY = 230.0f;        // カプセルの上端のオフセット
+	constexpr float kCapsuleRadius = 40.0f;             // 立体カプセルの半径
+	constexpr float kBodyHitBoxOffsetY = 150.0f;        // プレイヤーの球のオフセット
+	constexpr float kBodyHitBoxRadius = 90.0f;          // プレイヤーの球の半径
+	constexpr int kMeshDivision = 16;                   // 球を描画する際の分割数
+	constexpr int kCapsuleDivision = 8;                 // カプセルを描画する際の分割数
 }
 
 Player::Player(StageManager* stageManager, int padNo, int playerColor) :
@@ -81,16 +99,18 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 	// プレイヤー
 	GetJoypadAnalogInput(&x, &y, m_padNo);
 
-	float stickX = x / 1000.0f;
-	float stickY = y / 1000.0f;
+	float stickX = x / kAnalogInputScale;
+	float stickY = y / kAnalogInputScale;
 
 	// デッドゾーン（微妙な入力を無視する）
-	float deadZone = 0.2f;
+	float deadZone = kDeadZone;
 	if (fabs(stickX) < deadZone)stickX = 0.0f;
 	if (fabs(stickY) < deadZone)stickY = 0.0f;
 
 	m_move = { 0.0f,0.0f,0.0f };
 
+	// 移動ベクトルの計算
+	// カメラの水平方向を基準にしてスティックを3D座標に変換する
 	// 前後
 	m_move.x += cosf(cameraAngle) * stickY;
 	m_move.z += sinf(cameraAngle) * stickY;
@@ -101,21 +121,20 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 	float len = sqrtf(m_move.x * m_move.x + m_move.z * m_move.z);
 	if (len > 0)
 	{
-		// 移動方向から角度を作る
+		// 移動ベクトルから角度を作る
 		m_angle = atan2f(-m_move.x, -m_move.z);
 
-		// 正規化
+		// 移動ベクトルを正規化する
 		m_move.x /= len;
 		m_move.z /= len;
 	}
 
-	// 攻撃
+	// 入力
 	XINPUT_STATE xinputState;
-
 	GetJoypadXInputState(m_padNo, &xinputState);
-	bool isWeaponPress = (xinputState.RightTrigger > 128);// RTが押された
-	bool isDivePress = (xinputState.LeftTrigger > 128);   // LTが押された
-	bool isBombPress = Pad::IsPress(m_padNo, PAD_INPUT_6);// RBが押された
+	bool isWeaponPress = (xinputState.RightTrigger > kTrigger);// RTが押された
+	bool isDivePress = (xinputState.LeftTrigger > kTrigger);   // LTが押された
+	bool isBombPress = Pad::IsPress(m_padNo, PAD_INPUT_6);     // RBが押された
 
 	float speed = kSpeed;
 
@@ -150,10 +169,10 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 
 	else if (len > 0)
 	{
-		if (m_state != PlayerState::Run)
+		if (m_state != PlayerState::Move)
 		{
 			m_animation.Play(m_runAnim, true, kAnimSpeed);
-			m_state = PlayerState::Run;
+			m_state = PlayerState::Move;
 		}
 	}
 	else
@@ -176,14 +195,13 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 	{
 		VECTOR weaponPos = VGet(m_pos.x, m_pos.y + kWeaponPosY, m_pos.z);
 
-		float speed = kShotSpeed;
+		float shotSpeed = kShotSpeed;
 
 		// 撃っている向き
 		VECTOR shotVelocity;
-		shotVelocity.x = -cosf(cameraPitch) * cosf(cameraAngle) * speed;
-		shotVelocity.z = -cosf(cameraPitch) * sinf(cameraAngle) * speed;
-		shotVelocity.y = -sinf(cameraPitch) * speed;
-
+		shotVelocity.x = -cosf(cameraPitch) * cosf(cameraAngle) * shotSpeed;
+		shotVelocity.z = -cosf(cameraPitch) * sinf(cameraAngle) * shotSpeed;
+		shotVelocity.y = -sinf(cameraPitch) * shotSpeed;
 
 		m_pWeapon->UseWeapon(weaponPos, shotVelocity);
 
@@ -198,18 +216,31 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		m_pBomb->Throw();
 	}
 
-
 	if (m_isShooting)
 	{
-		// カメラ方向を見ながらインクを撃つ
+		// カメラの方向を見ながらインクを撃つ
 		// atan2fでcos,sinのカメラアングルを合わせる
 		m_angle = atan2f(cosf(cameraAngle), sinf(cameraAngle));
 	}
 
+	/*プレイヤーモデルの回転*/
+	// 向き
+	MATRIX rot = MGetRotY(m_angle);
+	// 大きさ
+	MATRIX scale = MGetScale(kScale);
+	// 動き
+	MATRIX trans = MGetTranslate(VGet(m_pos.x, m_pos.y, m_pos.z));
+	// 合成
+	MATRIX mtx = MMult(rot, scale);
+	// 合成
+	mtx = MMult(mtx, trans);
+	// モデルハンドルと合わせる
+	MV1SetMatrix(m_modelHandle, mtx);
+
 	m_pWeapon->Update();
 	Jump();
 	// アニメーションの再生速度
-	m_animation.SetGlobalSpeed(0.7f * timeScale);
+	m_animation.SetGlobalSpeed(kGlobalAnimframe* timeScale);
 	m_animation.Update();
 }
 void Player::Draw()
@@ -224,14 +255,14 @@ void Player::Draw()
 	// 潜り状態のプレイヤーの当たり判定(球)
 	if (m_isDiving)
 	{
-		DrawSphere3D(VGet(m_pos.x, m_pos.y + 25, m_pos.z),
-			60, 16,
+		DrawSphere3D(VGet(m_pos.x, m_pos.y + kDiveColOffsetY, m_pos.z),
+			kDiveColRadius, kMeshDivision,
 			::GetColor(255, 125, 0),
 			::GetColor(255, 125, 0),
 			true);
 #ifdef _DEBUG
-		DrawSphere3D(VGet(m_pos.x, m_pos.y + 25, m_pos.z),
-			80, 16,
+		DrawSphere3D(VGet(m_pos.x, m_pos.y + kDiveColOffsetY, m_pos.z),
+			kDiveHitRadius, kMeshDivision,
 			::GetColor(0, 255, 0),
 			::GetColor(0, 255, 0),
 			false);
@@ -240,37 +271,17 @@ void Player::Draw()
 		return;
 	}
 
-	// プレイヤーの当たり判定の描画(カプセル)
+	// プレイヤーの当たり判定の描画(現在は球)
 #ifdef _DEBUG
-	int playerCapsule = DrawCapsule3D(VGet(m_pos.x + 0.0f, m_pos.y + 40.0f, m_pos.z + 0.0f),
-		VGet(m_pos.x + 0.0f, m_pos.y + 230.0f, m_pos.z + 0.0f),
-		40.0f, 8, ::GetColor(0, 255, 0), ::GetColor(255, 255, 255), false);
-	DrawSphere3D(VGet(m_pos.x, m_pos.y + 150, m_pos.z),
-		90, 16,
+	int playerCapsule = DrawCapsule3D(VGet(m_pos.x + 0.0f, m_pos.y + kCapsuleBottomOffsetY, m_pos.z + 0.0f),
+		VGet(m_pos.x + 0.0f, m_pos.y + kCapsuleTopOffsetY, m_pos.z + 0.0f),
+		kCapsuleRadius, kCapsuleDivision, ::GetColor(0, 255, 0), ::GetColor(255, 255, 255), false);
+	DrawSphere3D(VGet(m_pos.x, m_pos.y + kBodyHitBoxOffsetY, m_pos.z),
+		kBodyHitBoxRadius, kMeshDivision,
 		::GetColor(0, 255, 0),
 		::GetColor(0, 255, 0),
 		false);
 #endif
-
-	// プレイヤーモデルの回転
-
-	// 向き
-	MATRIX rot = MGetRotY(m_angle);
-
-	// 大きさ
-	MATRIX scale = MGetScale(kScale);
-
-	// 動き
-	MATRIX trans = MGetTranslate(VGet(m_pos.x, m_pos.y, m_pos.z));
-
-	// 合成
-	MATRIX mtx = MMult(rot, scale);
-
-	// 合成
-	mtx = MMult(mtx, trans);
-
-	// モデルハンドルと合わせる
-	MV1SetMatrix(m_modelHandle, mtx);
 
 	// プレイヤー表示
 	MV1DrawModel(m_modelHandle);
@@ -333,7 +344,7 @@ void Player::ApplyDamage(float damage)
 	if (m_hp <= 0&&m_state!=PlayerState::Death)
 	{
 		m_state = PlayerState::Death;
-		m_respawnTimer = 180; // 3秒間のリスポーン時間
+		m_respawnTimer = kRespawnFrame; // リスポーン時間
 	}
 }
 
