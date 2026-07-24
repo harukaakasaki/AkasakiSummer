@@ -223,19 +223,7 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		m_angle = atan2f(cosf(cameraAngle), sinf(cameraAngle));
 	}
 
-	/*プレイヤーモデルの回転*/
-	// 向き
-	MATRIX rot = MGetRotY(m_angle);
-	// 大きさ
-	MATRIX scale = MGetScale(kScale);
-	// 動き
-	MATRIX trans = MGetTranslate(VGet(m_pos.x, m_pos.y, m_pos.z));
-	// 合成
-	MATRIX mtx = MMult(rot, scale);
-	// 合成
-	mtx = MMult(mtx, trans);
-	// モデルハンドルと合わせる
-	MV1SetMatrix(m_modelHandle, mtx);
+	
 
 	m_pWeapon->Update();
 	Jump();
@@ -282,6 +270,20 @@ void Player::Draw()
 		::GetColor(0, 255, 0),
 		false);
 #endif
+
+	/*プレイヤーモデルの回転*/
+	// 向き
+	MATRIX rot = MGetRotY(m_angle);
+	// 大きさ
+	MATRIX scale = MGetScale(kScale);
+	// 動き
+	MATRIX trans = MGetTranslate(VGet(m_pos.x, m_pos.y, m_pos.z));
+	// 合成
+	MATRIX mtx = MMult(rot, scale);
+	// 合成
+	mtx = MMult(mtx, trans);
+	// モデルハンドルと合わせる
+	MV1SetMatrix(m_modelHandle, mtx);
 
 	// プレイヤー表示
 	MV1DrawModel(m_modelHandle);

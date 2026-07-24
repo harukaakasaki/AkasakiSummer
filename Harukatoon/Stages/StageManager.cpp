@@ -254,6 +254,7 @@ void StageManager::Paint(float x, float z, int who, float paintRadius)
 	SetDrawScreen(DX_SCREEN_BACK);
 }
 
+// ステージ全体の各プレイヤーの塗りの割合
 float StageManager::GetPaintPercent(int playerColor) const
 {
 	int matchCount = 0;
