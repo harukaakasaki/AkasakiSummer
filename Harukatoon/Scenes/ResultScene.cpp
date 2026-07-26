@@ -45,7 +45,7 @@ void ResultScene::Init()
 	m_bgmHandle = LoadSoundMem("data/BGM/result_bgm.mp3");
 	m_selectSeHandle = LoadSoundMem("data/bgm/select_se.mp3");
 
-	ChangeVolumeSoundMem(140, m_bgmHandle);
+	ChangeVolumeSoundMem(100, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 
 	// ƒtƒHƒ“ƒg‚ğì‚é

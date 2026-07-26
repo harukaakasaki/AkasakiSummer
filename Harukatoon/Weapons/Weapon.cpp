@@ -6,9 +6,10 @@
 namespace
 {
 	constexpr int kShotInterval = 2;          // このフレーム内に一発発射する
-	constexpr float kShotupPower = 18.0f;     // 弾が上に飛ぶか下に飛ぶかの初速
 	constexpr int kStreatShoothingFrame = 30; // 初めのこのフレームは弾がばらける
 	constexpr int kInkRadius = 150;           // インクの大きさ
+	constexpr float kShotupPower = 18.0f;     // 弾が上に飛ぶか下に飛ぶかの初速
+	constexpr float kMoveInk = 0.1f;          // インクのブレ
 }
 
 Weapon::Weapon(StageManager* stageManager, int playerColor) :
@@ -93,7 +94,7 @@ void Weapon::UseWeapon(VECTOR playerPos, VECTOR shotVel)
 		VECTOR shotOffsetVel = VCross(shotVel, { 0.0f, 1.0f, 0.0f });
 
 		//　＊この数字を0に近づけるとシャープマーカーで1にするほどモデラー
-		float shotWidth = 0.1f * (m_shootingCountFrame / kStreatShoothingFrame);
+		float shotWidth = kMoveInk * (m_shootingCountFrame / kStreatShoothingFrame);
 
 		shotOffsetVel = VScale(shotOffsetVel, rate * shotWidth);
 

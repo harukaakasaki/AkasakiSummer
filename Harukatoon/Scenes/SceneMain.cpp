@@ -93,7 +93,7 @@ void SceneMain::Init()
 	// BGM
 	m_bgmHandle = LoadSoundMem("data/bgm/game_rock_bgm.mp3");
 	assert(m_bgmHandle != -1);
-	ChangeVolumeSoundMem(200, m_bgmHandle);
+	ChangeVolumeSoundMem(100, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 
 	// コリジョンマネージャーの生成
