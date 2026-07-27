@@ -132,7 +132,7 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 	// “ü—Í
 	XINPUT_STATE xinputState;
 	GetJoypadXInputState(m_padNo, &xinputState);
-	bool isWeaponPress = (xinputState.RightTrigger > kTrigger);// RT‚ª‰Ÿ‚³‚ê‚½
+	bool isWeaponPress = (xinputState.RightTrigger > kTrigger || Pad::IsPress(m_padNo, PAD_INPUT_2));// RT‚ª‰Ÿ‚³‚ê‚½
 	bool isDivePress = (xinputState.LeftTrigger > kTrigger);   // LT‚ª‰Ÿ‚³‚ê‚½
 	bool isBombPress = Pad::IsPress(m_padNo, PAD_INPUT_6);     // RB‚ª‰Ÿ‚³‚ê‚½
 
