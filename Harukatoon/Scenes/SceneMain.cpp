@@ -15,7 +15,7 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;         // プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;           // プレイヤーブルー
-	constexpr int kTimer = 60*60;            // タイマーの時間
+	constexpr int kTimer = 600*60;            // タイマーの時間
 	constexpr float kPlayer1FirstPos = 5000; // プレイヤー1の初期位置
 	constexpr float kPlayer2FirstPos = -5000;// プレイヤー2の初期位置
 
@@ -31,6 +31,8 @@ SceneMain::SceneMain() :
 	m_timeScale(1.0),
 	m_gameUI(-1),
 	m_reticleUI(-1),
+	m_player1DamageUI(-1),
+	m_player2DamageUI(-1),
 	m_timer(kTimer),
 	m_bgmHandle(-1)
 {
@@ -89,6 +91,10 @@ void SceneMain::Init()
 	assert(m_gameUI != -1);
 	m_reticleUI = LoadGraph("data/UI/reticle.png");
 	assert(m_reticleUI != -1);
+	m_player1DamageUI = LoadGraph("data/UI/player1DamageUI.png");
+	assert(m_m_player1DamageUI != -1);
+	m_player2DamageUI = LoadGraph("data/UI/player2DamageUI.png");
+	assert(m_player2DamageUI != -1);
 
 	// BGM
 	m_bgmHandle = LoadSoundMem("data/bgm/game_rock_bgm.mp3");
@@ -102,7 +108,6 @@ void SceneMain::Init()
 	m_pPlayerList.clear();
 	m_pPlayerList.push_back(m_pPlayer1.get());
 	m_pPlayerList.push_back(m_pPlayer2.get());
-
 }
 
 void SceneMain::Update()
@@ -189,6 +194,10 @@ void SceneMain::Draw()
 
 	// レティクル
 	DrawGraph(190, 150, m_reticleUI, true);
+
+	// プレイヤー1のダメージUIの描画処理
+	// ダメージを受けたら画面の周りにノイズを描けるようにしたい
+	//DrawGraph(190, 150, m_player1DamageUI, true);
 	
 	// プレイヤー2は描画範囲を右半分にする（x = 1280）
 	SetDrawArea(640, 0, 1280, 720);
@@ -206,6 +215,10 @@ void SceneMain::Draw()
 
 	// レティクル
 	DrawGraph(830, 150, m_reticleUI, true);
+
+	// プレイヤー2のダメージUIの描画処理
+	// ダメージを受けたら画面の周りにノイズを描けるようにしたい
+	//DrawGraph(190, 150, m_player1DamageUI, true);
 
 	// 描画範囲を元に戻す
 	SetDrawArea(0, 0, 1280, 720);

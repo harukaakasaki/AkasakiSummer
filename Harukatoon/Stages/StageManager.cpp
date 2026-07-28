@@ -277,3 +277,22 @@ float StageManager::GetPaintPercent(int playerColor) const
 	return (static_cast<float>(matchCount) / static_cast<float>(totalCells)) * 100.0f;
 }
 
+int StageManager::GetPaintColor(float x, float z) const
+{
+	// オフセットを出す
+	float offsetX = (m_mapWidthSize * m_cellSize) / 2;
+	float offsetZ = (m_mapHeightSize * m_cellSize) / 2;
+
+	// 3D座標から2dMapのマス目を計算
+	int gridX = static_cast<int>((x + offsetX) / m_cellSize);
+	int gridZ = static_cast<int>((z + offsetZ) / m_cellSize);
+
+	if (gridX < 0 || gridX >= m_mapWidthSize || 
+		gridZ < 0 || gridZ >= m_mapHeightSize)
+	{
+		return 0;
+	}
+
+	return m_2dMap[gridZ][gridX];
+}
+

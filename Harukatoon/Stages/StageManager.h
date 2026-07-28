@@ -24,6 +24,9 @@ public:
 	// プレイヤー1、2の塗り割合を計算する関数
 	float GetPaintPercent(int playerColor)const;
 
+	// 渡された3D座標が度のプレイヤーが塗ったところかを返す関数
+	int GetPaintColor(float x,float z)const;
+
 private:
 
 	// 2Dマップデータ

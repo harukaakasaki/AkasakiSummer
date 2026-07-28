@@ -15,7 +15,9 @@ namespace
 	constexpr float kAnimSpeed = 1.0f;                  // アニメーションスピード
 	constexpr float kSpeed = 18.0f;                     // プレイヤーの移動速度
 	constexpr float kAttackingSpeed = 13.0f;            // プレイヤーの攻撃中の移動速度
-	constexpr float kDiveSpeed = 30.0f;                 // プレイヤーの潜り移動速度
+	constexpr float kDiveSpeed = 30.0f;                 // プレイヤーの潜り中の移動速度
+	constexpr float kDiveEnemyInkSpeed = 5.0f;          // 敵インクの潜り中の移動速度
+	constexpr float kDiveFloorSpeed = 12.0f;            // 何も塗られていない所の潜り中の移動速度
 	constexpr float kShotSpeed = 30.0f;                 // 弾速度
 	constexpr float kGravity = 0.8f;                    // 重力
 	constexpr float kJumpPower = 20.0f;                 // ジャンプ力
@@ -136,13 +138,30 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 	bool isDivePress = (xinputState.LeftTrigger > kTrigger);   // LTが押された
 	bool isBombPress = Pad::IsPress(m_padNo, PAD_INPUT_6);     // RBが押された
 
+	int currentColor = m_pStageManager->GetPaintColor(m_pos.x, m_pos.z);
+	bool isMyInk = (currentColor == m_playerColor);// 自分のインクの上にいるか
+	bool isEnemyInk = (currentColor != 0 && currentColor != m_playerColor);// 敵のインクの上にいるか
+
 	float speed = kSpeed;
 
 	if (isDivePress)
 	{
 		m_isDiving = true;
 
-		speed = kDiveSpeed;
+		if (isMyInk)
+		{
+			speed = kDiveSpeed;
+		}
+		else if (isEnemyInk)
+		{
+			speed = kDiveEnemyInkSpeed;
+		}
+		else
+		{
+			speed = kDiveFloorSpeed;
+		}
+
+		
 
 #ifdef _DEBUG
 		printfDx("潜ってる～\n");

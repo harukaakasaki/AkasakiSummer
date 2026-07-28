@@ -40,7 +40,9 @@ private:
 	int m_frameCount;
 	int m_bgmHandle;
 	int m_gameUI;
-	int m_reticleUI;
+	int m_reticleUI;// レティクルUI
+	int m_player1DamageUI; // player1が攻撃を受けたUI
+	int m_player2DamageUI; // player2が攻撃を受けたUI
 	float m_timeScale;
 	bool m_isFinish = false;
 	// 各クラスのポインタ
