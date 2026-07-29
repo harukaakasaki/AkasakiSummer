@@ -15,6 +15,7 @@ namespace
 	constexpr float kAnimSpeed = 1.0f;                  // アニメーションスピード
 	constexpr float kSpeed = 18.0f;                     // プレイヤーの移動速度
 	constexpr float kAttackingSpeed = 13.0f;            // プレイヤーの攻撃中の移動速度
+	constexpr float kEnemyInkSpeed = 6.0f;              // エネミーインクに当たっているときの移動速度
 	constexpr float kDiveSpeed = 30.0f;                 // プレイヤーの潜り中の移動速度
 	constexpr float kDiveEnemyInkSpeed = 5.0f;          // 敵インクの潜り中の移動速度
 	constexpr float kDiveFloorSpeed = 12.0f;            // 何も塗られていない所の潜り中の移動速度
@@ -170,6 +171,10 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 	else
 	{
 		m_isDiving = false;
+		if (isEnemyInk)
+		{
+			speed = kEnemyInkSpeed;
+		}
 	}
 
 	// 攻撃中はプレイヤーのスピードが遅くなるようにしたい
@@ -184,6 +189,10 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 
 		// 攻撃中は移動速度を遅くする
 		speed = kAttackingSpeed;
+		if (isEnemyInk)
+		{
+			speed = kEnemyInkSpeed;
+		}
 	}
 
 	else if (len > 0)
