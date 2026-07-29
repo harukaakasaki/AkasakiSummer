@@ -10,7 +10,7 @@ namespace
 	// アニメーションのインデックス
 	constexpr const char* kIdleAnim = "root|Idle";      // 待機アニメーション
 	constexpr const char* kShotAnim = "root|Shot";      // 射撃アニメーション
-	constexpr const char* kRunAnim = "root|Run";	    // 走るアニメーション
+	constexpr const char* kRunAnim  = "root|Run";	    // 走るアニメーション
 
 	constexpr float kAnimSpeed = 1.0f;                  // アニメーションスピード
 	constexpr float kSpeed = 18.0f;                     // プレイヤーの移動速度
@@ -162,8 +162,6 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 			speed = kDiveFloorSpeed;
 		}
 
-		
-
 #ifdef _DEBUG
 		printfDx("潜ってる～\n");
 #endif // DEBUG
@@ -195,6 +193,7 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		}
 	}
 
+	// 歩いている
 	else if (len > 0)
 	{
 		if (m_state != PlayerState::Move)
@@ -383,7 +382,7 @@ void Player::Respawn()
 	m_pos = m_respawnPos;
 
 	m_hp = m_maxHp;
-
+	
 	m_state = PlayerState::Idle;
 }
 
