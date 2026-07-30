@@ -183,6 +183,12 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		if (isMyInk)
 		{
 			speed = kDiveSpeed;
+			// hp‚ð‰ñ•œ‚·‚é
+			m_hp += 1;
+			if (m_hp > m_maxHp)
+			{
+				m_hp = m_maxHp;
+			}
 		}
 		else if (isEnemyInk)
 		{
