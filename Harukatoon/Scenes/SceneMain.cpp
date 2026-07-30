@@ -15,7 +15,8 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;         // プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;           // プレイヤーブルー
-	constexpr int kTimer = 120*60;            // タイマーの時間
+	constexpr int kTimer = 120*60;           // タイマーの時間
+	constexpr int kBGMVol = 100;              // ゲームシーンのBGMの大きさ
 	constexpr float kPlayer1FirstPos = 5000; // プレイヤー1の初期位置
 	constexpr float kPlayer2FirstPos = -5000;// プレイヤー2の初期位置
 
@@ -62,7 +63,6 @@ void SceneMain::Init()
 	// 背景の色設定
 	SetBackgroundColor(250, 250, 250);
 
-
 	m_pStageManager->Init();
 
 	// カメラの更新
@@ -99,7 +99,7 @@ void SceneMain::Init()
 	// BGM
 	m_bgmHandle = LoadSoundMem("data/bgm/game_rock_bgm.mp3");
 	assert(m_bgmHandle != -1);
-	ChangeVolumeSoundMem(100, m_bgmHandle);
+	ChangeVolumeSoundMem(kBGMVol, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 
 	// コリジョンマネージャーの生成
