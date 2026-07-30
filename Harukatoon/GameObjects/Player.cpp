@@ -1,7 +1,9 @@
 #include "Player.h"
 #include <DxLib.h>
 #include <cmath>
+#include <cassert>
 #include "../Systems/Pad.h"
+#include "../Systems/Game.h"
 #include "../Weapons/Weapon.h"
 #include "../Weapons/Bomb.h"
 
@@ -67,6 +69,15 @@ Player::Player(StageManager* stageManager, int padNo, int playerColor) :
 Player::~Player()
 {
 	MV1DeleteModel(m_modelHandle);
+
+	// ロードしたダメージUIをメモリから削除
+	for (int handle : m_damageUIHandle)
+	{
+		if (handle != -1)
+		{
+			DeleteGraph(handle);
+		}
+	}
 }
 
 void Player::Init()
@@ -77,6 +88,26 @@ void Player::Init()
 	m_idleAnim = MV1GetAnimIndex(m_modelHandle, kIdleAnim);
 	m_shotAnim = MV1GetAnimIndex(m_modelHandle, kShotAnim);
 	m_runAnim = MV1GetAnimIndex(m_modelHandle, kRunAnim);
+
+	// プレイヤーの色によって相手のインク画像をロードする
+	if (m_playerColor == 1)// プレイヤーオレンジ
+	{
+		m_damageUIHandle[0] = LoadGraph("data/UI/blueDamageUI_1.png");
+		m_damageUIHandle[1] = LoadGraph("data/UI/blueDamageUI_2.png");
+		m_damageUIHandle[2] = LoadGraph("data/UI/blueDamageUI_3.png");
+	}
+	else// プレイヤーブルー
+	{
+		m_damageUIHandle[0] = LoadGraph("data/UI/orangeDamageUI_1.png");
+		m_damageUIHandle[1] = LoadGraph("data/UI/orangeDamageUI_2.png");
+		m_damageUIHandle[2] = LoadGraph("data/UI/orangeDamageUI_3.png");
+	}
+
+	// 正しく画像が読み込めたか
+	for (int handle : m_damageUIHandle)
+	{
+		assert(handle != -1 && "Damage UI が ない！");
+	}
 
 	// 初期のプレイヤーの大きさ
 	MV1SetScale(m_modelHandle, kScale);
@@ -314,6 +345,31 @@ void Player::Draw()
 
 	// プレイヤー表示
 	MV1DrawModel(m_modelHandle);
+}
+
+void Player::DrawDamageUI(int offsetX)
+{
+	int selectIndex = -1;
+
+	if (m_hp <= 10)
+	{
+		selectIndex = 2;
+	}
+	else if (m_hp <= 60)
+	{
+		selectIndex = 1;
+	}
+	else if (m_hp <= 90)
+	{
+		selectIndex = 0;
+	}
+
+	if (selectIndex != -1 && m_damageUIHandle[selectIndex] != -1)
+	{
+		DrawExtendGraph(offsetX, 0, 
+			offsetX+640, 720, 
+			m_damageUIHandle[selectIndex], TRUE);
+	}
 }
 
 void Player::Jump()

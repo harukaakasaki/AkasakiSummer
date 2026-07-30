@@ -196,8 +196,7 @@ void SceneMain::Draw()
 	DrawGraph(190, 150, m_reticleUI, true);
 
 	// プレイヤー1のダメージUIの描画処理
-	// ダメージを受けたら画面の周りにノイズを描けるようにしたい
-	//DrawGraph(190, 150, m_player1DamageUI, true);
+	m_pPlayer1->DrawDamageUI(0);
 	
 	// プレイヤー2は描画範囲を右半分にする（x = 1280）
 	SetDrawArea(640, 0, 1280, 720);
@@ -217,8 +216,7 @@ void SceneMain::Draw()
 	DrawGraph(830, 150, m_reticleUI, true);
 
 	// プレイヤー2のダメージUIの描画処理
-	// ダメージを受けたら画面の周りにノイズを描けるようにしたい
-	//DrawGraph(190, 150, m_player1DamageUI, true);
+	m_pPlayer2->DrawDamageUI(640);
 
 	// 描画範囲を元に戻す
 	SetDrawArea(0, 0, 1280, 720);

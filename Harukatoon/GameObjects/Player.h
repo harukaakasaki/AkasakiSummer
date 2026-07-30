@@ -1,5 +1,6 @@
 #pragma once
 #include <DxLib.h>
+#include <array>
 #include <memory>
 #include "../Systems/Animation.h"
 #include "../Systems/Vector3.h"
@@ -53,6 +54,9 @@ public:
 
 	// 描画処理
 	void Draw();
+
+	// ダメージUIの描画処理
+	void DrawDamageUI(int offsetX = 0);
 
 	/// <summary>
 	/// ジャンプ処理
@@ -128,4 +132,7 @@ private:
 	std::unique_ptr<Bomb> m_pBomb;
 	// Stageマネージャーのポインタ
 	StageManager* m_pStageManager;
+
+	// ダメージUIの画像ハンドル配列
+	std::array<int, 3>m_damageUIHandle = { -1,-1,-1 };
 };
