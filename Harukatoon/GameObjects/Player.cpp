@@ -9,7 +9,7 @@
 
 namespace
 {
-	// アニメーションのインデックス
+	// アニメーションの種類
 	constexpr const char* kIdleAnim = "root|Idle";      // 待機アニメーション
 	constexpr const char* kShotAnim = "root|Shot";      // 射撃アニメーション
 	constexpr const char* kRunAnim  = "root|Run";	    // 走るアニメーション
