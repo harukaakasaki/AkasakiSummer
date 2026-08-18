@@ -27,6 +27,8 @@ public:
 	// 渡された3D座標が度のプレイヤーが塗ったところかを返す関数
 	int GetPaintColor(float x,float z)const;
 
+	int GetStageModelHandle()const { return m_stageModelHandle; }
+
 private:
 
 	// 2Dマップデータ

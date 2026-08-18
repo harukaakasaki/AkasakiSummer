@@ -121,8 +121,9 @@ void SceneMain::Update()
 		m_pPlayer1->Update(m_pCamera1->GetYaw(), m_pCamera1->GetPitch(), m_timeScale);
 		m_pPlayer2->Update(m_pCamera2->GetYaw(), m_pCamera2->GetPitch(), m_timeScale);
 
-		m_pCamera1->Update(m_pPlayer1->GetPos());
-		m_pCamera2->Update(m_pPlayer2->GetPos());
+		int stageHandle = m_pStageManager->GetStageModelHandle();
+		m_pCamera1->Update(m_pPlayer1->GetPos(),stageHandle);
+		m_pCamera2->Update(m_pPlayer2->GetPos(),stageHandle);
 
 		auto& bullet1 = m_pPlayer1->GetBullets();
 		m_pCollisionManager->Update(m_pPlayerList, bullet1);

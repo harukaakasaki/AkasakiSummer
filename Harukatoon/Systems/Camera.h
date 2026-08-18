@@ -26,24 +26,24 @@ public:
 	/// XVˆ—
 	/// </summary>
 	/// <param name="playerPos"></param>
-	void Update(VECTOR playerPos);
+	void Update(VECTOR playerPos, int stageModelHandle = -1);
 
 	/// <summary>
 	///  •`‰æˆ—
 	/// </summary>
 	void Draw();
 
-	/// <summary>
-	/// ƒJƒƒ‰‚Ì‰¡‰ñ“]‚ğİ’è
-	/// </summary>
-	/// <param name="yaw"></param>
-	void SetYaw(float yaw){ m_cameraYaw = yaw; }
-
 	/// ƒJƒƒ‰‚Ì‰¡‰ñ“]‚ğæ“¾
 	float GetYaw() const { return m_cameraYaw; }
 
 	/// ƒJƒƒ‰‚Ìc‰ñ“]‚ğæ“¾
 	float GetPitch() const { return m_cameraPitch; }
+
+	/// <summary>
+	/// ƒJƒƒ‰‚Ì‰¡‰ñ“]‚ğİ’è
+	/// </summary>
+	/// <param name="yaw"></param>
+	void SetYaw(float yaw) { m_cameraYaw = yaw; }
 
 private:
 	float m_cameraYaw;     // ‰¡‰ñ“]

@@ -1,8 +1,15 @@
 #include "Camera.h"
 #include <cmath>
 #include <DxLib.h>
+#include <algorithm>
 #include "Pad.h"
 #include "EffekseerForDXLib.h"
+
+namespace
+{
+	// カメラが壁に当たらないようにする
+	constexpr float kCameraMargin = 20.0f;
+}
 
 Camera::Camera() :
 	m_cameraYaw(0.0f),
@@ -43,7 +50,7 @@ void Camera::Init(int padNo)
 	m_cameraTarget.y = 100.0f;
 	m_cameraTarget.z = 0.0f;
 }
-void Camera::Update(VECTOR playerPos)
+void Camera::Update(VECTOR playerPos,int stageModelHandle)
 {
 	// 毎フレームカメラにエフェクトを描画する
 	// とてもすんごく重要
@@ -64,6 +71,10 @@ void Camera::Update(VECTOR playerPos)
 	// 縦回転(あとで)
 	m_cameraPitch += y * sensitivity;
 
+	// カメラの制限
+	float limit = DX_PI_F / 3.0f;
+	m_cameraPitch = std::clamp(m_cameraPitch, -limit, limit);
+
 	// カメラとプレイヤーとの距離
 	float distance = 800.0f;
 	// カメラの高さ
@@ -77,34 +88,57 @@ void Camera::Update(VECTOR playerPos)
 		height = 50.0f;
 	}*/
 
-	// カメラの制限
-	float limit = DX_PI_F / 3.0f;
-	if (m_cameraPitch > limit)m_cameraPitch = limit;
-	if (m_cameraPitch < -limit)m_cameraPitch = -limit;
-
-	// カメラ位置(プレイヤーを中心に回転する)
-	m_cameraPos.x = playerPos.x + cosf(m_cameraPitch) * cosf(m_cameraYaw) * distance;
-	m_cameraPos.z = playerPos.z + cosf(m_cameraPitch) * sinf(m_cameraYaw) * distance;
-	m_cameraPos.y = playerPos.y + sinf(m_cameraPitch) * distance + height;
+	// ステージとカメラの当たり判定
+	VECTOR cameraPos;
+	cameraPos.x = playerPos.x + cosf(m_cameraPitch) * cosf(m_cameraYaw) * distance;
+	cameraPos.z = playerPos.z + cosf(m_cameraPitch) * sinf(m_cameraYaw) * distance;
+	cameraPos.y = playerPos.y + sinf(m_cameraPitch) * distance + height;
 
 	m_cameraTarget = playerPos;
-
 	m_cameraTarget.y += 300.0f;
+
+	m_cameraPos = cameraPos;
+
+	if (stageModelHandle != -1)
+	{
+		MV1_COLL_RESULT_POLY hitResult = MV1CollCheck_Line(
+			stageModelHandle,
+			-1,
+			m_cameraTarget,
+			cameraPos);
+		// 壁に当たっていた場合
+		if (hitResult.HitFlag == 1)
+		{
+			VECTOR dir = VSub(hitResult.HitPosition, m_cameraTarget);
+			float hitDistance = VSize(dir);
+
+			if (hitDistance > 0.001f)
+			{
+				// 正規化
+				dir = VScale(dir, 1.0f / hitDistance);
+				// 注視点側に引き戻す
+				float safeDistance = (hitDistance > kCameraMargin) ? (hitDistance - kCameraMargin) : 0.0f;
+				// 実際のカメラ位置を壁に手前に設定
+				m_cameraPos = VAdd(m_cameraTarget, VScale(dir, safeDistance));
+			}
+		}
+	}
 }
 void Camera::Draw()
 {
 	// カメラと注視点を設定
-	SetCameraPositionAndTarget_UpVecY(
+	SetCameraPositionAndTarget_UpVecY(m_cameraPos, m_cameraTarget);
+	/*SetCameraPositionAndTarget_UpVecY(
 		VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z),
-		VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
+		VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));*/
 
 	// 空を描画
-	MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
-	MV1DrawModel(m_skyModelHandle);
+	//MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
+	MV1SetPosition(m_skyModelHandle, m_cameraTarget);
 
 	// 空を描画する前にZバッファへの書き込みをオフにする
 	SetWriteZBuffer3D(false);
-
+	MV1DrawModel(m_skyModelHandle);
 	// 空を描画した後にZバッファへの書き込みをオンにする
 	SetWriteZBuffer3D(true);
 }
