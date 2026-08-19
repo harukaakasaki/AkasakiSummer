@@ -179,14 +179,14 @@ void SceneMain::Update()
 
 void SceneMain::Draw()
 {
-	// プレイヤー1は描画範囲を左半分にする（x = 640）
-	SetDrawArea(0, 0, 640, 720);
-	//3Dカメラの描画範囲を左半分に合わせる（320）
-	SetCameraScreenCenter(320.0f, 360.0f);
+	// プレイヤー1は描画範囲を左半分にする
+	SetDrawArea(0, 0, Game::kSplitWidth, Game::kScreenHeight);
+	//3Dカメラの描画範囲を左半分に合わせる
+	SetCameraScreenCenter(Game::kCamera1CenterX, Game::kCameraCenterY);
 
 	// プレイヤー1のカメラを描画
 	m_pCamera1->Draw();
-
+	 
 	// プレイヤー1に映る世界の描画
 	DrawGrid();
 	m_pPlayer1->Draw();
@@ -194,15 +194,15 @@ void SceneMain::Draw()
 	m_pStageManager->Draw();
 
 	// レティクル
-	DrawGraph(190, 150, m_reticleUI, true);
+	DrawRotaGraph(static_cast<int>(Game::kCamera1CenterX), static_cast<int>(Game::kScreenCenterY-120),1.0,0.0, m_reticleUI, true);
 
 	// プレイヤー1のダメージUIの描画処理
 	m_pPlayer1->DrawDamageUI(0);
 	
-	// プレイヤー2は描画範囲を右半分にする（x = 1280）
-	SetDrawArea(640, 0, 1280, 720);
-	//3Dカメラの描画範囲を右半分に合わせる（320）
-	SetCameraScreenCenter(960.0f, 360.0f);
+	// プレイヤー2は描画範囲を右半分にする
+	SetDrawArea(Game::kSplitWidth, 0, Game::kScreenWidth, Game::kScreenHeight);
+	//3Dカメラの描画範囲を右半分に合わせる
+	SetCameraScreenCenter(Game::kCamera2CenterX, Game::kCameraCenterY);
 	
 	// プレイヤー2のカメラを描画
 	m_pCamera2->Draw();
@@ -214,35 +214,35 @@ void SceneMain::Draw()
 	m_pStageManager->Draw();
 
 	// レティクル
-	DrawGraph(830, 150, m_reticleUI, true);
+	DrawRotaGraph(static_cast<int>(Game::kCamera2CenterX), static_cast<int>(Game::kScreenCenterY-120), 1.0, 0.0, m_reticleUI, true);
 
 	// プレイヤー2のダメージUIの描画処理
-	m_pPlayer2->DrawDamageUI(640);
+	m_pPlayer2->DrawDamageUI(Game::kSplitWidth);
 
 	// 描画範囲を元に戻す
-	SetDrawArea(0, 0, 1280, 720);
-	SetCameraScreenCenter(640.0f, 360.0f);
+	SetDrawArea(0, 0, Game::kScreenWidth, Game::kScreenHeight);
+	SetCameraScreenCenter(static_cast<float>(Game::kScreenCenterX), static_cast<float>(Game::kScreenCenterY));
 	
 #ifdef _DEBUG
 	DrawString(0, 0, "SceneMain", GetColor(255, 255, 255));
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "FRAME:%d", m_frameCount);
 #endif // DEBUG
 	// 画面の中央に線を引く
-	DrawLine(640, 0, 640, 720, GetColor(0, 0, 0));
+	DrawLine(Game::kScreenCenterX, 0, Game::kScreenCenterX, Game::kScreenHeight, GetColor(0, 0, 0));
 
 	// 各プレイヤーの塗り割合を取得
 	float orangePercent = m_pStageManager->GetPaintPercent(kPlayerOrange);
 	float bluePercent = m_pStageManager->GetPaintPercent(kPlayerBlue);
 
 	// UIの描画
-	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 0.6, 0, m_gameUI, TRUE);
+	DrawRotaGraph(Game::kScreenCenterX, Game::kScreenCenterY, 0.6, 0, m_gameUI, TRUE);
 
 	int seconds = m_timer / 60;
-	DrawFormatString(630, 60, GetColor(255, 255, 255), "%d", seconds);
+	DrawFormatString(Game::kScreenCenterX - 10, 60, GetColor(255, 255, 255), "%d", seconds);
 
 	// 各インクの割合を描画
-	DrawFormatString(540, 145, GetColor(255, 255, 255), "%.2f%%", orangePercent);
-	DrawFormatString(705, 145, GetColor(255, 255, 255), "%.2f%%", bluePercent);
+	DrawFormatString(Game::kScreenCenterX - 100, 145, GetColor(255, 255, 255), "%.2f%%", orangePercent);
+	DrawFormatString(Game::kScreenCenterX + 65, 145, GetColor(255, 255, 255), "%.2f%%", bluePercent);
 }
 
 bool SceneMain::IsEnd() const
