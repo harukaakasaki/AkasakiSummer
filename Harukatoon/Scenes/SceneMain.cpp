@@ -12,7 +12,7 @@
 #include "../Stages/StageManager.h"
 
 namespace
-{
+{ 
 	constexpr int kPlayerOrange = 1;         // プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;           // プレイヤーブルー
 	constexpr int kTimer = 120*60;           // タイマーの時間
@@ -101,6 +101,9 @@ void SceneMain::Init()
 	assert(m_bgmHandle != -1);
 	ChangeVolumeSoundMem(kBGMVol, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
+
+	// フォントを作る
+	m_fontHandle = CreateFontToHandle("Nikkyou Sans", 40, -1, DX_FONTTYPE_NORMAL);
 
 	// コリジョンマネージャーの生成
 	m_pCollisionManager = std::make_unique<CollisionManager>();
@@ -235,14 +238,19 @@ void SceneMain::Draw()
 	float bluePercent = m_pStageManager->GetPaintPercent(kPlayerBlue);
 
 	// UIの描画
-	DrawRotaGraph(Game::kScreenCenterX, Game::kScreenCenterY, 0.6, 0, m_gameUI, TRUE);
+	DrawRotaGraph(Game::kScreenCenterX, Game::kScreenCenterY, 0.9, 0, m_gameUI, TRUE);
 
 	int seconds = m_timer / 60;
-	DrawFormatString(Game::kScreenCenterX - 10, 60, GetColor(255, 255, 255), "%d", seconds);
+//	DrawFormatString(Game::kScreenCenterX - 10, 60, GetColor(255, 255, 255), "%d", seconds);
+	DrawFormatStringToHandle(Game::kScreenCenterX -30, 85, GetColor(255, 255, 255), m_fontHandle, "%d", seconds);
 
 	// 各インクの割合を描画
-	DrawFormatString(Game::kScreenCenterX - 100, 145, GetColor(255, 255, 255), "%.2f%%", orangePercent);
-	DrawFormatString(Game::kScreenCenterX + 65, 145, GetColor(255, 255, 255), "%.2f%%", bluePercent);
+	DrawFormatStringToHandle(Game::kScreenCenterX - 140, 211, GetColor(0, 0, 0), m_fontHandle, "%d%%", static_cast<int>(orangePercent));
+	DrawFormatStringToHandle(Game::kScreenCenterX - 145, 210, GetColor(255, 255, 255), m_fontHandle, "%d%%", static_cast<int>(orangePercent));
+	DrawFormatStringToHandle(Game::kScreenCenterX + 100, 211, GetColor(0, 0, 0), m_fontHandle, "%d%%", static_cast<int>(bluePercent));
+	DrawFormatStringToHandle(Game::kScreenCenterX + 95, 210, GetColor(255, 255, 255), m_fontHandle, "%d%%", static_cast<int>(bluePercent));
+//	DrawFormatString(Game::kScreenCenterX - 100, 145, GetColor(255, 255, 255), "%.2f%%", orangePercent);
+//	DrawFormatString(Game::kScreenCenterX + 65, 145, GetColor(255, 255, 255), "%.2f%%", bluePercent);
 }
 
 bool SceneMain::IsEnd() const

@@ -5,7 +5,7 @@ namespace Game
 {
 	// 画面全体の基本のサイズ
 //	constexpr int kScreenWidth = 1280;
-//	constexpr int kScreenHeight = 720;
+//  constexpr int kScreenHeight = 720;
 	// 全画面表示用のサイズ
 	constexpr int kScreenWidth = 1920;
 	constexpr int kScreenHeight = 1080;

@@ -43,6 +43,7 @@ private:
 	int m_reticleUI;// レティクルUI
 	int m_player1DamageUI; // player1が攻撃を受けたUI
 	int m_player2DamageUI; // player2が攻撃を受けたUI
+	int m_fontHandle;       // フォントのハンドル
 	float m_timeScale;
 	bool m_isFinish = false;
 	// 各クラスのポインタ

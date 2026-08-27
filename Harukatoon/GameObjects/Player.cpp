@@ -373,7 +373,7 @@ void Player::DrawDamageUI(int offsetX)
 	if (selectIndex != -1 && m_damageUIHandle[selectIndex] != -1)
 	{
 		DrawExtendGraph(offsetX, 0, 
-			offsetX+640, 720, 
+			offsetX+Game::kScreenCenterX, Game::kScreenHeight, 
 			m_damageUIHandle[selectIndex], TRUE);
 	}
 }
