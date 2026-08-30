@@ -60,7 +60,12 @@ Player::Player(StageManager* stageManager, int padNo, int playerColor) :
 	m_shotAnim(-1),
 	m_respawnTimer(0),
 	m_padNo(padNo),
-	m_playerColor(playerColor)
+	m_playerColor(playerColor),
+	m_shotSE(),
+    m_walkSE(),
+    m_inkWalkSE(),
+    m_deathSE(),
+    m_hitSE()
 {
 	m_pWeapon = std::make_unique<Weapon>(stageManager, playerColor);
 	m_pBomb = std::make_unique<Bomb>();
@@ -69,6 +74,14 @@ Player::Player(StageManager* stageManager, int padNo, int playerColor) :
 Player::~Player()
 {
 	MV1DeleteModel(m_modelHandle);
+	StopSoundMem(m_shotSE);
+	DeleteSoundMem(m_shotSE);
+	StopSoundMem(m_walkSE);
+	DeleteSoundMem(m_walkSE);
+	StopSoundMem(m_deathSE);
+	DeleteSoundMem(m_deathSE);
+	StopSoundMem(m_hitSE);
+	DeleteSoundMem(m_hitSE);
 
 	// ロードしたダメージUIをメモリから削除
 	for (int handle : m_damageUIHandle)
@@ -88,6 +101,12 @@ void Player::Init()
 	m_idleAnim = MV1GetAnimIndex(m_modelHandle, kIdleAnim);
 	m_shotAnim = MV1GetAnimIndex(m_modelHandle, kShotAnim);
 	m_runAnim = MV1GetAnimIndex(m_modelHandle, kRunAnim);
+
+	m_shotSE = LoadSoundMem("data/SE/InkShot.mp3");    // 攻撃中のSE
+	m_walkSE = LoadSoundMem("data/SE/Walk.mp3");       // 歩きSE
+	m_inkWalkSE = LoadSoundMem("data/SE/InkWalk.mp3"); // インクの上のSE
+	m_deathSE = LoadSoundMem("data/SE/InkShot.mp3");   // 攻撃中のSE
+	m_hitSE = LoadSoundMem("data/SE/Hit.mp3");         // ヒット時のSE
 
 	// プレイヤーの色によって相手のインク画像をロードする
 	if (m_playerColor == 1)// プレイヤーオレンジ
@@ -218,6 +237,10 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		if (m_state != PlayerState::Shot)
 		{
 			m_animation.Play(m_shotAnim, true, kAnimSpeed);
+			// SEの再生
+			StopSoundMem(m_shotSE);
+			ChangeVolumeSoundMem(200, m_shotSE);
+			PlaySoundMem(m_shotSE, DX_PLAYTYPE_LOOP);
 			m_state = PlayerState::Shot;
 		}
 		m_isShooting = true;
@@ -230,23 +253,41 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		}
 	}
 
-	// 歩いている
-	else if (len > 0)
-	{
-		if (m_state != PlayerState::Move)
-		{
-			m_animation.Play(m_runAnim, true, kAnimSpeed);
-			m_state = PlayerState::Move;
-		}
-	}
 	else
 	{
-		if (m_state != PlayerState::Idle)
+		if (m_state == PlayerState::Shot)
 		{
-			m_animation.Play(m_idleAnim, true, kAnimSpeed);
-			m_state = PlayerState::Idle;
+			StopSoundMem(m_shotSE);
+		}
+
+		// 歩いている
+		if (len > 0)
+		{
+			if (m_state != PlayerState::Move)
+			{
+				m_animation.Play(m_runAnim, true, kAnimSpeed);
+				// SEの再生
+				StopSoundMem(m_walkSE);
+				ChangeVolumeSoundMem(200, m_walkSE);
+				PlaySoundMem(m_walkSE, DX_PLAYTYPE_LOOP);
+				m_state = PlayerState::Move;
+			}
+		}
+		else
+		{
+		    if (m_state == PlayerState::Move)
+		    {
+			    StopSoundMem(m_walkSE);
+		    }
+			if (m_state != PlayerState::Idle)
+			{
+				m_animation.Play(m_idleAnim, true, kAnimSpeed);
+				m_state = PlayerState::Idle;
+			}
 		}
 	}
+
+	
 
 	m_move.x = m_move.x * speed * timeScale;
 	m_move.z = m_move.z * speed * timeScale;

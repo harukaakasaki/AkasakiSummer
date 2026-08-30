@@ -114,6 +114,12 @@ private:
 	int m_idleAnim;
 	int m_shotAnim;
 	int m_runAnim;
+	// SE
+	int m_shotSE;// UŒ‚’†‚ÌSE
+	int m_walkSE;// •à‚«SE
+	int m_inkWalkSE;// ƒCƒ“ƒN‚Ìã‚Å‚Ì•à‚«SE
+	int m_deathSE;// €‚ñ‚¾‚Æ‚«‚Ì…SE
+	int m_hitSE;// UŒ‚‚ª“–‚½‚Á‚½Û‚ÌSE
 
 	// Šp“x
 	float m_angle = 0.0f;

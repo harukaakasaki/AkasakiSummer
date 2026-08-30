@@ -35,7 +35,8 @@ SceneMain::SceneMain() :
 	m_player1DamageUI(-1),
 	m_player2DamageUI(-1),
 	m_timer(kTimer),
-	m_bgmHandle(-1)
+	m_bgmHandle(-1),
+	m_fontHandle(-1)
 {
 	m_pStageManager = std::make_unique<StageManager>();
 	m_pPlayer1 = std::make_unique<Player>(m_pStageManager.get(), DX_INPUT_PAD1,kPlayerOrange);
