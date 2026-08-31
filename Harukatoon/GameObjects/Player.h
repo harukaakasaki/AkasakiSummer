@@ -15,14 +15,15 @@ class Player
 	// プレイヤーの状態の列挙型
 	enum class PlayerState
 	{
-		Idle,   // 通常
-		Move,   // 移動
-		Jump,   // ジャンプ
-		Shot, // 攻撃
-		Dive,   // 潜る
-		Damage, // ダメージ
-		Death,  // 死
-		Respawn,// 復活
+		Idle,    // 通常
+		DiveMove,// 潜り移動
+		Move,    // 移動
+		Jump,    // ジャンプ
+		Shot,    // 攻撃
+		Dive,    // 潜る
+		Damage,  // ダメージ
+		Death,   // 死
+		Respawn, // 復活
 	};
 
 public:
@@ -115,11 +116,13 @@ private:
 	int m_shotAnim;
 	int m_runAnim;
 	// SE
-	int m_shotSE;// 攻撃中のSE
-	int m_walkSE;// 歩きSE
-	int m_inkWalkSE;// インクの上での歩きSE
-	int m_deathSE;// 死んだときの水SE
-	int m_hitSE;// 攻撃が当たった際のSE
+	int m_shotSE;    // 攻撃中のSE
+	int m_walkSE;    // 歩きSE
+	int m_inkWalkSE; // インクの上での歩きSE
+	int m_deathSE;   // 死んだときの水SE
+	int m_hitSE;     // 攻撃が当たった際のSE
+	int m_diveSE;    // 潜りSE
+	int m_diveMoveSE;// 潜り移動SE
 
 	// 角度
 	float m_angle = 0.0f;

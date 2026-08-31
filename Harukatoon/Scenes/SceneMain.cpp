@@ -4,6 +4,7 @@
 #include <cmath>
 #include <algorithm>
 #include <cassert>
+
 #include "../GameObjects/Player.h"
 #include "../Systems/Camera.h"
 #include "../Systems/Game.h"
@@ -15,7 +16,7 @@ namespace
 { 
 	constexpr int kPlayerOrange = 1;         // プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;           // プレイヤーブルー
-	constexpr int kTimer = 120*60;           // タイマーの時間
+	constexpr int kTimer = 20*60;           // タイマーの時間
 	constexpr int kBGMVol = 100;              // ゲームシーンのBGMの大きさ
 	constexpr float kPlayer1FirstPos = 5000; // プレイヤー1の初期位置
 	constexpr float kPlayer2FirstPos = -5000;// プレイヤー2の初期位置
@@ -25,6 +26,14 @@ namespace
 	constexpr float kStageMaxX = 5820.0f;
 	constexpr float kStageMinZ = -2120.0f;
 	constexpr float kStageMaxZ = 1680.0f;
+
+	// BGM一覧
+	const std::vector<std::string>kBgmPathList =
+	{
+		"data/bgm/game_bgm_1.mp3",
+		"data/bgm/game_bgm_2.mp3",
+		"data/bgm/game_bgm_3.mp3"
+	};
 }
 
 SceneMain::SceneMain() :
@@ -93,12 +102,13 @@ void SceneMain::Init()
 	m_reticleUI = LoadGraph("data/UI/reticle.png");
 	assert(m_reticleUI != -1);
 	m_player1DamageUI = LoadGraph("data/UI/player1DamageUI.png");
-	assert(m_m_player1DamageUI != -1);
+	assert(m_player1DamageUI != -1);
 	m_player2DamageUI = LoadGraph("data/UI/player2DamageUI.png");
 	assert(m_player2DamageUI != -1);
 
 	// BGM
-	m_bgmHandle = LoadSoundMem("data/bgm/game_rock_bgm.mp3");
+	int bgmIndex = GetRand(static_cast<int>(kBgmPathList.size()) - 1);
+	m_bgmHandle = LoadSoundMem(kBgmPathList[bgmIndex].c_str());
 	assert(m_bgmHandle != -1);
 	ChangeVolumeSoundMem(kBGMVol, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);

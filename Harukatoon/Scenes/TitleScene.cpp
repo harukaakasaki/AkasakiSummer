@@ -28,7 +28,8 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
-	SetBackgroundColor(0, 195, 255);
+//	SetBackgroundColor(0, 195, 255);
+	SetBackgroundColor(0, 0, 0);
 
 	// モデルを読み込む
 	m_skyModelHandle = MV1LoadModel("data/Sky_Night02.mv1");
@@ -79,9 +80,7 @@ void TitleScene::Draw()
 	// 2D描画の設定
 	SetUseZBufferFlag(false);
 	// タイトル画面を描画
-	DrawRotaGraph(Game::kScreenWidth/2, Game::kScreenHeight/2,0.6,0, m_titleLogoHandle, TRUE);
-
-//	DrawString(0, 50, "タイトルシーン", GetColor(255, 255, 255));
+	DrawRotaGraph(Game::kScreenWidth/2, Game::kScreenHeight/2,0.8,0, m_titleLogoHandle, TRUE);
 
 	SetUseZBufferFlag(true);
 
@@ -90,7 +89,7 @@ void TitleScene::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 
 	
-	DrawStringToHandle(450, 550, "Aボタンでスタート！", GetColor(255, 255, 255), m_fontHandle);
+	DrawStringToHandle(700, 850, "Aボタンでスタート！", GetColor(255, 255, 255), m_fontHandle);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 

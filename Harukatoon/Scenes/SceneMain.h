@@ -1,6 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
+#include <string>
 #include <memory>
 #include "Scene.h"
 

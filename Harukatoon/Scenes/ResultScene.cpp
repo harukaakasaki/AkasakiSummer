@@ -83,7 +83,7 @@ void ResultScene::Update()
 void ResultScene::Draw()
 {
 	// UI‚ð•`‰æ
-	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 0.6, 0, m_resultUIHandle, TRUE);
+	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 0.9, 0, m_resultUIHandle, TRUE);
 
 	// ƒ‚ƒfƒ‹‚ð•`‰æ
 	MV1DrawModel(m_playerModelHandle);

@@ -102,11 +102,13 @@ void Player::Init()
 	m_shotAnim = MV1GetAnimIndex(m_modelHandle, kShotAnim);
 	m_runAnim = MV1GetAnimIndex(m_modelHandle, kRunAnim);
 
-	m_shotSE = LoadSoundMem("data/SE/InkShot.mp3");    // 攻撃中のSE
-	m_walkSE = LoadSoundMem("data/SE/Walk.mp3");       // 歩きSE
-	m_inkWalkSE = LoadSoundMem("data/SE/InkWalk.mp3"); // インクの上のSE
-	m_deathSE = LoadSoundMem("data/SE/InkShot.mp3");   // 攻撃中のSE
-	m_hitSE = LoadSoundMem("data/SE/Hit.mp3");         // ヒット時のSE
+	m_shotSE = LoadSoundMem("data/SE/InkShot.mp3");      // 攻撃中のSE
+	m_walkSE = LoadSoundMem("data/SE/Walk.mp3");         // 歩きSE
+	m_inkWalkSE = LoadSoundMem("data/SE/InkWalk.mp3");   // インクの上のSE
+	m_deathSE = LoadSoundMem("data/SE/Dead.mp3");        // 死のSE
+	m_hitSE = LoadSoundMem("data/SE/Hit.mp3");           // ヒット時のSE
+	m_diveSE = LoadSoundMem("data/SE/Dive.mp3");         // 潜りのSE
+	m_diveMoveSE = LoadSoundMem("data/SE/DiveMove.mp3"); // 潜り移動のSE
 
 	// プレイヤーの色によって相手のインク画像をロードする
 	if (m_playerColor == 1)// プレイヤーオレンジ
@@ -185,7 +187,7 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 	// 入力
 	XINPUT_STATE xinputState;
 	GetJoypadXInputState(m_padNo, &xinputState);
-	bool isWeaponPress = (xinputState.RightTrigger > kTrigger || Pad::IsPress(m_padNo, PAD_INPUT_2));// RTが押された
+	bool isWeaponPress = (xinputState.RightTrigger > kTrigger);// RTが押された
 	bool isDivePress = (xinputState.LeftTrigger > kTrigger);   // LTが押された
 	bool isBombPress = Pad::IsPress(m_padNo, PAD_INPUT_6);     // RBが押された
 
@@ -197,7 +199,21 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 
 	if (isDivePress)
 	{
+		
 		m_isDiving = true;
+
+		if (m_state != PlayerState::Dive)
+		{
+			// SEの再生
+			StopSoundMem(m_shotSE);
+			StopSoundMem(m_walkSE);
+			// 潜ったSEの再生
+			StopSoundMem(m_diveSE);
+			ChangeVolumeSoundMem(200, m_diveSE);
+			PlaySoundMem(m_diveSE, DX_PLAYTYPE_BACK);
+
+			m_state = PlayerState::Dive;
+		}
 
 		if (isMyInk)
 		{
@@ -238,6 +254,8 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		{
 			m_animation.Play(m_shotAnim, true, kAnimSpeed);
 			// SEの再生
+			StopSoundMem(m_walkSE);
+
 			StopSoundMem(m_shotSE);
 			ChangeVolumeSoundMem(200, m_shotSE);
 			PlaySoundMem(m_shotSE, DX_PLAYTYPE_LOOP);
@@ -287,8 +305,6 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		}
 	}
 
-	
-
 	m_move.x = m_move.x * speed * timeScale;
 	m_move.z = m_move.z * speed * timeScale;
 
@@ -327,8 +343,6 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		// atan2fでcos,sinのカメラアングルを合わせる
 		m_angle = atan2f(cosf(cameraAngle), sinf(cameraAngle));
 	}
-
-	
 
 	m_pWeapon->Update();
 	Jump();
@@ -465,6 +479,10 @@ void Player::ApplyDamage(float damage)
 {
 	// 受け取ったダメージ分だけHPを減らす
 	m_hp -= static_cast<int>(damage);
+	// SEの再生
+	StopSoundMem(m_hitSE);
+	ChangeVolumeSoundMem(200, m_hitSE);
+	PlaySoundMem(m_hitSE, DX_PLAYTYPE_BACK);
 
 	if (m_hp < 0)m_hp = 0;
 
