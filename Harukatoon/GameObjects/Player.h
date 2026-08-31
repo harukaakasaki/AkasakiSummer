@@ -109,8 +109,10 @@ private:
 	int m_respawnTimer = 0; // リスポーンタイマー
 
 	Animation m_animation;
-	// プレイヤーモデル
-	int m_modelHandle;
+	
+	int m_modelHandle;    // プレイヤーモデル
+	int m_weaponHandle;   // 武器モデル
+	int m_handFrameIndex; // 右手のフレーム番号
 	// アニメーション
 	int m_idleAnim;
 	int m_shotAnim;
