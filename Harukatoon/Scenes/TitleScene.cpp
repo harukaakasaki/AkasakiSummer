@@ -11,7 +11,9 @@ TitleScene::TitleScene() :
 	m_skyAngle(0.0f),
 	m_isEnd(false),
 	m_bgmHandle(0),
-	m_selectSeHandle(0)
+	m_selectSeHandle(0),
+	m_AHandle(-1),
+	m_pressInkHandle(-1)
 {
 }
 
@@ -33,7 +35,9 @@ void TitleScene::Init()
 
 	// モデルを読み込む
 	m_skyModelHandle = MV1LoadModel("data/Sky_Night02.mv1");
-	m_titleLogoHandle = LoadGraph("data/UI/Harukatoon_Logo.png");
+	m_titleLogoHandle = LoadGraph("data/UI/Harukatoon_Title.png");
+	m_pressInkHandle = LoadGraph("data/UI/PressInk.png");
+	m_AHandle = LoadGraph("data/UI/aButton.png");
 
 	// BGM
 	m_bgmHandle = LoadSoundMem("data/bgm/title_bgm.mp3");
@@ -80,16 +84,16 @@ void TitleScene::Draw()
 	// 2D描画の設定
 	SetUseZBufferFlag(false);
 	// タイトル画面を描画
-	DrawRotaGraph(Game::kScreenWidth/2, Game::kScreenHeight/2,0.8,0, m_titleLogoHandle, TRUE);
+	DrawRotaGraph(Game::kScreenWidth/2, Game::kScreenHeight/2,1.0,0, m_titleLogoHandle, TRUE);
+	DrawRotaGraph(Game::kScreenWidth/2, Game::kScreenHeight/2,1.0,0, m_pressInkHandle, TRUE);
+	
 
 	SetUseZBufferFlag(true);
 
 	// スタートボタンを点滅させる
 	int alpha = static_cast<int>((sinf(m_blinkAngle) * 0.5f + 0.5f) * 255);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-
-	
-	DrawStringToHandle(700, 850, "Aボタンでスタート！", GetColor(255, 255, 255), m_fontHandle);
+	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 1.0, 0, m_AHandle, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 

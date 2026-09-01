@@ -18,6 +18,8 @@ private:
 	int m_skyModelHandle;   // 空のモデル
 	int m_fontHandle;       // フォントのハンドル
 	int m_titleLogoHandle;  // タイトルロゴのハンドル
+	int m_pressInkHandle;   // インクのロゴのハンドル
+	int m_AHandle;          // Aボタンのハンドル
 
 	// BGM関連
 	int m_bgmHandle;
