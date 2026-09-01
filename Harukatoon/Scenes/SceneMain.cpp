@@ -25,7 +25,7 @@ namespace
 	constexpr float kStageMinX = -5900.0f;
 	constexpr float kStageMaxX = 5820.0f;
 	constexpr float kStageMinZ = -2120.0f;
-	constexpr float kStageMaxZ = 1680.0f;
+	constexpr float kStageMaxZ = 2080.0f;
 
 	// BGMˆê——
 	const std::vector<std::string>kBgmPathList =

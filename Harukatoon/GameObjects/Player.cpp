@@ -100,7 +100,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_modelHandle = MV1LoadModel("data/Models/Player.mv1");
+	m_modelHandle = MV1LoadModel("data/Models/PlayerOrange.mv1");
 	assert(m_modelHandle != -1);
 	m_weaponHandle = MV1LoadModel("data/Models/Weapon.mv1");
 	assert(m_weaponHandle != -1);
@@ -412,10 +412,6 @@ void Player::Draw()
 	// 行列の合成
 	MATRIX worldMatrix = MMult(MMult(scale, rot),trans);
 	MV1SetMatrix(m_modelHandle, worldMatrix);
-	//// 合成
-	//mtx = MMult(mtx, trans);
-	//// モデルハンドルと合わせる
-	//MV1SetMatrix(m_modelHandle, mtx);
 
 	// プレイヤー表示
 	MV1DrawModel(m_modelHandle);
@@ -423,8 +419,9 @@ void Player::Draw()
 	if (!m_isDiving && m_handFrameIndex != -1)
 	{
 		MATRIX handMatrix = MV1GetFrameLocalWorldMatrix(m_modelHandle, m_handFrameIndex);
+		MATRIX weaponWorldMatrix = MMult(handMatrix,worldMatrix);
 
-		MV1SetMatrix(m_weaponHandle, handMatrix);
+		MV1SetMatrix(m_weaponHandle, weaponWorldMatrix);
 		MV1DrawModel(m_weaponHandle);
 	}
 
