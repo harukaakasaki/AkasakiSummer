@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include "Scene.h"
+#include "ResultScene.h"
 
 // プロトタイプ宣言
 class Player;
@@ -47,6 +48,9 @@ private:
 	int m_fontHandle;       // フォントのハンドル
 	float m_timeScale;
 	bool m_isFinish = false;
+
+	WinnerType m_winnerState = WinnerType::None;
+
 	// 各クラスのポインタ
 	std::unique_ptr<Player> m_pPlayer1;
 	std::unique_ptr<Player> m_pPlayer2;

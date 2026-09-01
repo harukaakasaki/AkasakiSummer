@@ -14,12 +14,12 @@
 
 namespace
 { 
-	constexpr int kPlayerOrange = 1;         // プレイヤーオレンジ
-	constexpr int kPlayerBlue = 2;           // プレイヤーブルー
-	constexpr int kTimer = 90*60;           // タイマーの時間
+	constexpr int kPlayerOrange = 1;          // プレイヤーオレンジ
+	constexpr int kPlayerBlue = 2;            // プレイヤーブルー
+	constexpr int kTimer = 10*60;             // タイマーの時間
 	constexpr int kBGMVol = 100;              // ゲームシーンのBGMの大きさ
-	constexpr float kPlayer1FirstPos = 5000; // プレイヤー1の初期位置
-	constexpr float kPlayer2FirstPos = -5000;// プレイヤー2の初期位置
+	constexpr float kPlayer1FirstPos = 5000;  // プレイヤー1の初期位置
+	constexpr float kPlayer2FirstPos = -5000; // プレイヤー2の初期位置
 
 	// ステージの範囲
 	constexpr float kStageMinX = -5900.0f;
@@ -173,17 +173,17 @@ void SceneMain::Update()
 			if (orange > blue)
 			{
 				// オレンジの勝利
-				printfDx("オレンジの勝利!");
+				m_winnerState = WinnerType::Orange;
 			}
 			else if (blue > orange)
 			{
 				// ブルーの勝利
-				printfDx("ブルーの勝利!");
+				m_winnerState = WinnerType::Blue;
 			}
 			else
 			{
 				// 引き分け
-				printfDx("引き分け!");
+				m_winnerState = WinnerType::None;
 			}
 			// ゲーム終了フラグ
 			m_isFinish = true;
@@ -260,8 +260,6 @@ void SceneMain::Draw()
 	DrawFormatStringToHandle(Game::kScreenCenterX - 145, 210, GetColor(255, 255, 255), m_fontHandle, "%d%%", static_cast<int>(orangePercent));
 	DrawFormatStringToHandle(Game::kScreenCenterX + 100, 211, GetColor(0, 0, 0), m_fontHandle, "%d%%", static_cast<int>(bluePercent));
 	DrawFormatStringToHandle(Game::kScreenCenterX + 95, 210, GetColor(255, 255, 255), m_fontHandle, "%d%%", static_cast<int>(bluePercent));
-//	DrawFormatString(Game::kScreenCenterX - 100, 145, GetColor(255, 255, 255), "%.2f%%", orangePercent);
-//	DrawFormatString(Game::kScreenCenterX + 65, 145, GetColor(255, 255, 255), "%.2f%%", bluePercent);
 }
 
 bool SceneMain::IsEnd() const
@@ -271,7 +269,7 @@ bool SceneMain::IsEnd() const
 
 Scene* SceneMain::GetNextScene()
 {
-	return new ResultScene();// 次のシーンへ移行
+	return new ResultScene(m_winnerState);// 次のシーンへ移行
 }
 
 void SceneMain::DrawGrid()
