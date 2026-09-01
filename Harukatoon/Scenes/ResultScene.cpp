@@ -38,7 +38,7 @@ void ResultScene::Init()
 	SetBackgroundColor(0, 0, 0);
 
 	// ƒ‚ƒfƒ‹‚ğ“Ç‚İ‚Ş
-	m_playerModelHandle = MV1LoadModel("data/Models/player.mv1");
+	m_playerModelHandle = MV1LoadModel("data/Models/playerBlue.mv1");
 	m_resultUIHandle = LoadGraph("data/UI/resultUI.png");
 
 	// BGM

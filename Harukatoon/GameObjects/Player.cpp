@@ -100,7 +100,14 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_modelHandle = MV1LoadModel("data/Models/PlayerOrange.mv1");
+	if (m_playerColor == 1)// プレイヤーオレンジ
+	{
+		m_modelHandle = MV1LoadModel("data/Models/PlayerOrange.mv1");
+	}
+	else// プレイヤーブルー
+	{
+		m_modelHandle = MV1LoadModel("data/Models/PlayerBlue.mv1");
+	}
 	assert(m_modelHandle != -1);
 	m_weaponHandle = MV1LoadModel("data/Models/Weapon.mv1");
 	assert(m_weaponHandle != -1);
@@ -374,11 +381,23 @@ void Player::Draw()
 	// 潜り状態のプレイヤーの当たり判定(球)
 	if (m_isDiving)
 	{
-		DrawSphere3D(VGet(m_pos.x, m_pos.y + kDiveColOffsetY, m_pos.z),
-			kDiveColRadius, kMeshDivision,
-			::GetColor(255, 125, 0),
-			::GetColor(255, 125, 0),
-			true);
+		if (m_playerColor == 1)// プレイヤーオレンジ
+		{
+			DrawSphere3D(VGet(m_pos.x, m_pos.y + kDiveColOffsetY, m_pos.z),
+				kDiveColRadius, kMeshDivision,
+				::GetColor(255, 125, 0),
+				::GetColor(255, 125, 0),
+				true);
+		}
+		else// プレイヤーブルー
+		{
+			DrawSphere3D(VGet(m_pos.x, m_pos.y + kDiveColOffsetY, m_pos.z),
+				kDiveColRadius, kMeshDivision,
+				::GetColor(0, 0, 255),
+				::GetColor(0, 0, 255),
+				true);
+		}
+		
 #ifdef _DEBUG
 		DrawSphere3D(VGet(m_pos.x, m_pos.y + kDiveColOffsetY, m_pos.z),
 			kDiveHitRadius, kMeshDivision,

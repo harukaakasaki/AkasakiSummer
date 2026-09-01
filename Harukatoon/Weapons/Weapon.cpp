@@ -7,7 +7,7 @@ namespace
 {
 	constexpr int kShotInterval = 2;          // このフレーム内に一発発射する
 	constexpr int kStreatShoothingFrame = 30; // 初めのこのフレームは弾がばらける
-	constexpr int kInkRadius = 150;           // インクの大きさ
+	constexpr int kInkRadius = 200;           // インクの大きさ
 	constexpr float kShotupPower = 18.0f;     // 弾が上に飛ぶか下に飛ぶかの初速
 	constexpr float kMoveInk = 0.1f;          // インクのブレ
 }
