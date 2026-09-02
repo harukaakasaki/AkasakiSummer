@@ -44,11 +44,17 @@ private:
 	int m_endSEHandle;      // 終了時のSEハンドル
 	int m_gameUI;
 	int m_reticleUI;        // レティクルUI
+	int m_finish_1UI;       // フィニッシュUI一枚目
+	int m_finish_2UI;       // フィニッシュUI二枚目
+	int m_finish_3UI;       // フィニッシュUI三枚目
+	int m_finish_4UI;       // フィニッシュUI四枚目
 	int m_fontHandle;       // フォントのハンドル
 
+	float m_finishScale;         // フィニッシュUIの大きさ
 	float m_timeScale;
-	float m_endTimer;        // 終了するまでのタイマー
-	bool m_isFinish = false;
+	float m_endTimer;            // 終了するまでのタイマー
+	bool m_isFinish = false;     // 終了したかどうか
+	bool m_isFinishAnim = false; // 終了UIのアニメーション
 
 	WinnerType m_winnerState = WinnerType::None;
 

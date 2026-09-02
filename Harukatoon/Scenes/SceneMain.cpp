@@ -17,10 +17,12 @@ namespace
 	constexpr int kPlayerOrange = 1;          // プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;            // プレイヤーブルー
 	constexpr int kTimer = 5*60;             // タイマーの時間
-	constexpr float	kEndTimer = 120.0f;       // 終了するまでのタイマーの時間
 	constexpr int kBGMVol = 150;              // ゲームシーンのBGMの大きさ
+	constexpr float kFinishScale = 100.0f;    // フィニッシュUIの大きさ
+	constexpr float	kEndTimer = 120.0f;       // 終了するまでのタイマーの時間
 	constexpr float kPlayer1FirstPos =  5000; // プレイヤー1の初期位置
 	constexpr float kPlayer2FirstPos = -5000; // プレイヤー2の初期位置
+	
 
 	// ステージの範囲
 	constexpr float kStageMinX = -5900.0f;
@@ -39,14 +41,21 @@ namespace
 
 SceneMain::SceneMain() :
 	m_frameCount(0),
-	m_timeScale(1.0),
+	m_finishScale(1.0f),
+	m_timeScale(1.0f),
 	m_gameUI(-1),
+	m_finish_1UI(-1),
+	m_finish_2UI(-1),
+	m_finish_3UI(-1),
+	m_finish_4UI(-1),
 	m_reticleUI(-1),
 	m_timer(kTimer),
 	m_endTimer(0.0f),
 	m_bgmHandle(-1),
 	m_endSEHandle(-1),
-	m_fontHandle(-1)
+	m_fontHandle(-1),
+	m_isFinish(false),
+	m_isFinishAnim(false)
 {
 	m_pStageManager = std::make_unique<StageManager>();
 	m_pPlayer1 = std::make_unique<Player>(m_pStageManager.get(), DX_INPUT_PAD1,kPlayerOrange);
@@ -102,6 +111,18 @@ void SceneMain::Init()
 	assert(m_gameUI != -1);
 	m_reticleUI = LoadGraph("data/UI/reticle.png");
 	assert(m_reticleUI != -1);
+	m_finish_1UI = LoadGraph("data/UI/Finish_1.png");
+	assert(m_finish_1UI != -1);
+	m_finish_2UI = LoadGraph("data/UI/Finish_2.png");
+	assert(m_finish_2UI != -1);
+	m_finish_3UI = LoadGraph("data/UI/Finish_3.png");
+	assert(m_finish_3UI != -1);
+	m_finish_4UI = LoadGraph("data/UI/Finish_4.png");
+	assert(m_finish_4UI != -1);
+
+	// フィニッシュUIの大きさ
+	m_finishScale = kFinishScale;
+	m_isFinishAnim = false;
 
 	// BGM
 	int bgmIndex = GetRand(static_cast<int>(kBgmPathList.size()) - 1);
@@ -175,7 +196,16 @@ void SceneMain::Update()
 		}
 		else
 		{
+			m_isFinishAnim = true;
+
 			m_endTimer++;
+
+			if (m_isFinishAnim)
+			{
+				float targetScale = 1.0f;// 目標のスケール
+
+				m_finishScale += (targetScale - m_finishScale) * 0.6f;// スムーズにスケールを変化させる
+			}
 
 			if (m_endTimer >= kEndTimer)
 			{
@@ -203,7 +233,6 @@ void SceneMain::Update()
 				m_gameState = GameState::Result;
 				// ゲーム終了フラグ
 				m_isFinish = true;
-
 			}
 		}
 	}
@@ -270,7 +299,6 @@ void SceneMain::Draw()
 	DrawRotaGraph(Game::kScreenCenterX, Game::kScreenCenterY, 0.9, 0, m_gameUI, TRUE);
 
 	int seconds = m_timer / 60;
-//	DrawFormatString(Game::kScreenCenterX - 10, 60, GetColor(255, 255, 255), "%d", seconds);
 	DrawFormatStringToHandle(Game::kScreenCenterX -30, 85, GetColor(255, 255, 255), m_fontHandle, "%d", seconds);
 
 	// 各インクの割合を描画
@@ -278,6 +306,17 @@ void SceneMain::Draw()
 	DrawFormatStringToHandle(Game::kScreenCenterX - 145, 210, GetColor(255, 255, 255), m_fontHandle, "%d%%", static_cast<int>(orangePercent));
 	DrawFormatStringToHandle(Game::kScreenCenterX + 100, 211, GetColor(0, 0, 0), m_fontHandle, "%d%%", static_cast<int>(bluePercent));
 	DrawFormatStringToHandle(Game::kScreenCenterX + 95, 210, GetColor(255, 255, 255), m_fontHandle, "%d%%", static_cast<int>(bluePercent));
+	if (m_timer <= 1)
+	{
+		int x = Game::kScreenCenterX;
+		int y = Game::kScreenCenterY;
+
+		// KO画面を描画
+		DrawRotaGraph(x, y, m_finishScale, 0.0f, m_finish_1UI, TRUE);
+		DrawRotaGraph(x, y, m_finishScale, 0.0f, m_finish_2UI, TRUE);
+		DrawRotaGraph(x, y, m_finishScale, 0.0f, m_finish_3UI, TRUE);
+		DrawRotaGraph(x, y, m_finishScale, 0.0f, m_finish_4UI, TRUE);
+	}
 }
 
 bool SceneMain::IsEnd() const
