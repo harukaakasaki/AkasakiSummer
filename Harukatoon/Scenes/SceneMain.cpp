@@ -17,7 +17,7 @@ namespace
 	constexpr int kPlayerOrange = 1;          // プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;            // プレイヤーブルー
 	constexpr int kTimer = 60*60;             // タイマーの時間
-	constexpr int kBGMVol = 100;              // ゲームシーンのBGMの大きさ
+	constexpr int kBGMVol = 150;              // ゲームシーンのBGMの大きさ
 	constexpr float kPlayer1FirstPos = 5000;  // プレイヤー1の初期位置
 	constexpr float kPlayer2FirstPos = -5000; // プレイヤー2の初期位置
 
@@ -41,8 +41,6 @@ SceneMain::SceneMain() :
 	m_timeScale(1.0),
 	m_gameUI(-1),
 	m_reticleUI(-1),
-	m_player1DamageUI(-1),
-	m_player2DamageUI(-1),
 	m_timer(kTimer),
 	m_bgmHandle(-1),
 	m_fontHandle(-1)
@@ -101,10 +99,6 @@ void SceneMain::Init()
 	assert(m_gameUI != -1);
 	m_reticleUI = LoadGraph("data/UI/reticle.png");
 	assert(m_reticleUI != -1);
-	m_player1DamageUI = LoadGraph("data/UI/player1DamageUI.png");
-	assert(m_player1DamageUI != -1);
-	m_player2DamageUI = LoadGraph("data/UI/player2DamageUI.png");
-	assert(m_player2DamageUI != -1);
 
 	// BGM
 	int bgmIndex = GetRand(static_cast<int>(kBgmPathList.size()) - 1);

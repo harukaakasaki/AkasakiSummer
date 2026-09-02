@@ -238,7 +238,7 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		{
 			speed = kDiveSpeed;
 			// hp‚ð‰ñ•œ‚·‚é
-			m_hp += 1;
+			m_hp += 0.5f;
 			if (m_hp > m_maxHp)
 			{
 				m_hp = m_maxHp;

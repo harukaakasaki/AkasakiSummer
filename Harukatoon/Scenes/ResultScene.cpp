@@ -10,6 +10,8 @@ namespace
 {
 	// アニメーションのインデックス
 	const char* const kPlayerAnim = "CharacterArmature|Idle";// プレイヤー待機アニメーション
+
+	constexpr int kBGMVol = 150;                             // ゲームシーンのBGMの大きさ
 }
 
 ResultScene::ResultScene(WinnerType winner) :
@@ -69,11 +71,11 @@ void ResultScene::Init()
 	m_fontHandle = CreateFontToHandle("Nikkyou Sans", 70, -1, DX_FONTTYPE_NORMAL);
 	// カメラ位置
 	SetCameraPositionAndTarget_UpVecY(
-		VGet(500, 300, -500),// カメラ位置
+		VGet(500, 250, -400),// カメラ位置
 		VGet(500, 250, -200));// 注視点
 
-	// 各モデルの位置
-	MV1SetPosition(m_playerModelHandle, VGet(500, 150, -200));
+	// プレイヤーモデルの位置
+	MV1SetPosition(m_playerModelHandle, VGet(500, 200, -200));
 }
 
 void ResultScene::Update()
@@ -85,7 +87,7 @@ void ResultScene::Update()
 	if (Pad::IsTrigger(DX_INPUT_PAD1, PAD_INPUT_1))
 	{
 		// SEの再生
-		ChangeVolumeSoundMem(200, m_selectSeHandle);
+		ChangeVolumeSoundMem(kBGMVol, m_selectSeHandle);
 		PlaySoundMem(m_selectSeHandle, DX_PLAYTYPE_BACK);
 		m_isEnd = true;
 	}

@@ -103,7 +103,7 @@ private:
 	// 最初のプレイヤーの状態をIdleにする
 	PlayerState m_state = PlayerState::Idle;
 
-	int m_hp = 100;         // プレイヤーHP
+	float m_hp = 100.0f;         // プレイヤーHP
 	int m_maxHp = 100;      // プレイヤーの最大HP
 	int m_playerColor;      // 各プレイヤーの色
 	int m_respawnTimer = 0; // リスポーンタイマー
