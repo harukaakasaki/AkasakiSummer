@@ -49,6 +49,8 @@ SceneMain::SceneMain() :
 	m_finish_3UI(-1),
 	m_finish_4UI(-1),
 	m_reticleUI(-1),
+	m_readyUI(-1),
+	m_goUI(-1),
 	m_timer(kTimer),
 	m_endTimer(0.0f),
 	m_bgmHandle(-1),
@@ -111,6 +113,12 @@ void SceneMain::Init()
 	assert(m_gameUI != -1);
 	m_reticleUI = LoadGraph("data/UI/reticle.png");
 	assert(m_reticleUI != -1);
+
+	m_readyUI = LoadGraph("data/UI/ready.png");
+	assert(m_readyUI != -1);
+	m_goUI = LoadGraph("data/UI/go.png");
+	assert(m_goUI != -1);
+
 	m_finish_1UI = LoadGraph("data/UI/Finish_1.png");
 	assert(m_finish_1UI != -1);
 	m_finish_2UI = LoadGraph("data/UI/Finish_2.png");
@@ -119,6 +127,11 @@ void SceneMain::Init()
 	assert(m_finish_3UI != -1);
 	m_finish_4UI = LoadGraph("data/UI/Finish_4.png");
 	assert(m_finish_4UI != -1);
+
+	m_gameState = GameState::Ready;
+	m_readyState = ReadyState::ReadyZoomIn;
+	m_readyGoScale = 0.0f;
+	m_readyTimer = 0.0f;
 
 	// フィニッシュUIの大きさ
 	m_finishScale = kFinishScale;
@@ -150,9 +163,62 @@ void SceneMain::Update()
 	Pad::Update();
 	m_frameCount++;
 
+	if (m_gameState == GameState::Ready)
+	{
+		m_readyTimer++;
+
+		// カメラの更新
+		int stageHandle = m_pStageManager->GetStageModelHandle();
+		m_pCamera1->Update(m_pPlayer1->GetPos(), stageHandle);
+		m_pCamera2->Update(m_pPlayer2->GetPos(), stageHandle);
+
+		switch (m_readyState)
+		{
+		case ReadyState::ReadyZoomIn:
+			// 中心からReadyUIを表示
+			m_readyGoScale += (1.0f - m_readyGoScale) * 0.2f;
+
+			if (m_readyTimer > 60)
+			{
+				m_readyState = ReadyState::ReadyZoomOut;
+			}
+			break;
+
+		case ReadyState::ReadyZoomOut:
+
+			m_readyGoScale += (1.0f - m_readyGoScale) * 0.05f;
+
+			if (m_readyTimer > 90)
+			{
+				m_readyState = ReadyState::GoZoomIn;
+				m_readyGoScale = 0.0f;
+			}
+			break;
+
+		case ReadyState::GoZoomIn:
+
+			m_readyGoScale += (1.0f - m_readyGoScale) * 0.25f;
+
+			m_gameState = GameState::Playing;
+			break;
+		}
+		return;
+	}
+
 	// ゲーム内の処理
 	if (m_gameState == GameState::Playing)
 	{
+		if (m_readyState == ReadyState::GoZoomIn)
+		{
+			m_readyTimer++;
+			m_readyGoScale += (1.2f - m_readyGoScale) * 0.25f;
+
+			if (m_readyTimer > 130)
+			{
+				m_readyState = ReadyState::End;
+			}
+		}
+
 		if (m_timer > 1)
 		{
 			// プレイヤーの更新
@@ -306,6 +372,23 @@ void SceneMain::Draw()
 	DrawFormatStringToHandle(Game::kScreenCenterX - 145, 210, GetColor(255, 255, 255), m_fontHandle, "%d%%", static_cast<int>(orangePercent));
 	DrawFormatStringToHandle(Game::kScreenCenterX + 100, 211, GetColor(0, 0, 0), m_fontHandle, "%d%%", static_cast<int>(bluePercent));
 	DrawFormatStringToHandle(Game::kScreenCenterX + 95, 210, GetColor(255, 255, 255), m_fontHandle, "%d%%", static_cast<int>(bluePercent));
+
+	if (m_readyState != ReadyState::End)
+	{
+		int x = Game::kScreenCenterX;
+		int y = Game::kScreenCenterY;
+
+		if (m_readyState == ReadyState::ReadyZoomIn || m_readyState == ReadyState::ReadyZoomOut)
+		{
+			DrawRotaGraph(x, y, m_readyGoScale, 0.0f, m_readyUI, TRUE);
+		}
+
+		else if(m_readyState == ReadyState::GoZoomIn)
+		{
+			DrawRotaGraph(x, y, m_readyGoScale, 0.0f, m_goUI, TRUE);
+		}
+	}
+
 	if (m_timer <= 1)
 	{
 		int x = Game::kScreenCenterX;

@@ -31,11 +31,20 @@ private:
 	// ゲームシーンの状態
 	enum class GameState
 	{
+		Ready,  // 試合開始前のカウントダウン
 		Playing,// ゲーム中
 		Result  // 結果表示
 	};
 
-	GameState m_gameState = GameState::Playing;
+	enum class ReadyState
+	{
+		ReadyZoomIn,
+		ReadyZoomOut,
+		GoZoomIn,
+		End
+	};
+
+	GameState m_gameState = GameState::Ready;
 	int m_timer;
 
 private:
@@ -48,10 +57,16 @@ private:
 	int m_finish_2UI;       // フィニッシュUI二枚目
 	int m_finish_3UI;       // フィニッシュUI三枚目
 	int m_finish_4UI;       // フィニッシュUI四枚目
+	int m_readyUI;          // ReadyUI
+	int m_goUI;             // GoUI
 	int m_fontHandle;       // フォントのハンドル
 
+	ReadyState m_readyState = ReadyState::ReadyZoomIn;
+
+	float m_readyGoScale = 0.0f; // ReadyGoのUIスケール
+	float m_readyTimer = 0;      // Ready演出タイマー
 	float m_finishScale;         // フィニッシュUIの大きさ
-	float m_timeScale;
+	float m_timeScale;           // ゲームタイマー
 	float m_endTimer;            // 終了するまでのタイマー
 	bool m_isFinish = false;     // 終了したかどうか
 	bool m_isFinishAnim = false; // 終了UIのアニメーション
