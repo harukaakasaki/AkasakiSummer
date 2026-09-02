@@ -75,7 +75,7 @@ void ResultScene::Init()
 		VGet(500, 250, -200));// 注視点
 
 	// プレイヤーモデルの位置
-	MV1SetPosition(m_playerModelHandle, VGet(500, 200, -200));
+	MV1SetPosition(m_playerModelHandle, VGet(500, 170, -200));
 }
 
 void ResultScene::Update()

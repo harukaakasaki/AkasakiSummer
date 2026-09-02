@@ -16,7 +16,8 @@ namespace
 {
 	constexpr int kPlayerOrange = 1;          // プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;            // プレイヤーブルー
-	constexpr int kTimer = 60*60;             // タイマーの時間
+	constexpr int kTimer = 5*60;             // タイマーの時間
+	constexpr float	kEndTimer = 120.0f;       // 終了するまでのタイマーの時間
 	constexpr int kBGMVol = 150;              // ゲームシーンのBGMの大きさ
 	constexpr float kPlayer1FirstPos =  5000; // プレイヤー1の初期位置
 	constexpr float kPlayer2FirstPos = -5000; // プレイヤー2の初期位置
@@ -42,7 +43,9 @@ SceneMain::SceneMain() :
 	m_gameUI(-1),
 	m_reticleUI(-1),
 	m_timer(kTimer),
+	m_endTimer(0.0f),
 	m_bgmHandle(-1),
+	m_endSEHandle(-1),
 	m_fontHandle(-1)
 {
 	m_pStageManager = std::make_unique<StageManager>();
@@ -107,6 +110,9 @@ void SceneMain::Init()
 	ChangeVolumeSoundMem(kBGMVol, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 
+	// SE
+	m_endSEHandle = LoadSoundMem("data/se/End.mp3");
+
 	// フォントを作る
 	m_fontHandle = CreateFontToHandle("Nikkyou Sans", 40, -1, DX_FONTTYPE_NORMAL);
 
@@ -126,61 +132,79 @@ void SceneMain::Update()
 	// ゲーム内の処理
 	if (m_gameState == GameState::Playing)
 	{
-		m_pPlayer1->Update(m_pCamera1->GetYaw(), m_pCamera1->GetPitch(), m_timeScale);
-		m_pPlayer2->Update(m_pCamera2->GetYaw(), m_pCamera2->GetPitch(), m_timeScale);
-
-		int stageHandle = m_pStageManager->GetStageModelHandle();
-		m_pCamera1->Update(m_pPlayer1->GetPos(),stageHandle);
-		m_pCamera2->Update(m_pPlayer2->GetPos(),stageHandle);
-
-		auto& bullet1 = m_pPlayer1->GetBullets();
-		m_pCollisionManager->Update(m_pPlayerList, bullet1);
-		auto& bullet2 = m_pPlayer2->GetBullets();
-		m_pCollisionManager->Update(m_pPlayerList, bullet2);
-
-		m_pStageManager->Update();
-
-		// プレイヤーを範囲内に収める
-		VECTOR player1Pos = m_pPlayer1->GetPos();
-		player1Pos.x = std::clamp(player1Pos.x, kStageMinX, kStageMaxX);
-		player1Pos.z = std::clamp(player1Pos.z, kStageMinZ, kStageMaxZ);
-		m_pPlayer1->SetPos(player1Pos);
-
-		VECTOR player2Pos = m_pPlayer2->GetPos();
-		player2Pos.x = std::clamp(player2Pos.x, kStageMinX, kStageMaxX);
-		player2Pos.z = std::clamp(player2Pos.z, kStageMinZ, kStageMaxZ);
-		m_pPlayer2->SetPos(player2Pos);
-
-		// ゲームタイマーを減らす
-		m_timer--;
-
-		if (m_timer <= 0)
+		if (m_timer > 1)
 		{
-			m_timer = 0;
-			m_gameState = GameState::Result;
+			// プレイヤーの更新
+			m_pPlayer1->Update(m_pCamera1->GetYaw(), m_pCamera1->GetPitch(), m_timeScale);
+			m_pPlayer2->Update(m_pCamera2->GetYaw(), m_pCamera2->GetPitch(), m_timeScale);
 
-			// オレンジとブルーの塗り割合を取得する
-			int orange = m_pStageManager->GetPaintPercent(kPlayerOrange);
-			int blue = m_pStageManager->GetPaintPercent(kPlayerBlue);
+			// カメラの更新
+			int stageHandle = m_pStageManager->GetStageModelHandle();
+			m_pCamera1->Update(m_pPlayer1->GetPos(), stageHandle);
+			m_pCamera2->Update(m_pPlayer2->GetPos(), stageHandle);
 
-			// 勝敗の判定
-			if (orange > blue)
+			// 当たり判定の更新
+			auto& bullet1 = m_pPlayer1->GetBullets();
+			m_pCollisionManager->Update(m_pPlayerList, bullet1);
+			auto& bullet2 = m_pPlayer2->GetBullets();
+			m_pCollisionManager->Update(m_pPlayerList, bullet2);
+
+			// ステージの更新
+			m_pStageManager->Update();
+
+			// プレイヤーを範囲内に収める
+			VECTOR player1Pos = m_pPlayer1->GetPos();
+			player1Pos.x = std::clamp(player1Pos.x, kStageMinX, kStageMaxX);
+			player1Pos.z = std::clamp(player1Pos.z, kStageMinZ, kStageMaxZ);
+			m_pPlayer1->SetPos(player1Pos);
+
+			VECTOR player2Pos = m_pPlayer2->GetPos();
+			player2Pos.x = std::clamp(player2Pos.x, kStageMinX, kStageMaxX);
+			player2Pos.z = std::clamp(player2Pos.z, kStageMinZ, kStageMaxZ);
+			m_pPlayer2->SetPos(player2Pos);
+			// ゲームタイマーを減らす
+			m_timer--;
+
+			if (m_timer == 1)
 			{
-				// オレンジの勝利
-				m_winnerState = WinnerType::Orange;
+				// BGMを止めて終了SEをならす
+				StopSoundMem(m_bgmHandle);
+				// 終了SEをならす
+				PlaySoundMem(m_endSEHandle, DX_PLAYTYPE_BACK);
 			}
-			else if (blue > orange)
+		}
+		else
+		{
+			m_endTimer++;
+
+			if (m_endTimer >= kEndTimer)
 			{
-				// ブルーの勝利
-				m_winnerState = WinnerType::Blue;
+				// オレンジとブルーの塗り割合を取得する
+				int orange = m_pStageManager->GetPaintPercent(kPlayerOrange);
+				int blue = m_pStageManager->GetPaintPercent(kPlayerBlue);
+
+				// 勝敗の判定
+				if (orange > blue)
+				{
+					// オレンジの勝利
+					m_winnerState = WinnerType::Orange;
+				}
+				else if (blue > orange)
+				{
+					// ブルーの勝利
+					m_winnerState = WinnerType::Blue;
+				}
+				else
+				{
+					// 引き分け
+					m_winnerState = WinnerType::None;
+				}
+
+				m_gameState = GameState::Result;
+				// ゲーム終了フラグ
+				m_isFinish = true;
+
 			}
-			else
-			{
-				// 引き分け
-				m_winnerState = WinnerType::None;
-			}
-			// ゲーム終了フラグ
-			m_isFinish = true;
 		}
 	}
 }

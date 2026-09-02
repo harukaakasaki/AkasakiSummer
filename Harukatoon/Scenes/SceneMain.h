@@ -40,11 +40,14 @@ private:
 
 private:
 	int m_frameCount;
-	int m_bgmHandle;
+	int m_bgmHandle;        // BGMのハンドル
+	int m_endSEHandle;      // 終了時のSEハンドル
 	int m_gameUI;
-	int m_reticleUI;// レティクルUI
+	int m_reticleUI;        // レティクルUI
 	int m_fontHandle;       // フォントのハンドル
+
 	float m_timeScale;
+	float m_endTimer;        // 終了するまでのタイマー
 	bool m_isFinish = false;
 
 	WinnerType m_winnerState = WinnerType::None;
