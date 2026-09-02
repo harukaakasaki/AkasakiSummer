@@ -80,14 +80,6 @@ void Camera::Update(VECTOR playerPos,int stageModelHandle)
 	// カメラの高さ
 	float height = 600.0f;
 
-	// カメラズーム（サブウェポンを投げるときに長押しでズームするようにしたい！）
-	// そんな時はラープ！
-	/*if (Pad::IsPress(PAD_INPUT_6))
-	{
-		distance = 600.0f;
-		height = 50.0f;
-	}*/
-
 	// ステージとカメラの当たり判定
 	VECTOR cameraPos;
 	cameraPos.x = playerPos.x + cosf(m_cameraPitch) * cosf(m_cameraYaw) * distance;
@@ -128,12 +120,8 @@ void Camera::Draw()
 {
 	// カメラと注視点を設定
 	SetCameraPositionAndTarget_UpVecY(m_cameraPos, m_cameraTarget);
-	/*SetCameraPositionAndTarget_UpVecY(
-		VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z),
-		VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));*/
 
 	// 空を描画
-	//MV1SetPosition(m_skyModelHandle, VGet(m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z));
 	MV1SetPosition(m_skyModelHandle, m_cameraTarget);
 
 	// 空を描画する前にZバッファへの書き込みをオフにする
@@ -142,4 +130,3 @@ void Camera::Draw()
 	// 空を描画した後にZバッファへの書き込みをオンにする
 	SetWriteZBuffer3D(true);
 }
-

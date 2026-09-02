@@ -11,7 +11,7 @@ namespace
 	// アニメーションのインデックス
 	const char* const kPlayerAnim = "CharacterArmature|Idle";// プレイヤー待機アニメーション
 
-	constexpr int kBGMVol = 150;                             // ゲームシーンのBGMの大きさ
+	constexpr int kBGMVol = 200;                             // ゲームシーンのBGMの大きさ
 }
 
 ResultScene::ResultScene(WinnerType winner) :
@@ -23,8 +23,7 @@ ResultScene::ResultScene(WinnerType winner) :
 	m_resultUIHandle(-1),
 	m_winUIHandle(-1),
 	m_aButtonUIHandle(-1),
-	m_bgmHandle(0),
-	m_selectSeHandle(0)
+	m_bgmHandle(0)
 {
 }
 
@@ -34,8 +33,6 @@ ResultScene::~ResultScene()
 
 	StopSoundMem(m_bgmHandle);
 	DeleteSoundMem(m_bgmHandle);
-	StopSoundMem(m_selectSeHandle);
-	DeleteSoundMem(m_selectSeHandle);
 }
 
 void ResultScene::Init()
@@ -62,7 +59,6 @@ void ResultScene::Init()
 
 	// BGM
 	m_bgmHandle = LoadSoundMem("data/BGM/result_bgm.mp3");
-	m_selectSeHandle = LoadSoundMem("data/bgm/select_se.mp3");
 
 	ChangeVolumeSoundMem(100, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
@@ -86,14 +82,9 @@ void ResultScene::Update()
 	// Aボタンが押されたらシーンを終了する
 	if (Pad::IsTrigger(DX_INPUT_PAD1, PAD_INPUT_1))
 	{
-		// SEの再生
-		ChangeVolumeSoundMem(kBGMVol, m_selectSeHandle);
-		PlaySoundMem(m_selectSeHandle, DX_PLAYTYPE_BACK);
 		m_isEnd = true;
 	}
 
-	// 空の回転
-	m_skyAngle += 0.008f;
 	// プレイヤーの回転
 	m_playerAngle += 0.008f;
 	m_blinkAngle += 0.08f;
@@ -116,7 +107,6 @@ void ResultScene::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawRotaGraph(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 1.0, 0, m_aButtonUIHandle, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
 }
 
 // シーン切り替え

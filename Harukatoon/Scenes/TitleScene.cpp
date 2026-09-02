@@ -4,14 +4,16 @@
 #include "SceneMain.h"
 #include <DxLib.h>
 
+namespace
+{
+	constexpr int kBGMVol = 200;                             // ゲームシーンのBGMの大きさ
+}
+
 TitleScene::TitleScene() :
-	m_skyModelHandle(-1),
 	m_titleLogoHandle(-1),
 	m_fontHandle(-1),
-	m_skyAngle(0.0f),
 	m_isEnd(false),
 	m_bgmHandle(0),
-	m_selectSeHandle(0),
 	m_aButtonUIHandle(-1),
 	m_pressInkUIHandle(-1)
 {
@@ -19,37 +21,27 @@ TitleScene::TitleScene() :
 
 TitleScene::~TitleScene()
 {
-	MV1DeleteModel(m_skyModelHandle);
 	DeleteGraph(m_titleLogoHandle);
 
 	StopSoundMem(m_bgmHandle);
 	DeleteSoundMem(m_bgmHandle);
-	StopSoundMem(m_selectSeHandle);
-	DeleteSoundMem(m_selectSeHandle);
 }
 
 void TitleScene::Init()
 {
-//	SetBackgroundColor(0, 195, 255);
-	SetBackgroundColor(0, 0, 0);
-
 	// モデルを読み込む
-	m_skyModelHandle = MV1LoadModel("data/Sky_Night02.mv1");
 	m_titleLogoHandle = LoadGraph("data/UI/Harukatoon_Title.png");
 	m_pressInkUIHandle = LoadGraph("data/UI/PressInk.png");
 	m_aButtonUIHandle = LoadGraph("data/UI/aButton.png");
 
 	// BGM
 	m_bgmHandle = LoadSoundMem("data/bgm/title_bgm.mp3");
-	m_selectSeHandle = LoadSoundMem("data/bgm/select_se.mp3");
 
-	ChangeVolumeSoundMem(100, m_bgmHandle);
+	ChangeVolumeSoundMem(kBGMVol, m_bgmHandle);
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 
 	// フォントを作る
 	m_fontHandle = CreateFontToHandle("Nikkyou Sans", 70, -1, DX_FONTTYPE_NORMAL);
-
-	MV1SetPosition(m_skyModelHandle, VGet(500, -600, 0));
 
 	// カメラ位置
 	SetCameraPositionAndTarget_UpVecY(
@@ -65,16 +57,11 @@ void TitleScene::Update()
 	// パッドクラスの更新
 	Pad::Update();
 
-	// 空の回転
-	m_skyAngle += 0.002f;
 	// 点滅
 	m_blinkAngle += 0.08f;
 
 	if (Pad::IsTrigger(DX_INPUT_PAD1, PAD_INPUT_1))
 	{
-		// SEの再生
-		ChangeVolumeSoundMem(200, m_selectSeHandle);
-		PlaySoundMem(m_selectSeHandle, DX_PLAYTYPE_BACK);
 		m_isEnd = true;
 	}
 }

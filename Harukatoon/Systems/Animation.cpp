@@ -1,6 +1,11 @@
 #include "Animation.h"
 #include <DxLib.h>
 
+namespace
+{
+	constexpr float kBlendFrame = 10.0f;
+}
+
 Animation::Animation() :
 	m_modelHandle(-1),
 	m_currentAnimIndex(-1),
@@ -47,7 +52,7 @@ void Animation::Update()
 	m_changeAnimFrame++;
 
 	// ブレンド率を計算する（徐々に新しいアニメに切り替え）
-	float blendRate = (float)m_changeAnimFrame / 10.0f; // 10フレームかけて切り替える
+	float blendRate = (float)m_changeAnimFrame / kBlendFrame; // 10フレームかけて切り替える
 	if (blendRate > 1.0f)blendRate = 1.0f;
 
 	// アニメーション同士をブレンドする

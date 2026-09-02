@@ -4,7 +4,12 @@
 
 namespace
 {
-	constexpr float kHandleScale = 4096.0f;
+	constexpr float kHandleScale = 4096.0f;  // マップの大きさ
+	constexpr float kCell = 100.0f;          // インクの塗りサイズ
+	constexpr int kMapWidth = 128;           // マップの横サイズ
+	constexpr int kMapHeight = 48;           // マップの縦サイズ
+	constexpr float kInkGroundHeight = 0.5f; // インク位置
+	constexpr float kMinInkSize = 16;        // 最小インクサイズ
 }
 
 StageManager::StageManager() :
@@ -63,9 +68,9 @@ void StageManager::Init()
 	// ステージの位置とスケールを設定
 	MV1SetPosition(m_stageModelHandle, VGet(0.0f, -100.0f, -1300.0f));
 
-	m_cellSize = 100.0f;
-	m_mapWidthSize = 128;
-	m_mapHeightSize = 48;
+	m_cellSize = kCell;
+	m_mapWidthSize = kMapWidth;
+	m_mapHeightSize = kMapHeight;
 
 	m_2dMap.resize(m_mapHeightSize);// 縦48マスの空きを作る
 	// メモリ内に48x128の紙を作成
@@ -122,7 +127,7 @@ void StageManager::Draw()
 	float rightX = offsetX;
 	float frontZ = -offsetZ;
 	float backZ = offsetZ;
-	float ground = 0.5f;// 床の高さ(0より少し高くする)
+	float ground = kInkGroundHeight;// 床の高さ(0より少し高くする)
 
 	// 3Dポリゴンの頂点データ
 	VERTEX3DSHADER verticesShader[6];
@@ -229,8 +234,8 @@ void StageManager::Paint(float x, float z, int who, float paintRadius)
 	int inkCanvasSizeX = static_cast<int>((paintRadius * 2.0f) / stageWidth * kHandleScale);
 	int inkCanvasSizeZ = static_cast<int>((paintRadius * 2.0f) / stageHeight * kHandleScale);
 	// もしインクサイズが小さすぎたら、16は描画されるようにする
-	if (inkCanvasSizeX < 16)inkCanvasSizeX = 16;
-	if (inkCanvasSizeZ < 16)inkCanvasSizeZ = 16;
+	if (inkCanvasSizeX < kMinInkSize)inkCanvasSizeX = kMinInkSize;
+	if (inkCanvasSizeZ < kMinInkSize)inkCanvasSizeZ = kMinInkSize;
 
 	SetDrawMode(DX_DRAWMODE_BILINEAR);
 
@@ -295,4 +300,3 @@ int StageManager::GetPaintColor(float x, float z) const
 
 	return m_2dMap[gridZ][gridX];
 }
-

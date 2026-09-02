@@ -15,7 +15,6 @@ public:
 
 private:
 	// モデル一覧
-	int m_skyModelHandle;   // 空のモデル
 	int m_fontHandle;       // フォントのハンドル
 	int m_titleLogoHandle;  // タイトルロゴのハンドル
 	int m_pressInkUIHandle;   // インクのロゴのハンドル
@@ -23,10 +22,7 @@ private:
 
 	// BGM関連
 	int m_bgmHandle;
-	int m_selectSeHandle;
-
-	// 空の回転角
-	float m_skyAngle = 0.0f;
+	
 	// 点滅アングル
 	float m_blinkAngle = 0.0f;
 

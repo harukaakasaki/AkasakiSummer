@@ -52,9 +52,6 @@ private:
 	// Stageマネージャーのポインタ
 	StageManager* m_stageManager;
 
-	// 誰が撃った？（プレイヤー1 or プレイヤー2）
-	float m_whoShot;
-
 	// 連射速度を制御する
 	int m_shotTimer;
 

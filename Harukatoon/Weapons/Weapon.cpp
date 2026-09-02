@@ -16,7 +16,6 @@ Weapon::Weapon(StageManager* stageManager, int playerColor) :
 	m_shotTimer(0),
 	m_shootingCountFrame(0),
 	m_shotInterval(kShotInterval),
-	m_whoShot(0.0f),
 	m_isMainBullet(false)
 {
 	m_stageManager = stageManager;

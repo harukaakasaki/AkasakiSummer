@@ -27,4 +27,3 @@ void Bomb::Throw()
 	printfDx("ƒ{ƒ€‚ÅUŒ‚’†I\n");
 #endif // DEBUG
 }
-

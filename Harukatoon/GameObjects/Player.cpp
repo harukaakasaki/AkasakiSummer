@@ -167,8 +167,6 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		return;
 	}
 
-
-
 	int x, y;
 	// ƒvƒŒƒCƒ„[
 	GetJoypadAnalogInput(&x, &y, m_padNo);
