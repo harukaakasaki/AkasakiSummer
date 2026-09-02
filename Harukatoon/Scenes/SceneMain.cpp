@@ -13,12 +13,12 @@
 #include "../Stages/StageManager.h"
 
 namespace
-{ 
+{
 	constexpr int kPlayerOrange = 1;          // プレイヤーオレンジ
 	constexpr int kPlayerBlue = 2;            // プレイヤーブルー
 	constexpr int kTimer = 60*60;             // タイマーの時間
 	constexpr int kBGMVol = 150;              // ゲームシーンのBGMの大きさ
-	constexpr float kPlayer1FirstPos = 5000;  // プレイヤー1の初期位置
+	constexpr float kPlayer1FirstPos =  5000; // プレイヤー1の初期位置
 	constexpr float kPlayer2FirstPos = -5000; // プレイヤー2の初期位置
 
 	// ステージの範囲
