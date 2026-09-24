@@ -109,6 +109,7 @@ void Player::Init()
 		m_modelHandle = MV1LoadModel("data/Models/PlayerBlue.mv1");
 	}
 	assert(m_modelHandle != -1);
+	// ブキのモデル
 	m_weaponHandle = MV1LoadModel("data/Models/Weapon.mv1");
 	assert(m_weaponHandle != -1);
 
@@ -435,10 +436,20 @@ void Player::Draw()
 
 	if (!m_isDiving && m_handFrameIndex != -1)
 	{
+		// 手首のローカルワールドを取得
 		MATRIX handMatrix = MV1GetFrameLocalWorldMatrix(m_modelHandle, m_handFrameIndex);
-		MATRIX weaponWorldMatrix = MMult(handMatrix,worldMatrix);
 
-		MV1SetMatrix(m_weaponHandle, weaponWorldMatrix);
+		// 武器の大きさ
+		MATRIX weaponScale = MGetScale(VGet(80.0f, 80.0f, 80.0f));
+
+		MATRIX rotY = MGetRotY(DX_PI_F/2.0f);
+
+		MATRIX weaponRot = MGetRotY(DX_PI_F/2.0f);
+
+		// 武器のローカル座標を取得
+		MATRIX weaponMatrix = MMult(weaponScale,MMult(weaponRot,handMatrix));
+
+		MV1SetMatrix(m_weaponHandle, weaponMatrix);
 		MV1DrawModel(m_weaponHandle);
 	}
 

@@ -63,7 +63,7 @@ void StageManager::Init()
 	assert(m_inkShaderHandle != -1);
 
 	// ステージのモデルをロード
-	m_stageModelHandle = MV1LoadModel("data/Stage/HarukaStage_2.mv1");
+	m_stageModelHandle = MV1LoadModel("data/Stage/HarukaStage_.mv1");
 	assert(m_stageModelHandle != -1);
 	// ステージの位置とスケールを設定
 	MV1SetPosition(m_stageModelHandle, VGet(0.0f, -100.0f, -1300.0f));
