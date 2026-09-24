@@ -56,7 +56,9 @@ SceneMain::SceneMain() :
 	m_endSEHandle(-1),
 	m_fontHandle(-1),
 	m_isFinish(false),
-	m_isFinishAnim(false)
+	m_isFinishAnim(false),
+	m_countDownScale(-1),
+	m_countDownUI()
 {
 	m_pStageManager = std::make_unique<StageManager>();
 	m_pPlayer1 = std::make_unique<Player>(m_pStageManager.get(), DX_INPUT_PAD1,kPlayerOrange);
@@ -117,6 +119,17 @@ void SceneMain::Init()
 	assert(m_readyUI != -1);
 	m_goUI = LoadGraph("data/UI/go.png");
 	assert(m_goUI != -1);
+
+	for (int i = 1; i <= 10; ++i)
+	{
+		char filePath[256];
+		sprintf_s(filePath, sizeof(filePath), "data/UI/%d.png", i);
+
+		m_countDownUI[i] = LoadGraph(filePath);
+		assert(m_countDownUI[i] != -1);
+	}
+	m_countDownUI[10] = LoadGraph("data/UI/10.png");
+	assert(m_countDownUI[10] != -1);
 
 	m_finish_1UI = LoadGraph("data/UI/Finish_1.png");
 	assert(m_finish_1UI != -1);
@@ -251,6 +264,20 @@ void SceneMain::Update()
 			// ゲームタイマーを減らす
 			m_timer--;
 
+			int currentSeconds = m_timer / 60;
+
+			if (currentSeconds <= 9 && currentSeconds >= 1)
+			{
+				if (currentSeconds != m_prevSecond)
+				{
+					m_countDownScale = 2.5f;
+					m_prevSecond = currentSeconds;
+				}
+			}
+			float targetScale = 1.0f;// 目標のスケール
+
+			m_countDownScale += (targetScale - m_countDownScale) * 0.2f;
+
 			if (m_timer == 1)
 			{
 				// BGMを止めて終了SEをならす
@@ -307,6 +334,7 @@ void SceneMain::Draw()
 {
 	// プレイヤー1は描画範囲を左半分にする
 	SetDrawArea(0, 0, Game::kSplitWidth, Game::kScreenHeight);
+
 	//3Dカメラの描画範囲を左半分に合わせる
 	SetCameraScreenCenter(Game::kCamera1CenterX, Game::kCameraCenterY);
 
@@ -327,6 +355,7 @@ void SceneMain::Draw()
 	
 	// プレイヤー2は描画範囲を右半分にする
 	SetDrawArea(Game::kSplitWidth, 0, Game::kScreenWidth, Game::kScreenHeight);
+
 	//3Dカメラの描画範囲を右半分に合わせる
 	SetCameraScreenCenter(Game::kCamera2CenterX, Game::kCameraCenterY);
 	
@@ -388,12 +417,23 @@ void SceneMain::Draw()
 		}
 	}
 
+	if (seconds <= 9 && seconds >= 1)
+	{
+		int x = Game::kScreenCenterX;
+		int y = Game::kScreenCenterY;
+
+		if (m_countDownUI[seconds] != -1)
+		{
+			DrawRotaGraph(x, y, m_countDownScale, 0.0f, m_countDownUI[seconds], TRUE);
+		}
+	}
+
 	if (m_timer <= 1)
 	{
 		int x = Game::kScreenCenterX;
 		int y = Game::kScreenCenterY;
 
-		// KO画面を描画
+		// フィニッシュUIを描画
 		DrawRotaGraph(x, y, m_finishScale, 0.0f, m_finish_1UI, TRUE);
 		DrawRotaGraph(x, y, m_finishScale, 0.0f, m_finish_2UI, TRUE);
 		DrawRotaGraph(x, y, m_finishScale, 0.0f, m_finish_3UI, TRUE);

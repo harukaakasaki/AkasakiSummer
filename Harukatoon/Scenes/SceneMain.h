@@ -59,17 +59,20 @@ private:
 	int m_finish_4UI;       // フィニッシュUI四枚目
 	int m_readyUI;          // ReadyUI
 	int m_goUI;             // GoUI
+	int m_countDownUI[11];  // 1～10のUI
+	int m_prevSecond = -1;  // 秒数が変わった瞬間を検知する
 	int m_fontHandle;       // フォントのハンドル
 
 	ReadyState m_readyState = ReadyState::ReadyZoomIn;
 
-	float m_readyGoScale = 0.0f; // ReadyGoのUIスケール
-	float m_readyTimer = 0;      // Ready演出タイマー
-	float m_finishScale;         // フィニッシュUIの大きさ
-	float m_timeScale;           // ゲームタイマー
-	float m_endTimer;            // 終了するまでのタイマー
-	bool m_isFinish = false;     // 終了したかどうか
-	bool m_isFinishAnim = false; // 終了UIのアニメーション
+	float m_readyGoScale = 0.0f;  // ReadyGoのUIスケール
+	float m_readyTimer = 0;       // Ready演出タイマー
+	float m_finishScale;          // フィニッシュUIの大きさ
+	float m_timeScale;            // ゲームタイマー
+	float m_endTimer;             // 終了するまでのタイマー
+	float m_countDownScale = 1.0f;// カウントダウンUIのスケール
+	bool m_isFinish = false;      // 終了したかどうか
+	bool m_isFinishAnim = false;  // 終了UIのアニメーション
 
 	WinnerType m_winnerState = WinnerType::None;
 
