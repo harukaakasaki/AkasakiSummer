@@ -246,10 +246,18 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		else if (isEnemyInk)
 		{
 			speed = kDiveEnemyInkSpeed;
+		    if (m_isGround == false)
+		    {
+		    	speed = kDiveSpeed;
+		    }
 		}
 		else
 		{
 			speed = kDiveFloorSpeed;
+			if (m_isGround == false)
+		    {
+		    	speed = kDiveSpeed;
+		    }
 		}
 
 #ifdef _DEBUG
@@ -265,7 +273,7 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		}
 	}
 
-	// 攻撃中はプレイヤーのスピードが遅くなるようにしたい
+	// 攻撃中はプレイヤーのスピードが遅くなる
 	if (isWeaponPress)
 	{
 		if (m_state != PlayerState::Shot)
@@ -442,8 +450,7 @@ void Player::Draw()
 		// 武器の大きさ
 		MATRIX weaponScale = MGetScale(VGet(80.0f, 80.0f, 80.0f));
 
-		MATRIX rotY = MGetRotY(DX_PI_F/2.0f);
-
+		// 武器の向きの修正
 		MATRIX weaponRot = MGetRotY(DX_PI_F/2.0f);
 
 		// 武器のローカル座標を取得
