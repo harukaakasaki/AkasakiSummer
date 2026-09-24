@@ -266,7 +266,7 @@ void SceneMain::Update()
 
 			int currentSeconds = m_timer / 60;
 
-			if (currentSeconds <= 9 && currentSeconds >= 1)
+			if (currentSeconds <= 10 && currentSeconds >= 1)
 			{
 				if (currentSeconds != m_prevSecond)
 				{
@@ -417,7 +417,7 @@ void SceneMain::Draw()
 		}
 	}
 
-	if (seconds <= 9 && seconds >= 1)
+	if (seconds <= 10 && seconds >= 1)
 	{
 		int x = Game::kScreenCenterX;
 		int y = Game::kScreenCenterY;

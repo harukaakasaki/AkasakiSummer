@@ -6,7 +6,7 @@
 
 namespace
 {
-	constexpr int kBGMVol = 200;                             // ゲームシーンのBGMの大きさ
+	constexpr int kBGMVol = 150;                             // ゲームシーンのBGMの大きさ
 }
 
 TitleScene::TitleScene() :
