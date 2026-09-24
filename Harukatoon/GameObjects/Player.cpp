@@ -233,7 +233,12 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 			m_state = PlayerState::Dive;
 		}
 
-		if (isMyInk)
+		if (!m_isGround)
+		{
+			speed = kDiveSpeed;
+		}
+
+		else if (isMyInk)
 		{
 			speed = kDiveSpeed;
 			// hp‚ð‰ñ•œ‚·‚é
@@ -246,18 +251,10 @@ void Player::Update(float cameraAngle, float cameraPitch, float timeScale)
 		else if (isEnemyInk)
 		{
 			speed = kDiveEnemyInkSpeed;
-		    if (m_isGround == false)
-		    {
-		    	speed = kDiveSpeed;
-		    }
 		}
 		else
 		{
 			speed = kDiveFloorSpeed;
-			if (m_isGround == false)
-		    {
-		    	speed = kDiveSpeed;
-		    }
 		}
 
 #ifdef _DEBUG
