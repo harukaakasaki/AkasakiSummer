@@ -448,7 +448,7 @@ void Player::Draw()
 		MATRIX weaponScale = MGetScale(VGet(80.0f, 80.0f, 80.0f));
 
 		// •Ší‚ÌŒü‚«‚ÌC³
-		MATRIX weaponRot = MGetRotY(DX_PI_F/2.0f);
+		MATRIX weaponRot = MMult(MGetRotY(DX_PI_F/2.0f),MGetRotX(DX_PI_F/2.0f));
 
 		// •Ší‚Ìƒ[ƒJƒ‹À•W‚ğæ“¾
 		MATRIX weaponMatrix = MMult(weaponScale,MMult(weaponRot,handMatrix));
