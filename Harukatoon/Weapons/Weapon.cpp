@@ -84,19 +84,23 @@ void Weapon::UseWeapon(VECTOR playerPos, VECTOR shotVel)
 	// x軸、y軸の-0.8～6.0fの間からランダムで弾が飛ぶ
 	if (m_shotTimer == 0)
 	{
+		// 弾の基本スピード
 		float tempSpeed = VSize(shotVel);
 
-		// -1～1の範囲でランダムな値を生成
+		// -1～1の範囲でランダムなブレ率を生成
 		int temp = GetRand(512) - 256;
 		float rate = (float)temp / 256.0f;
 
+		// 弾の進行方向と上方向の外積を求め、左右の横ブレ用ベクトルを出す
 		VECTOR shotOffsetVel = VCross(shotVel, { 0.0f, 1.0f, 0.0f });
 
-		//　＊この数字を0に近づけるとシャープマーカーで1にするほどモデラー
+		//＊この数字を0に近づけると弾が拡散されずに、1にするほど拡散率が上がる
 		float shotWidth = kMoveInk * (m_shootingCountFrame / kStreatShoothingFrame);
 
+		// 横ブレ用ベクトルにランダムなブレ率と拡散率を掛け合わせる
 		shotOffsetVel = VScale(shotOffsetVel, rate * shotWidth);
 
+		// 進行方向に横ブレを足して正規化して、元のスピードを掛け直して最終的な弾速ベクトルを作る
 		VECTOR randomVel = VNorm(VAdd(shotVel, shotOffsetVel));
 		randomVel = VScale(randomVel, tempSpeed);
 
