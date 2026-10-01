@@ -12,6 +12,3 @@ public:
 	virtual bool IsEnd() const = 0;
 	virtual Scene* GetNextScene() = 0;
 };
-
-
-

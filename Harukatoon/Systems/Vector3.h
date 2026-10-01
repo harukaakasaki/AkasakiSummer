@@ -84,4 +84,3 @@ public:
 		return Vector3(x / length, y / length, z / length);
 	}
 };
-

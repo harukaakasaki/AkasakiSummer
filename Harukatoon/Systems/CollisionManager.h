@@ -30,4 +30,3 @@ private:
 	void CheckPlayerBulletCollisions(std::vector<Player*>& m_players,
 		                             std::vector<std::unique_ptr<Bullet>>& m_bullets);
 };
-

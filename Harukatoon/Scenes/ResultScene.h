@@ -45,4 +45,3 @@ private:
 	// “_–ÅƒAƒ“ƒOƒ‹
 	float m_blinkAngle = 0.0f;
 };
-

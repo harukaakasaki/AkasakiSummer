@@ -53,4 +53,3 @@ private:
 	// ステージのモデルハンドル
 	int m_stageModelHandle;
 };
-

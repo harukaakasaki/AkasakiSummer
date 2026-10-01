@@ -88,4 +88,3 @@ private:
 	std::vector<Player*> m_pPlayerList;
 
 };
-

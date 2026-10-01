@@ -55,4 +55,3 @@ private:
 	VECTOR m_cameraPos;    // カメラの位置
 	VECTOR m_cameraTarget; // カメラの注視点
 };
-
