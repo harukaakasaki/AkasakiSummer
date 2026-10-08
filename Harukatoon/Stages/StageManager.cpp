@@ -171,6 +171,14 @@ void StageManager::Draw()
 	SetUseAlphaTestFlag(FALSE);// アルファテストをOFFにする
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	SetUseBackCulling(TRUE);// カリングを元に戻す
+
+	
+#ifdef _DEBUG
+	// デバッグ用にインクのキャンバスを画面に描画する
+	DrawExtendGraph(0, 0, 400, 150, m_inkCanvasHandle, TRUE);
+#endif // _DEBUG
+
+	
 }
 
 void StageManager::Paint(float x, float z, int who, float paintRadius)
